@@ -1,0 +1,5 @@
+[22-Sep-2016 23:53:48 Asia/Jakarta] PHP Fatal error:  require_once(): Failed opening required '/home/koperasi/public_html/application/\modules\anggota\controllers\Anggota.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/koperasi/public_html/application/modules/Admin/controllers/Index.php on line 7
+[22-Sep-2016 23:54:35 Asia/Jakarta] PHP Fatal error:  require_once(): Failed opening required '/home/koperasi/public_html/application/modules/anggota/controllers/Anggota.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/koperasi/public_html/application/modules/Admin/controllers/Index.php on line 7
+[26-Sep-2016 16:10:52 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ''admin/index/' (T_ENCAPSED_AND_WHITESPACE) in /home/koperasi/public_html/application/views/main_html/script.php on line 264
+[26-Sep-2016 16:26:57 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '}' in /home/koperasi/public_html/application/views/main_html/script.php on line 223
+[26-Sep-2016 16:27:04 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '}' in /home/koperasi/public_html/application/views/main_html/script.php on line 223
