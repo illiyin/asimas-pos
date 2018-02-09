@@ -125,7 +125,7 @@
              <div class="col-sm-6">
                 <div class="form-group">
                  <label for="expire_date">Expire Date</label>
-                 <input type="text" name="expire_date" maxlength="50" Required class="form-control" id="expire_date" placeholder="Expire date">
+                 <input type="text" name="expire_date" maxlength="50" Required class="form-control datepicker" id="expire_date" placeholder="Expire date">
                </div>
              </div>
              <div class="col-sm-6">

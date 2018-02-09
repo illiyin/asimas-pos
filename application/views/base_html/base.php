@@ -57,7 +57,7 @@
 
       <link href="<?php echo base_url(); ?>assets/js/notify/pnotify.custom.min.css" rel="stylesheet">
       <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/jquery-confirm.min.css">
-     
+
        <!-- slim scroll script -->
       <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.slimscroll.min.js"></script>
       <!-- waves material design effect -->
@@ -119,7 +119,7 @@
       <script src="<?php echo base_url(); ?>assets/js/app.js"></script>
       <script src="<?php echo base_url(); ?>assets/js/app.js"></script>
       <script src="<?php echo base_url(); ?>assets/js/notify/pnotify.custom.min.js"></script>
-      <script src="<?php echo base_url(); ?>assets/js/jquery-confirm.min.js"></script>      
+      <script src="<?php echo base_url(); ?>assets/js/jquery-confirm.min.js"></script>
    </head>
       <!-- TESTER -->
       <?php
@@ -128,7 +128,7 @@
         // echo "</pre>";
       ?>
       <!-- Navigation -->
-      <?php 
+      <?php
         //Hide navbar menu untuk halaman yang tertera pada array $segmen_hide
         $hide_class = $body_style = '';
         if(isset($segmen_hide) && isset($segmen_0) && isset($segmen_2)) {
@@ -154,31 +154,31 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                <ul class="nav navbar-nav">
-                  <?php foreach ($nav_kategori as $nav_kat) { 
+                  <?php foreach ($nav_kategori as $nav_kat) {
                     $nav_kat_icon = (!empty($nav_kat->kategori_icon)) ? $nav_kat->kategori_icon : 'fa fa-list'; ?>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle flat-box" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <i class="<?php echo $nav_kat_icon;?>"></i> <?php echo ucfirst($nav_kat->nama);?> <span class="caret"></span>
                       </a>
-                      
+
                       <ul class="dropdown-menu">
                       <?php if (isset($_SESSION['user_permission']) && !empty($_SESSION['user_permission'])) { ?>
-                        
+
                         <?php foreach ($nav_menu as $nav_item) { ?>
-                          <?php if($nav_kat->id == $nav_item->id_menu) { 
+                          <?php if($nav_kat->id == $nav_item->id_menu) {
                             $nav_item_icon = (!empty($nav_item->icon_class)) ? $nav_item->icon_class : 'fa fa-angle-right'; ?>
-                            
-                            <?php 
+
+                            <?php
                             $access_granted = 0; $disable_class = 'disabled'; $href = 'javascript:void(0)';
-                            foreach ($_SESSION['user_permission'] as $granted_item) { 
-                              if($nav_item->id == $granted_item) { 
+                            foreach ($_SESSION['user_permission'] as $granted_item) {
+                              if($nav_item->id == $granted_item) {
                                 $access_granted = 1;
-                              } 
-                            } 
+                              }
+                            }
                             ?>
-                            <?php if($access_granted == 1) { 
+                            <?php if($access_granted == 1) {
                               $disable_class = '';
-                              $href = base_url().$nav_item->url; 
+                              $href = base_url().$nav_item->url;
                             } ?>
                               <li class="flat-box <?php echo $disable_class;?>">
                                 <a href="<?php echo $href; ?>"><i class="<?php echo $nav_item_icon?>"></i> <?php echo ucfirst($nav_item->nama);?></a>
@@ -240,6 +240,13 @@
       }
    }
 
+$(document).ready(function(){
+  if($(".datepicker").length != 0){
+    $(".datepicker").datepicker({
+      format: "dd/mm/yyyy"
+    })
+  }
+})
    </script>
    <!-- Modal add user -->
    <div class="modal fade" id="CashinHand" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -260,15 +267,15 @@
              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
              <button type="submit" class="btn btn-add">Submit</button>
            </div>
-          </form>       
+          </form>
       </div>
     </div>
    </div>
    <!-- /.Modal -->
-   
 
 
 
-     
+
+
    </body>
 </html>

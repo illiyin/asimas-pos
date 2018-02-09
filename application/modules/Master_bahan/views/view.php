@@ -95,6 +95,55 @@
                  </select>
                </div>
              </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_satuan">Satuan</label>
+                 <select name="id_satuan" class="form-control" id="id_satuan" required="">
+                 </select>
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Kode</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Bahan">
+                 </select>
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Jumlah Keluar</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Bahan">
+                 </select>
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Jumlah Masuk</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Bahan">
+                 </select>
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Saldo Bulan Sebelumnya</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Bahan">
+                 </select>
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Saldo Bulan Ini</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Bahan">
+                 </select>
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Tgl. Datang</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control datepicker" id="nama" placeholder="Nama Bahan">
+                 </select>
+               </div>
+             </div>
 
         </div>
         <div class="modal-footer">
