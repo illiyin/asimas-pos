@@ -147,10 +147,11 @@
 
     </div>
 
-    <div class="text-right">
-      <a href="Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
-      <button class="btn btn-success">Submit Data</button>
-
+    <div class="panel panel-default">
+      <div class="panel-body text-right">
+        <a href="Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
+        <button class="btn btn-success">Submit Data</button>
+      </div>
     </div>
   </form>
 </div>

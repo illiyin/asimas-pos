@@ -38,6 +38,11 @@ class Master extends MX_Controller {
       $this->load->view('Produksi_perintah/perintahCetak');
       // $this->load->view('Produksi_perintah/view', $data);
     }
+    function detail(){
+
+      $this->load->view('Produksi_perintah/perintahDetail');
+      // $this->load->view('Produksi_perintah/view', $data);
+    }
 
 
 }

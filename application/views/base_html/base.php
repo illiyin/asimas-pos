@@ -73,7 +73,8 @@
       <!-- select2 plugin script -->
       <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/select2.min.js"></script>
       <!-- dalatable scripts -->
-      <script src="<?php echo base_url(); ?>assets/datatables/js/jquery.dataTables.min.js"></script>
+      <!-- <script src="<?php echo base_url(); ?>assets/datatables/js/jquery.dataTables.min.js"></script> -->
+      <script src="<?php echo base_url(); ?>assets/datatables/js/jquery.dataTables.min-1.10.16.js"></script>
       <script src="<?php echo base_url(); ?>assets/datatables/js/dataTables.bootstrap.js"></script>
       <!-- summernote js -->
       <script src="<?php echo base_url(); ?>assets/js/summernote.js"></script>
@@ -149,7 +150,7 @@
                  <span class="icon-bar"></span>
                  <span class="icon-bar"></span>
                </button>
-               <a class="navbar-brand" href="#"><img src="http://localhost/zarpos/assets/img/logo.png" alt="logo"></a>
+               <a class="navbar-brand" href="#"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="logo" class="navbar-logo"></a>
             </div>
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -274,7 +275,12 @@ $(document).ready(function(){
    <!-- /.Modal -->
 
 
-
+<style media="screen">
+  .navbar-brand .navbar-logo{
+    width: 50px;
+    margin-top: -16px;
+  }
+</style>
 
 
    </body>

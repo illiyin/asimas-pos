@@ -23,7 +23,7 @@
       <tbody id='bodytable'>
         <tr>
           <td>1</td>
-          <td>ZXS-234</td>
+          <td><a href="Produksi_perintah-master-detail" title="Detail dan setujui">ZXS-234</a></td>
           <td>1</td>
           <td>12/03/2018</td>
           <td>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td>2</td>
-          <td>ZXS-234</td>
+          <td><a href="Produksi_perintah-master-detail" title="Detail dan setujui">ZXS-234</a></td>
           <td>1</td>
           <td>12/03/2018</td>
           <td>

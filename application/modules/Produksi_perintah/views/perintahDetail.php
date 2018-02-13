@@ -189,121 +189,12 @@
     </tbody>
   </table>
 
-  <table class="tanda-tangan">
-    <tr>
-      <td class="w-30">
-        <table class="nested panel">
-          <tr>
-            <th>Diterbitkan</th>
-          </tr>
-          <tr>
-            <td class="ttd-field">
-
-            </td>
-          </tr>
-          <tr>
-            <td class="name-field">
-              &nbsp;
-            </td>
-          </tr>
-          <tr>
-            <td class="jabatan-field">
-              PPIC
-            </td>
-          </tr>
-        </table>
-      </td>
-      <td class="w-30">&nbsp;</td>
-      <td class="w-40">
-        <table class="nested panel">
-          <tr>
-            <th colspan="2">Diterima</th>
-          </tr>
-          <tr>
-            <td class="ttd-field bagi-dua">
-
-            </td>
-            <td class="ttd-field bagi-dua">
-
-            </td>
-          </tr>
-          <tr>
-            <td class="name-field">
-              &nbsp;
-            </td>
-            <td class="name-field">
-              &nbsp;
-            </td>
-          </tr>
-          <tr>
-            <td class="jabatan-field">
-              PPIC
-            </td>
-            <td class="jabatan-field">
-              Kabag Produksi
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-
-  <h3 class="tb-title">
-    Rekonsiliasi (syarat 95% - 105%):
-  </h3>
-  <table class="kotak">
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
-  </table>
-
-  <h3 class="tb-title">
-    Justifikasi (bila rekonsiliasi di luar rentang):
-  </h3>
-  <table class="kotak">
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
-  </table>
-
-  <table class="nested panel">
-    <tr>
-      <th colspan="3">Mengetahui</th>
-    </tr>
-    <tr>
-      <td class="ttd-field bagi-tiga">
-
-      </td>
-      <td class="ttd-field bagi-tiga">
-
-      </td>
-      <td class="ttd-field bagi-tiga">
-
-      </td>
-    </tr>
-    <tr>
-      <td class="name-field">
-        &nbsp;
-      </td>
-      <td class="name-field">
-        &nbsp;
-      </td>
-      <td class="name-field">
-        &nbsp;
-      </td>
-    </tr>
-    <tr>
-      <td class="jabatan-field">
-        Kabag Produksi
-      </td>
-      <td class="jabatan-field">
-        PPIC
-      </td>
-      <td class="jabatan-field">
-        Accounting
-      </td>
-    </tr>
-  </table>
+  <div class="panel panel-default">
+    <div class="panel-body text-right">
+      <a href="Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
+      <button class="btn btn-success">Setujui</button>
+    </div>
+  </div>
 
 </div> <!-- tutup container -->
 

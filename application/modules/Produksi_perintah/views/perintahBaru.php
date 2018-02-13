@@ -143,10 +143,11 @@
 
     </div>
 
-    <div class="text-right">
-      <a href="Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
-      <button class="btn btn-success">Submit Data</button>
-
+    <div class="panel panel-default">
+      <div class="panel-body text-right">
+        <a href="Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
+        <button class="btn btn-success">Submit Data</button>
+      </div>
     </div>
   </form>
 </div>
@@ -218,64 +219,64 @@
     </div>
   </div>
 </div>
-  <!-- /.tutup Modal-->
-  <!-- Modal tambah bahan kemas -->
-  <div class="modal fade" id="modalBahanKemas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Tambah Bahan Kemas</h4>
-        </div>
-        <form action="" method="POST" id="myform" enctype="multipart/form-data" class="form-horizontal">
-          <div class="modal-body">
-            <div class="form-group">
-              <div class="col-sm-3">
-                <label for="">Nama Bahan</label>
-              </div>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="" id="">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-3">
-                <label for="">Jumlah</label>
-              </div>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="" id="">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-3">
-                <label for="">Satuan</label>
-              </div>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="" id="">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-3">
-                <label for="">Aktual</label>
-              </div>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="" id="">
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer text-right">
-            <button class="btn btn-default" data-dismiss="modal">Close</button>
-            <button class="btn btn-primary">Save Changes</button>
-          </div>
-        </form>
+<!-- /.tutup Modal-->
+<!-- Modal tambah bahan kemas -->
+<div class="modal fade" id="modalBahanKemas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Tambah Bahan Kemas</h4>
       </div>
+      <form action="" method="POST" id="myform" enctype="multipart/form-data" class="form-horizontal">
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="col-sm-3">
+              <label for="">Nama Bahan</label>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="" id="">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3">
+              <label for="">Jumlah</label>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="" id="">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3">
+              <label for="">Satuan</label>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="" id="">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3">
+              <label for="">Aktual</label>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="" id="">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer text-right">
+          <button class="btn btn-default" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
     </div>
   </div>
-  <!-- /.tutup Modal-->
-  <script type="text/javascript">
-  function showBahanBaku() {
-    $('#modalBahanBaku').modal('show');
-  }
-  function showBahanKemas() {
-    $('#modalBahanKemas').modal('show');
-  }
+</div>
+<!-- /.tutup Modal-->
+<script type="text/javascript">
+function showBahanBaku() {
+  $('#modalBahanBaku').modal('show');
+}
+function showBahanKemas() {
+  $('#modalBahanKemas').modal('show');
+}
 </script>
