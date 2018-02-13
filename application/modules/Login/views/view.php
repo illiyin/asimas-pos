@@ -27,13 +27,13 @@
  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog">
    <div class="modal-dialog">
         <div class="loginmodal-container">
-          <img src="<?php echo base_url()?>assets/img/logo.png" alt="logo"  style='max-height: 45px; max-width: 200px; margin: 0 auto'>
+          <img src="<?php echo base_url()?>assets/img/logo-asimas.png" alt="logo"  style='max-height: 130px; margin: 0 auto'>
           <h1>Silahkan Login</h1><br>
-           
-          <form id="myform" action="<?php echo base_url('Login/Master/do_login')?>/" method="post"> 
+
+          <form id="myform" action="<?php echo base_url('Login/Master/do_login')?>/" method="post">
             <input type="text" autofocus name="email" id="email" value="<?php echo isset($email)?$email:''?>" placeholder="Email" required>
             <input type="password" name="password" id="password" placeholder="Password" required>
-           
+
             <input type="submit" name="submit" id="aLogin" class="login loginmodal-submit" value="Login">
           </form>
           <div class="login-help">
@@ -50,7 +50,7 @@
   <script type="text/javascript" src="<?=base_url()?>assets/js/waves.min.js"></script>
   <!-- Bootstrap Core JavaScript -->
   <script type="text/javascript" src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
-  
+
   <script src="<?php echo base_url(); ?>assets/js/notify/pnotify.custom.min.js"></script>
 
 
@@ -68,13 +68,13 @@
       var notifText = 'Username/Password anda salah!';
       var action = "<?php echo base_url('Login/Master/do_login')?>/";
       var param = $('#myform').serialize();
-      
+
       $.ajax({
         type: 'post',
         url: action,
         data: param,
         dataType: 'json',
-        beforeSend: function() { 
+        beforeSend: function() {
           // tambahkan loading
           $('#aLogin').html('Sedang Login...');
         },
