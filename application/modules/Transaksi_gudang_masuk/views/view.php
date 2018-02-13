@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row" style='min-height:80px;'></div>
   <div class="row">
-    <h3><strong>Transaksi</strong> - Gudang Masuk</h3>
+    <h3><strong>Transaksi</strong> - Masuk Gudang</h3>
   </div>
   <div class="row" style="margin-top:10px;">
     <table id="TableMain" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -62,39 +62,102 @@
       </tbody>
     </table>
   </div>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-add btn-lg"  onclick="showAdd()">
+    Tambah Transaksi
+  </button>
 </div>
 <!-- /.container -->
-<!-- Modal Ubah -->
-<div class="modal fade" id="modalform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Modal add -->
+<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Ubah Stok Produk</h4>
+        <h4 class="modal-title" id="myModalLabel">Form Transaksi Masuk - Gudang</h4>
       </div>
-      <form action="<?php echo base_url('Transaksi_barangmasuk/Transaksi/ubahStok') ?>" method="POST" id="myform">
+      <form action="#" method="POST" id="myform">
         <div class="modal-body">
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="id_warna">Warna</label>
-                <select name="id_warna" class="form-control" id="id_warna" required="required">
+                <label for="no_transaksi">No. Transaksi</label>
+                <input type="text" class="form-control" name="no_transaksi" id="no_transaksi" placeholder="No. Transaksi">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="nama_barang">Nama Barang</label>
+                <select name="nama_barang" class="form-control" id="nama_barang" required="required">
+                  <option value="">-- Pilih Barang --</option>
+                  <option value="1">Barang 1</option>
                 </select>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="id_ukuran">Ukuran</label>
-                <select name="id_ukuran" class="form-control" id="id_ukuran" required="required">
+                <label for="nama_supplier">Nama Supplier</label>
+                <select name="nama_supplier" class="form-control" id="nama_supplier" required="required">
+                  <option value="">-- Pilih Supplier --</option>
+                  <option value="1">Supplier 1</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="id_satuan">Satuan</label>
+                <select name="id_satuan" class="form-control" id="id_satuan" required="required">
+                  <option value="">-- Pilih Satuan --</option>
+                  <option value="1">Satuan 1</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="jumlah_masuk">Jumlah Masuk</label>
+                <input type="text" class="form-control" name="jumlah_masuk" id="jumlah_masuk" placeholder="Jumlah Masuk">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="no_batch">No. Batch</label>
+                <input type="text" class="form-control" name="no_batch" id="no_batch" placeholder="No. Batch">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="expire_date">Expire Date</label>
+                <div class="input-group">
+                  <input type="text" class="form-control datepicker" name="expire_date" id="expire_date" placeholder="dd/mm/yyyy">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="kode_bahan">Kode Bahan</label>
+                <input type="text" class="form-control" name="kode_bahan" id="kode_bahan" placeholder="Kode Bahan">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="kategori_bahan">Kategori Bahan</label>
+                <input type="text" class="form-control" name="kategori_bahan" id="kategori_bahan" placeholder="Kategori Bahan">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="nama_produsen">Nama Produsen</label>
+                <select name="nama_produsen" class="form-control" id="nama_produsen" required="required">
+                  <option value="">-- Pilih Produsen --</option>
+                  <option value="1">Produsen 1</option>
                 </select>
               </div>
             </div>
             <div class="col-sm-12">
               <div class="form-group">
-                <label for="nama">Jumlah QTY</label>
-                <input type="number" name="qty" maxlength="50" Required class="form-control" id="qty" placeholder="Stok Produk">
-                <input type="hidden" name="state" maxlength="50" Required class="form-control" id="state">
-                <input type="hidden" name="idProduk" maxlength="50" Required class="form-control" id="idProduk">
+                <label for="keterangan">Keterangan</label>
+                <textarea name="keterangan" rows="5" class="form-control" id="keterangan"></textarea>
               </div>
             </div>
           </div>
@@ -108,3 +171,11 @@
   </div>
 </div>
 <!-- /.Modal Ubah-->
+<script type="text/javascript">
+  function showAdd(){
+    $('#modalAdd').modal('show');
+  }
+  function showUpdate(){
+    $('#modalAdd').modal('show');
+  }
+</script>
