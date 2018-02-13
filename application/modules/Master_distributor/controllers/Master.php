@@ -19,45 +19,33 @@ class Master extends MX_Controller {
     }
     function index(){
     	$dataSelect['deleted'] = 1;
-        $data['list_prov'] = json_encode($this->Distributormodel->select($dataSelect, 'm_provinsi', 'nama')->result());
-        $data['list_kota'] = json_encode($this->Distributormodel->select($dataSelect, 'm_kota', 'nama')->result());
-    	$data['list'] = json_encode($this->Distributormodel->select($dataSelect, 'm_supplier_bahan', 'date_add', 'DESC')->result());
+    	$data['list'] = json_encode($this->Distributormodel->select($dataSelect, 'm_distributor', 'date_add', 'DESC')->result());
 		//echo $data;
-		//print_r($data);
+		// print_r($data);
     	$this->load->view('Master_distributor/view', $data);
     }
 
-	function test(){
-		header('Content-Type: application/json; charset=utf-8');
-		$dataSelect['deleted'] = 1;
-		$list = $this->Distributormodel->select($dataSelect, 'm_supplier_bahan', 'date_add', 'DESC')->result();
-		echo json_encode(array('status' => '3','list' => $list));
-	}
 
     function add(){
 		$params = $this->input->post();
+
+        // echo json_encode($params);
 		$dataInsert['nama'] 			= $params['nama'];
 		$dataInsert['alamat'] 			= $params['alamat'];
 		$dataInsert['no_telp'] 			= $params['no_telp'];
         $dataInsert['email']            = $params['email'];
-        $dataInsert['id_provinsi']      = $params['id_provinsi'];
-        $dataInsert['id_kota']          = $params['id_kota'];
-        $dataInsert['npwp']             = $params['npwp'];
-        $dataInsert['nama_bank']        = $params['nama_bank'];
-        $dataInsert['no_rekening']      = $params['no_rekening'];
-        $dataInsert['rekening_an']      = $params['rekening_an'];
-		$dataInsert['keterangan'] 		= $params['keterangan'];
         $dataInsert['last_edited']      = date("Y-m-d H:i:s");
+        $dataInsert['date_add']         = date("Y-m-d H:i:s");
         $dataInsert['add_by']           = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $dataInsert['edited_by']        = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
 		$dataInsert['deleted'] 			= 1;
 
-		$checkData = $this->Distributormodel->select($dataInsert, 'm_supplier_bahan');
+		$checkData = $this->Distributormodel->select($dataInsert, 'm_distributor');
 		if($checkData->num_rows() < 1){
-			$insert = $this->Distributormodel->insert($dataInsert, 'm_supplier_bahan');
+			$insert = $this->Distributormodel->insert($dataInsert, 'm_distributor');
 			if($insert){
 				$dataSelect['deleted'] = 1;
-				$list = $this->Distributormodel->select($dataSelect, 'm_supplier_bahan', 'date_add', 'DESC')->result();
+				$list = $this->Distributormodel->select($dataSelect, 'm_distributor', 'date_add', 'DESC')->result();
 				echo json_encode(array('status' => 3,'list' => $list));
 			}else{
 				echo json_encode(array('status' => 1));
@@ -134,10 +122,10 @@ class Master extends MX_Controller {
     	if($id != null){
     		$dataCondition['id'] = $id;
     		$dataUpdate['deleted'] = 0;
-    		$update = $this->Distributormodel->update($dataCondition, $dataUpdate, 'm_supplier_bahan');
+    		$update = $this->Distributormodel->update($dataCondition, $dataUpdate, 'm_distributor');
     		if($update){
     			$dataSelect['deleted'] = 1;
-				$list = $this->Distributormodel->select($dataSelect, 'm_supplier_bahan', 'date_add', 'DESC')->result();
+				$list = $this->Distributormodel->select($dataSelect, 'm_distributor', 'date_add', 'DESC')->result();
 				echo json_encode(array('status' => '3','list' => $list));
     		}else{
     			echo "1";

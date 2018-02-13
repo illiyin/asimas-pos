@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Index extends MX_Controller {
-	function __construct() {
+    function __construct() {
         parent::__construct();
         $this->load->model("Gmodel");
         $this->load->helper("url");
@@ -15,12 +15,12 @@ class Index extends MX_Controller {
         }
     }
     function index(){
-    	//$data['view'] = 'base_html/sale';
-    	//$this->load->view('base_html/base', $data);
+        //$data['view'] = 'base_html/sale';
+        //$this->load->view('base_html/base', $data);
         redirect("index/modul/Transaksi_penjualan-Transaksi-index");
     }
     function base_sale(){
-    	$this->load->view('base_html/sale');
+        $this->load->view('base_html/sale');
     }
     function sale(){
         $data['view'] = 'base_html/sale';
@@ -30,10 +30,11 @@ class Index extends MX_Controller {
         print_r($this->session->userdata());
     }
     function modul($modul = null){
-        $sql = "SELECT B.id, B.nama, B.icon_class AS kategori_icon, (SELECT COUNT(A.id) FROM m_pegawai_permission A WHERE A.id_menu = B.id) AS jumlah_sub FROM m_pegawai_menu B";
+        $sql = "SELECT B.id, B.nama, B.icon_class AS kategori_icon, (SELECT COUNT(A.id) FROM m_pegawai_permission A WHERE A.id_menu = B.id) AS jumlah_sub FROM m_pegawai_menu B WHERE B.deleted = 1";
         $data['nav_kategori'] = $this->Gmodel->rawQuery($sql)->result();
-        $data['nav_menu'] = $this->Gmodel->get("m_pegawai_permission", "id_menu, urutan, id", "ASC")->result();
-
+        // $data['nav_menu'] = $this->Gmodel->get("m_pegawai_permission", "id_menu, urutan, id", "ASC")->result();
+        $data['nav_menu'] = $this->Gmodel->select(array('deleted' => 1), 'm_pegawai_permission', 'id_menu, urutan, id', 'ASC')->result();
+        
         if($modul != null){
             $realmodul = explode("-", $modul);
             $modul=str_replace("-", "/", $modul);
@@ -81,6 +82,6 @@ class Index extends MX_Controller {
         $params = $this->input->get();
         $data['redir'] = isset($params['redir']) ? $params['redir'] : '';
 
-    	$this->load->view('Login/view', $data);
+        $this->load->view('Login/view', $data);
     }
 }

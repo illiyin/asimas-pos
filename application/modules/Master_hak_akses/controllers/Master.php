@@ -21,9 +21,9 @@ class Master extends MX_Controller {
     	$dataSelect['deleted'] = 1;
         $data['list'] = json_encode($this->Pegawailevelmodel->select($dataSelect, 'm_pegawai_level', 'date_add', 'DESC')->result());
 
-        $data['list_permission'] = json_encode($this->Pegawailevelmodel->get('m_pegawai_permission')->result());
+        $data['list_permission'] = json_encode($this->Pegawailevelmodel->select($dataSelect, 'm_pegawai_permission')->result());
         // $sql = "SELECT DISTINCT kategori FROM m_pegawai_permission";
-        $sql = "SELECT B.id, B.nama, (SELECT COUNT(A.id) FROM m_pegawai_permission A WHERE A.id_menu = B.id) AS jumlah_sub FROM m_pegawai_menu B";
+        $sql = "SELECT B.id, B.nama, (SELECT COUNT(A.id) FROM m_pegawai_permission A WHERE A.id_menu = B.id) AS jumlah_sub FROM m_pegawai_menu B WHERE B.deleted = 1";
     	$data['list_menu'] = json_encode($this->Pegawailevelmodel->rawQuery($sql)->result());
 		//echo $data;
 		//print_r($data);
