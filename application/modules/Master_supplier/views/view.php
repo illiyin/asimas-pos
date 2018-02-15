@@ -62,7 +62,7 @@
              </div>
              <div class="col-sm-6">
                <div class="form-group">
-                 <label for="no_telp">No Telp Supplier</label>
+                 <label for="no_telp">No. Telp. Supplier</label>
                  <input type="number" min="0" maxlength="50" name="no_telp" class="form-control" id="no_telp" placeholder="No Telp Supplier" required="">
                </div>
              </div>
@@ -70,6 +70,33 @@
                <div class="form-group">
                  <label for="email">Email Supplier</label>
                  <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier" required="">
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="email">Lead Time</label>
+                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier" required="">
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="email">Minumum Order Quantity (MOQ)</label>
+                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier" required="">
+               </div>
+             </div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="">Status</label>
+                 <div class="radio">
+                   <label for="pre_approved">
+                     <input type="radio" name="approvement" value="1" id="pre_approved"> Pre-approved
+                   </label>
+                 </div>
+                 <div class="radio">
+                   <label for="approved">
+                     <input type="radio" name="approvement" value="2" id="approved"> Approved
+                   </label>
+                 </div>
                </div>
              </div>
            </div>
