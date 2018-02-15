@@ -29,7 +29,7 @@ class Master extends MX_Controller {
         $data['list_satuan'] = json_encode($this->Bahanbakumodel->select($dataSelect, 'm_satuan', 'nama')->result());
         $data['list_gudang'] = json_encode($this->Bahanbakumodel->select($dataSelect, 'm_gudang', 'nama')->result());
         $data['list_kategori'] = json_encode($this->Bahanbakumodel->select($dataSelect, 'm_bahan_kategori', 'nama')->result());
-
+        
         $data['list_warna'] = json_encode($this->Bahanbakumodel->select($dataSelect, 'm_bahan_warna', 'nama')->result());
         $data['list_det_warna'] = json_encode($this->Bahanbakumodel->get('m_bahan_det_warna')->result());
 
@@ -41,10 +41,10 @@ class Master extends MX_Controller {
 
     function data(){
         $requestData= $_REQUEST;
-        $columns = array(
-            0   =>  '#',
-            1   =>  'foto',
-            2   =>  'nama',
+        $columns = array( 
+            0   =>  '#', 
+            1   =>  'foto', 
+            2   =>  'nama', 
             3   =>  'sku',
             4   =>  'stok',
             5   =>  'date_add',
@@ -57,7 +57,7 @@ class Master extends MX_Controller {
         $sql = "SELECT * ";
         $sql.=" FROM m_bahan WHERE deleted = 1";
         if( !empty($requestData['search']['value']) ) {
-            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' "; 
             $sql.=" OR sku LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR stok LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR date_add LIKE '%".$requestData['search']['value']."%' )";
@@ -65,9 +65,9 @@ class Master extends MX_Controller {
         $query=$this->Bahanbakumodel->rawQuery($sql);
         $totalFiltered = $query->num_rows();
 
-        $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."   LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+        $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."   LIMIT ".$requestData['start']." ,".$requestData['length']."   "; 
         $query=$this->Bahanbakumodel->rawQuery($sql);
-
+        
         $data = array(); $i=0;
         foreach ($query->result_array() as $row) {
             $foto_url = base_url()."/upload/bahan_baku/placeholder.png";
@@ -76,7 +76,7 @@ class Master extends MX_Controller {
                     $foto_url = base_url()."/upload/bahan_baku/".$row["foto"];
                 }
             }
-            $nestedData     =   array();
+            $nestedData     =   array(); 
             $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
             $nestedData[]   .=  "<a href='javascript:void(0)' data-toggle='popover' data-html='true' data-placement='right' onclick='showThumbnail(this)'>"
                             . "<img src='".$foto_url."' class='img-responsive img-rounded' width='70' alt='No Image' style='margin:0 auto;'> </a>";
@@ -90,7 +90,7 @@ class Master extends MX_Controller {
                 .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="showDetail('.$row["id"].')"><i class="fa fa-file-text-o"></i></a>'
                .'</div>'
             .'</td>';
-
+            
             $data[] = $nestedData; $i++;
         }
         $totalData = count($data);
@@ -101,7 +101,7 @@ class Master extends MX_Controller {
                     "data"            => $data
                     );
         echo json_encode($json_data);
-    }
+    }	
     function add(){
         $params = $this->input->post();
         $id = (!empty($params['id'])) ? $params['id'] : $this->Bahanbakumodel->get_last_id("m_bahan") + 1;
@@ -136,13 +136,13 @@ class Master extends MX_Controller {
             }else{
                 echo json_encode(array('status' => 1));
             }
-
-        }else{
+            
+        }else{          
             echo json_encode(array( 'status'=>1 ));
         }
     }
 
-	function get($id = null){
+	function get($id = null){   	
     	if($id != null){
     		$dataSelect['id'] = $id;
     		$selectData = $this->Bahanbakumodel->select($dataSelect, 'm_bahan');
@@ -160,7 +160,7 @@ class Master extends MX_Controller {
     		echo json_encode(array('status' => 0));
     	}
     }
-
+	
     function last_id() {
         echo "<script>console.log(".$this->Bahanbakumodel->get_last_id("m_bahan").");</script>";
     }
@@ -184,7 +184,7 @@ class Master extends MX_Controller {
         if(!$_FILES['foto']['error']) {
             $dataUpdate['foto']         = $this->proses_foto($id);
         }
-
+        
 		$checkData = $this->Bahanbakumodel->select($dataCondition, 'm_bahan');
 		if($checkData->num_rows() > 0){
 			$update = $this->Bahanbakumodel->update($dataCondition, $dataUpdate, 'm_bahan');
@@ -200,7 +200,7 @@ class Master extends MX_Controller {
 			}else{
 				echo json_encode(array( 'status'=>'2' ));
 			}
-		}else{
+		}else{			
     		echo json_encode(array( 'status'=>'1' ));
 		}
     }
@@ -228,9 +228,9 @@ class Master extends MX_Controller {
     		echo "NOT FOUND";
     	}
     }
-
+    
     private function insert_detail($id_bahan, $data, $table) {
-        $this->_insertLog('Insert Detail');
+        $this->_insertLog('Insert Detail');        
         if(!empty($table) AND !empty($data)) {
             //check if id_bahan exist in m_bahan_det_ tables
             $dataInsert = array();
@@ -238,10 +238,10 @@ class Master extends MX_Controller {
             $checkData = $this->Bahanbakumodel->select($dataCondition, 'm_bahan_det_'.$table);
             if($checkData->num_rows() > 0) {
                 //Delete old data first
-                $this->Bahanbakumodel->delete($dataCondition, 'm_bahan_det_'.$table);
+                $this->Bahanbakumodel->delete($dataCondition, 'm_bahan_det_'.$table);       
             }
-
-            //Then insert new data
+            
+            //Then insert new data       
             foreach ($data as $key=>$value) {
                 $dataInsert[] = array(
                         'id_bahan' => $id_bahan,
@@ -266,7 +266,7 @@ class Master extends MX_Controller {
 
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
-        if (!$this->upload->do_upload($input_name))
+        if (!$this->upload->do_upload($input_name)) 
         {
             $error = array('error' => $this->upload->display_errors());
             $this->upload->display_errors();
@@ -283,12 +283,12 @@ class Master extends MX_Controller {
     }
     private function cek_tipe($tipe)
     {
-        if ($tipe == 'image/jpeg')
+        if ($tipe == 'image/jpeg') 
             { return ".jpg"; }
-        else if($tipe == 'image/png')
+        else if($tipe == 'image/png') 
             { return ".png"; }
-        else
+        else 
             { return false; }
-    }
-
+    }   
+    
 }
