@@ -150,11 +150,12 @@
                  <span class="icon-bar"></span>
                  <span class="icon-bar"></span>
                </button>
-               <a class="navbar-brand" href="#"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="logo" class="navbar-logo"></a>
+               <a class="navbar-brand" href="<?php echo base_url(); ?>"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="logo" class="navbar-logo"></a>
             </div>
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                <ul class="nav navbar-nav">
+                 <li><a href="<?php echo base_url(); ?>" title="Dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
                   <?php foreach ($nav_kategori as $nav_kat) {
                     $nav_kat_icon = (!empty($nav_kat->kategori_icon)) ? $nav_kat->kategori_icon : 'fa fa-list'; ?>
                     <li class="dropdown">

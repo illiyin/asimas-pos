@@ -102,7 +102,13 @@
                  </select>
                </div>
              </div>
-             <div class="col-sm-6"></div>
+             <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_supplier">Supplier</label>
+                 <select name="id_supplier" class="form-control" id="id_supplier" required="">
+                 </select>
+               </div>
+             </div>
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Kategori Bahan</label>

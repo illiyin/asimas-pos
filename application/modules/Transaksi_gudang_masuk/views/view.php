@@ -79,10 +79,16 @@
       <form action="#" method="POST" id="myform">
         <div class="modal-body">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
               <div class="form-group">
                 <label for="no_transaksi">No. Transaksi</label>
                 <input type="text" class="form-control" name="no_transaksi" id="no_transaksi" placeholder="No. Transaksi">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="harga_beli">Harga Pembelian</label>
+                <input type="text" class="form-control" name="harga_beli" id="harga_beli" placeholder="Harga Pembelian">
               </div>
             </div>
             <div class="col-sm-6">
