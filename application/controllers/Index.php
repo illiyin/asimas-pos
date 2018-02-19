@@ -17,7 +17,6 @@ class Index extends MX_Controller {
     function index(){
         //$data['view'] = 'base_html/sale';
         //$this->load->view('base_html/base', $data);
-        // redirect("index/modul/Transaksi_penjualan-Transaksi-index");
         redirect("index/modul/Dashboard-master-index");
     }
     function base_sale(){

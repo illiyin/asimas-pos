@@ -111,7 +111,6 @@
 </div>
 <!-- /.Modal Add-->
 
-
 <script type="text/javascript">
 // initialize datatable
   var table = $("#TableMain").DataTable({
@@ -129,66 +128,15 @@
   } ).draw();
 
   var jsonList = <?php echo $list; ?>;
-  var jsonProv = <?php echo $list_prov; ?>;
-  var jsonKota = <?php echo $list_kota; ?>;
 
   var awalLoad = true;
 
   loadData(jsonList);
-  load_prov(jsonProv);
-
-  function load_prov(json){
-  	var html = "<option value='' selected disabled>Pilih Provinsi</option>";
-  	for (var i=0;i<json.length;i++){
-  	     html = html+ "<option value='"+json[i].id+"'>"+json[i].nama+"</option>";
-  	}
-  	$("#id_provinsi").html(html);
-  }
-  function load_kota(json, idProv=0){
-    // console.log(json);
-    var html = "<option value='' selected disabled>Pilih Kota</option>";
-    for (var i=0;i<json.length;i++){
-         if(json[i].id_provinsi == idProv){
-          html = html+ "<option value='"+json[i].id+"'>"+json[i].nama+"</option>";
-         }
-    }
-    $("#id_kota").html(html);
-  }
-
-  function get_kota(){
-  	if ($("#id_provinsi").val() == "" || $("#id_provinsi").val()==null){
-  	   return false;
-  	}
-  	$("#id_kota").prop("disabled",true);
-
-  	$.ajax({
-  	   url :"<?php echo base_url('Master_supplier_bahan/Master/get_kota')?>/",
-  	   type : "GET",
-  	   data :"id_prov="+$("#id_provinsi").val(),
-  	   dataType : "json",
-  	   success : function(data){
-  	      $("#id_kota").prop("disabled",false);
-  	      load_kota(data, $("#id_provinsi").val());
-  	   }
-  	});
-  }
-  function sync_kota(provinsi){
-    $.ajax({
-       url :"<?php echo base_url('Master_supplier_bahan/Master/get_kota')?>/",
-       type : "GET",
-       data :"id_prov="+provinsi,
-       dataType : "json",
-       success : function(data){
-          $("#id_kota").prop("disabled",false);
-          load_kota(data, provinsi);
-       }
-    });
-  }
 
   function loadData(json){
     //clear table
-	  table.clear().draw();
-	  for(var i=0;i<json.length;i++){
+    table.clear().draw();
+    for(var i=0;i<json.length;i++){
         table.row.add( [
             "",
             json[i].nama,
@@ -199,23 +147,21 @@
             // json[i].nama_bank,
             // DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
             '<td class="text-center"><div class="btn-group" >'+
-                '<a id="group'+i+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
+                '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
                 '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
                '</div>'+
             '</td>'
         ] ).draw( false );
-	  }
-	  if (!awalLoad){
-		  $('.divpopover').attr("data-content","ok");
-		  $('.divpopover').popover();
-	  }
-	  awalLoad = false;
+    }
+    if (!awalLoad){
+      $('.divpopover').attr("data-content","ok");
+      $('.divpopover').popover();
+    }
+    awalLoad = false;
   }
 
 
   function showAdd(){
-    load_kota(jsonKota, 0);
-
     $("#myModalLabel").text("Tambah Supplier");
     $("#id").val("");
     $("#nama").val("");
@@ -227,48 +173,37 @@
     $("#no_rekening").val("");
     $("#rekening_an").val("");
     $("#keterangan").val("");
-    load_prov(jsonProv);
     $("#modalform").modal("show");
   }
 
   function showUpdate(i){
-    load_prov(jsonProv);
-    load_kota(jsonKota, jsonList[i].id_provinsi);
-
     $("#myModalLabel").text("Ubah Supplier");
     $("#id").val(jsonList[i].id);
     $("#nama").val(jsonList[i].nama);
     $("#alamat").val(jsonList[i].alamat);
     $("#no_telp").val(jsonList[i].no_telp);
     $("#email").val(jsonList[i].email);
-    $("#id_provinsi").val(jsonList[i].id_provinsi);
-    $("#id_kota").val(jsonList[i].id_kota);
-    $("#npwp").val(jsonList[i].npwp);
-    $("#nama_bank").val(jsonList[i].nama_bank);
-    $("#no_rekening").val(jsonList[i].no_rekening);
-    $("#rekening_an").val(jsonList[i].rekening_an);
-    $("#keterangan").val(jsonList[i].keterangan);
     $("#modalform").modal("show");
   }
 
   $("#myform").on('submit', function(e){
     e.preventDefault();
     var notifText = 'Data berhasil ditambahkan!';
-    var action = "<?php echo base_url('Master_supplier_bahan/Master/add')?>/";
+    var action = "<?php echo base_url('Master_supplier/Master/add')?>/";
     if ($("#id").val() != ""){
-      action = "<?php echo base_url('Master_supplier_bahan/Master/edit')?>/";
+      action = "<?php echo base_url('Master_supplier/Master/edit')?>/";
       notifText = 'Data berhasil diubah!';
-	  }
-	  var param = $('#myform').serialize();
-	  if ($("#id").val() != ""){
-		 param = $('#myform').serialize()+"&id="+$('#id').val();
-	  }
+    }
+    var param = $('#myform').serialize();
+    if ($("#id").val() != ""){
+     param = $('#myform').serialize()+"&id="+$('#id').val();
+    }
 
     $.ajax({
       type: 'post',
       url: action,
       data: param,
-	    dataType: 'json',
+      dataType: 'json',
       beforeSend: function() {
         // tambahkan loading
         $("#aSimpan").prop("disabled", true);
@@ -276,72 +211,70 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          console.log("ojueojueokl"+data.status);
           jsonList = data.list;
           loadData(jsonList);
-          $('#aSimpan').html('Simpan');
-          $("#aSimpan").prop("disabled", false);
-  				$("#modalform").modal('hide');
-  				// $("#notif-top").fadeIn(500);
-  				// $("#notif-top").fadeOut(2500);
+          $("#modalform").modal('hide');
+          // $("#notif-top").fadeIn(500);
+          // $("#notif-top").fadeOut(2500);
           new PNotify({
-                              title: 'Sukses',
-                              text: notifText,
-                              type: 'success',
-                              hide: true,
-                              delay: 5000,
-                              styling: 'bootstrap3'
-                            });
-  			}
+            title: 'Sukses',
+            text: notifText,
+            type: 'success',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
+        }
+        console.log(data);
+        $('#aSimpan').html('Simpan');
+        $("#aSimpan").prop("disabled", false);
       }
     });
   });
 
-	function deleteData(element){
-		var el = $(element).attr("id");
-		console.log(el);
-		var id  = el.replace("aConfirm","");
-		var i = parseInt(id);
-		//console.log(jsonList[i]);
-		$.ajax({
+  function deleteData(element){
+    var el = $(element).attr("id");
+    var id  = el.replace("aConfirm","");
+    var i = parseInt(id);
+    $.ajax({
           type: 'post',
-          url: '<?php echo base_url('Master_supplier_bahan/Master/delete'); ?>/',
-          data: {"id":jsonList[i].id},
-		      dataType: 'json',
+          url: '<?php echo base_url('Master_supplier/Master/delete'); ?>/',
+          data: {"id":i},
+          dataType: 'json',
           beforeSend: function() {
             // kasi loading
             $("#aConfirm"+i).html("Sedang Menghapus...");
             $("#aConfirm"+i).prop("disabled", true);
           },
           success: function (data) {
+            console.log(data);
             if (data.status == '3'){
              $("#aConfirm"+i).prop("disabled", false);
-  				// $("#notif-top").fadeIn(500);
-  				// $("#notif-top").fadeOut(2500);
+          // $("#notif-top").fadeIn(500);
+          // $("#notif-top").fadeOut(2500);
               new PNotify({
-                              title: 'Sukses',
-                              text: 'Data berhasil dihapus!',
-                              type: 'success',
-                              hide: true,
-                              delay: 5000,
-                              styling: 'bootstrap3'
-                            });
-      				jsonList = data.list;
-      				loadData(jsonList);
-      			}
+                title: 'Sukses',
+                text: 'Data berhasil dihapus!',
+                type: 'success',
+                hide: true,
+                delay: 5000,
+                styling: 'bootstrap3'
+              });
+              jsonList = data.list;
+              loadData(jsonList);
+            }
           }
         });
-	}
+  }
 
-	function confirmDelete(el){
-		var element = $(el).attr("id");
-		console.log(element);
-		var id  = element.replace("group","");
-		var i = parseInt(id);
+  function confirmDelete(el){
+    var element = $(el).attr("id");
+    var id  = element.replace("group","");
+    var i = parseInt(id);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
-		$(el).popover();
+    $(el).popover();
 
-	}
+  }
 
   //Hack untuk bootstrap popover (popover hilang jika diklik di luar)
   $(document).on('click', function (e) {

@@ -9,7 +9,7 @@
     <h3><strong>Master</strong> - Kategori Bahan</h3>
   </div>
    <div class="row" style="margin-top:10px;">
-      <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">
+      <table id="TableMain" class="table table-striped table-bordered" cellspacing="0" width="100%">
           <thead>
               <tr>
                   <th class="text-center no-sort">#</th>
@@ -83,7 +83,7 @@
              <div class="col-sm-6">
                 <div class="form-group">
                  <label for="nama">Kode Kategori Bahan</label>
-                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Kode Kategori Bahan">
+                 <input type="text" name="kode_kategori" maxlength="50" Required class="form-control" id="kode_kategori" placeholder="Kode Kategori Bahan">
                  <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id" placeholder="ID Kategori Bahan">
                </div>
              </div>
@@ -108,184 +108,71 @@
 <!-- /.Modal Add-->
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    //initialize input money masking
-    maskInputMoney();
-    $("#foto").fileinput({ 'showUpload': false });
-  });
-  function maskInputMoney(){
-    $('.money').mask('#.##0', {reverse: true});
-  }
-  function unmaskInputMoney(){
-    $('.money').unmask();
-  }
-  function fotoInitialPreview(file_source, file_name){
-    $("#foto").fileinput('destroy');
-    $("#foto").fileinput({
-      showUpload: false,
-      initialPreview: [file_source],
-      initialPreviewAsData: true,
-      initialPreviewFileType: 'image',
-      initialPreviewConfig: [
-        {caption: file_name}
-        ],
-      // initialPreviewShowDelete: false,
-      purifyHtml: true, // this by default purifies HTML data for preview
-     });
-  }
+// initialize datatable
+var table = $("#TableMain").DataTable({
+  "columnDefs": [ {
+          "searchable": false,
+          "orderable": false,
+          "targets": "no-sort"
+      } ],
+      // "order": [[ 1, 'asc' ]]
+});
+table.on( 'order.dt search.dt', function () {
+      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+          cell.innerHTML = "<span style='display:block' class='text-center'>"+(i+1)+"</span>";
+      } );
+} ).draw();
 
-  var jsonlist = <?php echo $list; ?>;
-  var jsonSupplier = <?php echo $list_supplier; ?>;
-  var jsonSatuan = <?php echo $list_satuan; ?>;
-  var jsonGudang = <?php echo $list_gudang; ?>;
-  var jsonKategori = <?php echo $list_kategori; ?>;
+var jsonList = <?php echo $list; ?>;
 
-  var jsonWarna = <?php echo $list_warna; ?>;
-  var jsonDetWarna = <?php echo $list_det_warna; ?>;
+var awalLoad = true;
 
-  var awalLoad = true;
-  var initDataTable = $('#TableMainServer').DataTable({
-      "bProcessing": true,
-      "bServerSide": true,
-      "order": [[4, 'DESC']],
-      "ajax":{
-            url :"<?php echo base_url()?>Master_kategori_bahan/Master/data",
-            type: "post",  // type of method  , by default would be get
-            error: function(){  // error handling code
-              // $("#employee_grid_processing").css("display","none");
-            }
-          },
-      "columnDefs": [ {
-        "targets"  : 'no-sort',
-        "orderable": false,
-      }]
-    });
+loadData(jsonList);
 
-  function load_select_option(json, target_id, nama=""){
-    var html = "";
-    if(!nama == "") {
-      html = "<option value='' selected disabled>Pilih "+nama+"</option>";
-    }
-    for (var i=0;i<json.length;i++){
-         html = html+ "<option value='"+json[i].id+"'>"+json[i].nama+"</option>";
-    } $(target_id).html(html);
+function loadData(json){
+  //clear table
+  table.clear().draw();
+  for(var i=0;i<json.length;i++){
+      table.row.add( [
+          "",
+          json[i].kode_kategori,
+          json[i].nama,
+          // "Tanggal Buat " + i,
+          // json[i].nama,
+          // json[i].alamat,
+          // json[i].no_telp,
+          // json[i].email,
+          // json[i].npwp,
+          // json[i].nama_bank,
+          DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
+          '<td class="text-center"><div class="btn-group" >'+
+              '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
+              '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
+             '</div>'+
+          '</td>'
+      ] ).draw( false );
   }
-  function load_select() {
-    load_select_option(jsonSupplier, "#id_supplier", "Supplier");
-    load_select_option(jsonSatuan, "#id_satuan", "Satuan");
-    load_select_option(jsonGudang, "#id_gudang", "Gudang");
-    load_select_option(jsonKategori, "#id_kategori", "Kategori");
-    load_select_option(jsonWarna, "#id_warna","");
-    $("#id_warna").multiselect({
-      buttonWidth: '100%',
-      inheritClass: true,
-      enableFiltering: true,
-      includeSelectAllOption: true,
-      nonSelectedText: "Pilih Warna"
-    });
+  if (!awalLoad){
+    $('.divpopover').attr("data-content","ok");
+    $('.divpopover').popover();
   }
+  awalLoad = false;
+}
+
   function showAdd(){
-    load_select();
     $("#myModalLabel").text("Tambah Kategori Bahan");
     $("#id").val("");
     $("#nama").val("");
-    $("#id_supplier").val("");
-    $("#id_satuan").val("");
-    $("#id_gudang").val("");
-    $("#id_kategori").val("");
-    $("#id_warna").multiselect('refresh');
-    $("#sku").val("");
-    $("#kode_barang").val("");
-    $("#berat").val("");
-    $("#harga_beli").val("");
-    $("#foto").attr("required", true);
-    $("#foto").fileinput("clear");
-    $("#deskripsi").val("");
-    unmaskInputMoney(); maskInputMoney();
+    $("#kode_kategori").val("");
     $("#modalform").modal("show");
   }
 
   function showUpdate(i){
-    load_select();
-    //data ukuran & warna diambil dari tabel yang berbeda
-    var dataUpdate = jsonlist.filter(function (index) { return index.id == i });
-    console.log(dataUpdate);
-    var getWarna = jsonDetWarna.filter(function (index) { return index.id_bahan == i });
-    var id_warna = [];
-    id_warna = $.map(getWarna, function(el, idx){
-       return [el["id_warna"]];
-    });
-
     $("#myModalLabel").text("Ubah Kategori Bahan");
-    $("#id").val(dataUpdate[0].id);
-    $("#nama").val(dataUpdate[0].nama);
-    $("#id_supplier").val((dataUpdate[0].id_supplier_bahan==0) ? "" : dataUpdate[0].id_supplier_bahan);
-    $("#id_satuan").val((dataUpdate[0].id_satuan==0) ? "" : dataUpdate[0].id_satuan);
-    $("#id_gudang").val((dataUpdate[0].id_gudang==0) ? "" : dataUpdate[0].id_gudang);
-    $("#id_kategori").val((dataUpdate[0].id_kategori_bahan==0) ? "" : dataUpdate[0].id_kategori_bahan);
-    $("#sku").val(dataUpdate[0].sku);
-    $("#kode_barang").val(dataUpdate[0].kode_barang);
-    $("#berat").val(dataUpdate[0].berat);
-    $("#harga_beli").val(dataUpdate[0].harga_beli);
-    $("#deskripsi").val(dataUpdate[0].deskripsi);
-    $("#foto").attr("required", false);
-    $("#foto").fileinput("clear");
-
-    var file_source = dataUpdate[0].foto || "placeholder.png";
-    fotoInitialPreview("<?php echo base_url();?>"+ "upload/bahan_baku/" + file_source, file_source);
-
-    $("#id_warna").val(id_warna);
-    $("#id_warna").multiselect("refresh");
-    unmaskInputMoney(); maskInputMoney();
+    $("#id").val(jsonList[i].id);
+    $("#nama").val(jsonList[i].nama);
+    $("#kode_kategori").val(jsonList[i].kode_kategori);
     $("#modalform").modal("show");
-  }
-  function showDetail(i){
-    //data ukuran & warna diambil dari tabel yang berbeda
-    var dataDetail = jsonlist.filter(function (index) { return index.id == i });
-    console.log(dataDetail);
-    var getWarna = jsonDetWarna.filter(function (index) { return index.id_bahan == i });
-
-    var id_warna = [];
-    id_warna = $.map(getWarna, function(el, idx){
-       return [el["id_warna"]];
-    });
-
-    var list_warna = [];
-    $.each(id_warna, function(idx, val) {
-       list_warna.push($.map(jsonWarna, function(index, value) {
-        if(id_warna[idx] == index["id"]){
-          return [index["nama"]];
-        }
-      }));
-    });
-
-    $("#det_nama").text(dataDetail[0].nama ? dataDetail[0].nama : '-');
-    $("#det_sku").text(dataDetail[0].sku ? dataDetail[0].sku : '-');
-    $("#det_kode_barang").text(dataDetail[0].kode_barang ? dataDetail[0].kode_barang : '-');
-    $("#det_harga_beli").text(dataDetail[0].harga_beli);
-    $("#det_stok").text(dataDetail[0].stok);
-    $("#det_berat").text(dataDetail[0].berat);
-    $("#det_deskripsi").text(dataDetail[0].deskripsi ? dataDetail[0].deskripsi : '-');
-
-    $("#det_supplier").text(getMasterById(jsonSupplier, dataDetail[0].id_supplier_bahan));
-    $("#det_satuan").text(getMasterById(jsonSatuan, dataDetail[0].id_satuan));
-    $("#det_gudang").text(getMasterById(jsonGudang, dataDetail[0].id_gudang));
-    $("#det_kategori").text(getMasterById(jsonKategori, dataDetail[0].id_kategori_bahan));
-    $("#det_warna").text((list_warna.length>0) ? list_warna.join() : '-');
-    $("#det_foto").attr("src", "<?php echo base_url('upload/bahan_baku')?>/"+dataDetail[0].foto);
-    unmaskInputMoney(); maskInputMoney();
-    $("#Viewproduct").modal("show");
-  }
-
-  function getMasterById(jsonData, id){
-    dataNama = '-';
-    data = jsonData.filter(function(index) {return index.id == id});
-    // console.log(data);
-    if(data.length > 0) {
-      dataNama = data[0].nama;
-      // console.log(data[0].nama);
-    }
-    return dataNama;
   }
 
   $("#myform").on('submit', function(e){
@@ -296,17 +183,15 @@
       action = "<?php echo base_url('Master_kategori_bahan/Master/edit')?>/";
       notifText = 'Data berhasil diubah!';
     }
-    unmaskInputMoney();
-    var paramImg = new FormData(jQuery('#myform')[0]);
-    maskInputMoney();
+    var param = $('#myform').serialize();
+    if ($("#id").val() != ""){
+     param = $('#myform').serialize()+"&id="+$('#id').val();
+    }
 
     $.ajax({
-      url: action,
       type: 'post',
-      data: paramImg,
-      cache: false,
-      contentType: false,
-      processData: false,
+      url: action,
+      data: param,
       dataType: 'json',
       beforeSend: function() {
         // tambahkan loading
@@ -315,38 +200,45 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          console.log("ojueojueokl"+data.status);
-          jsonlist = data.list;
-          jsonDetWarna = data.list_det_warna;
-          // loadData(jsonlist);
-          initDataTable.ajax.reload();
-
-          $('#aSimpan').html('Simpan');
-          $("#aSimpan").prop("disabled", false);
+          jsonList = data.list;
+          loadData(jsonList);
           $("#modalform").modal('hide');
+          // $("#notif-top").fadeIn(500);
+          // $("#notif-top").fadeOut(2500);
           new PNotify({
-                      title: 'Sukses',
-                      text: notifText,
-                      type: 'success',
-                      hide: true,
-                      delay: 5000,
-                      styling: 'bootstrap3'
-                    });
+            title: 'Sukses',
+            text: notifText,
+            type: 'success',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
+        } else if(data.status == 1){
+          $("#myform")[0].reset();
+          new PNotify({
+            title: 'Gagal',
+            text: data.message,
+            type: 'warning',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
         }
+        $('#aSimpan').html('Simpan');
+        $("#aSimpan").prop("disabled", false);
       }
     });
   });
 
-	function deleteData(element){
-		var el = $(element).attr("id");
-		console.log(el);
-		var id  = el.replace("aConfirm","");
-		var i = parseInt(id);
-		$.ajax({
+  function deleteData(element){
+    var el = $(element).attr("id");
+    var id  = el.replace("aConfirm","");
+    var i = parseInt(id);
+    $.ajax({
           type: 'post',
           url: '<?php echo base_url('Master_kategori_bahan/Master/delete'); ?>/',
           data: {"id":i},
-		      dataType: 'json',
+          dataType: 'json',
           beforeSend: function() {
             // kasi loading
             $("#aConfirm"+i).html("Sedang Menghapus...");
@@ -354,34 +246,31 @@
           },
           success: function (data) {
             if (data.status == '3'){
-              $("#aConfirm"+i).prop("disabled", false);
-              initDataTable.ajax.reload();
+             $("#aConfirm"+i).prop("disabled", false);
+          // $("#notif-top").fadeIn(500);
+          // $("#notif-top").fadeOut(2500);
               new PNotify({
-                            title: 'Sukses',
-                            text: 'Data berhasil dihapus!',
-                            type: 'success',
-                            hide: true,
-                            delay: 5000,
-                            styling: 'bootstrap3'
-                          });
+                title: 'Sukses',
+                text: 'Data berhasil dihapus!',
+                type: 'success',
+                hide: true,
+                delay: 5000,
+                styling: 'bootstrap3'
+              });
+              jsonList = data.list;
+              loadData(jsonList);
             }
           }
         });
-	}
+  }
 
-	function confirmDelete(el){
-		var element = $(el).attr("id");
-		console.log(element);
-		var id  = element.replace("group","");
-		var i = parseInt(id);
+  function confirmDelete(el){
+    var element = $(el).attr("id");
+    var id  = element.replace("group","");
+    var i = parseInt(id);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
-    $(el).popover("show");
-	}
+    $(el).popover();
 
-  function showThumbnail(el){
-    var img_src = $(el).find("img").attr("src");
-    $(el).attr("data-content","<img src='"+img_src+"' class=\'img-responsive\'  href=\'#\' style=\'max-width:350px\'>");
-    $(el).popover("show");
   }
 
   //Hack untuk bootstrap popover (popover hilang jika diklik di luar)

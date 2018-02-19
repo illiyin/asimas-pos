@@ -121,7 +121,7 @@
             // json[i].nama_bank,
             // DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
             '<td class="text-center"><div class="btn-group" >'+
-                '<a id="group'+i+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
+                '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
                 '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
                '</div>'+
             '</td>'
@@ -157,13 +157,6 @@
     $("#alamat").val(jsonList[i].alamat);
     $("#no_telp").val(jsonList[i].no_telp);
     $("#email").val(jsonList[i].email);
-    $("#id_provinsi").val(jsonList[i].id_provinsi);
-    $("#id_kota").val(jsonList[i].id_kota);
-    $("#npwp").val(jsonList[i].npwp);
-    $("#nama_bank").val(jsonList[i].nama_bank);
-    $("#no_rekening").val(jsonList[i].no_rekening);
-    $("#rekening_an").val(jsonList[i].rekening_an);
-    $("#keterangan").val(jsonList[i].keterangan);
     $("#modalform").modal("show");
   }
 
@@ -206,6 +199,7 @@
             styling: 'bootstrap3'
           });
   			}
+        console.log(data);
         $('#aSimpan').html('Simpan');
         $("#aSimpan").prop("disabled", false);
       }
@@ -214,46 +208,43 @@
 
 	function deleteData(element){
 		var el = $(element).attr("id");
-		var id  = el.replace("aConfrirm","");
+		var id  = el.replace("aConfirm","");
 		var i = parseInt(id);
-    console.log(el);
-		// console.log(jsonList[i]);
-		// $.ajax({
-  //         type: 'post',
-  //         url: '<?php echo base_url('Master_distributor/Master/delete'); ?>/',
-  //         data: {"id":jsonList[i].id},
-		//       dataType: 'json',
-  //         beforeSend: function() {
-  //           // kasi loading
-  //           $("#aConfirm"+i).html("Sedang Menghapus...");
-  //           $("#aConfirm"+i).prop("disabled", true);
-  //         },
-  //         success: function (data) {
-  //           console.log(data);
-  //           if (data.status == '3'){
-  //            $("#aConfirm"+i).prop("disabled", false);
-  // 				// $("#notif-top").fadeIn(500);
-  // 				// $("#notif-top").fadeOut(2500);
-  //             new PNotify({
-  //               title: 'Sukses',
-  //               text: 'Data berhasil dihapus!',
-  //               type: 'success',
-  //               hide: true,
-  //               delay: 5000,
-  //               styling: 'bootstrap3'
-  //             });
-  //     				jsonList = data.list;
-  //     				loadData(jsonList);
-  //     			}
-  //         }
-  //       });
+		$.ajax({
+          type: 'post',
+          url: '<?php echo base_url('Master_distributor/Master/delete'); ?>/',
+          data: {"id":i},
+		      dataType: 'json',
+          beforeSend: function() {
+            // kasi loading
+            $("#aConfirm"+i).html("Sedang Menghapus...");
+            $("#aConfirm"+i).prop("disabled", true);
+          },
+          success: function (data) {
+            console.log(data);
+            if (data.status == '3'){
+             $("#aConfirm"+i).prop("disabled", false);
+  				// $("#notif-top").fadeIn(500);
+  				// $("#notif-top").fadeOut(2500);
+              new PNotify({
+                title: 'Sukses',
+                text: 'Data berhasil dihapus!',
+                type: 'success',
+                hide: true,
+                delay: 5000,
+                styling: 'bootstrap3'
+              });
+      				jsonList = data.list;
+      				loadData(jsonList);
+      			}
+          }
+        });
 	}
 
 	function confirmDelete(el){
 		var element = $(el).attr("id");
 		var id  = element.replace("group","");
 		var i = parseInt(id);
-    console.log(i);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
 		$(el).popover();
 
