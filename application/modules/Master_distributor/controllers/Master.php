@@ -29,7 +29,6 @@ class Master extends MX_Controller {
     function add(){
 		$params = $this->input->post();
 
-        // echo json_encode($params);
 		$dataInsert['nama'] 			= $params['nama'];
 		$dataInsert['alamat'] 			= $params['alamat'];
 		$dataInsert['no_telp'] 			= $params['no_telp'];
@@ -55,60 +54,24 @@ class Master extends MX_Controller {
     		echo json_encode(array( 'status'=>1 ));
 		}
     }
-
-
-	function get($id = null){
-    	if($id != null){
-    		$dataSelect['id'] = $id;
-    		$selectData = $this->Distributormodel->select($dataSelect, 'm_supplier_bahan');
-    		if($selectData->num_rows() > 0){
-    			echo json_encode(
-    				array(
-    					'status'			=> 2,
-    					'id'				=> $selectData->row()->id,
-    					'nama'				=> $selectData->row()->nama,
-    					'alamat'			=> $selectData->row()->alamat,
-    					'no_telp'			=> $selectData->row()->no_telp,
-                        'email'             => $selectData->row()->email,
-                        'id_provinsi'       => $selectData->row()->id_provinsi,
-                        'id_kota'           => $selectData->row()->id_kota,
-                        'npwp'              => $selectData->row()->npwp,
-                        'nama_bank'         => $selectData->row()->nama_bank,
-                        'no_rekening'       => $selectData->row()->no_rekening,
-                        'rekening_an'       => $selectData->row()->rekening_an,
-    					'keterangan'		=> $selectData->row()->keterangan,
-    				));
-    		}else{
-    			echo json_encode(array('status' => 1));
-    		}
-    	}else{
-    		echo json_encode(array('status' => 0));
-    	}
-    }
-
+    
     function edit(){
 		$params = $this->input->post();
 		$dataCondition['id']			= $params['id'];
-		$dataUpdate['nama'] 			= $params['nama'];
-		$dataUpdate['alamat'] 			= $params['alamat'];
-		$dataUpdate['no_telp'] 			= $params['no_telp'];
-		$dataUpdate['email'] 			= $params['email'];
-		$dataUpdate['id_provinsi'] 		= $params['id_provinsi'];
-		$dataUpdate['id_kota'] 			= $params['id_kota'];
-        $dataUpdate['npwp']             = $params['npwp'];
-        $dataUpdate['nama_bank']        = $params['nama_bank'];
-        $dataUpdate['no_rekening']      = $params['no_rekening'];
-        $dataUpdate['rekening_an']      = $params['rekening_an'];
-        $dataUpdate['keterangan']       = $params['keterangan'];
+
+		$dataUpdate['nama']             = $params['nama'];
+        $dataUpdate['alamat']           = $params['alamat'];
+        $dataUpdate['no_telp']          = $params['no_telp'];
+        $dataUpdate['email']            = $params['email'];
         $dataUpdate['last_edited']      = date("Y-m-d H:i:s");
         $dataUpdate['edited_by']        = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
 
-		$checkData = $this->Distributormodel->select($dataCondition, 'm_supplier_bahan');
+		$checkData = $this->Distributormodel->select($dataCondition, 'm_distributor');
 		if($checkData->num_rows() > 0){
-			$update = $this->Distributormodel->update($dataCondition, $dataUpdate, 'm_supplier_bahan');
+			$update = $this->Distributormodel->update($dataCondition, $dataUpdate, 'm_distributor');
 			if($update){
 				$dataSelect['deleted'] = 1;
-				$list = $this->Distributormodel->select($dataSelect, 'm_supplier_bahan', 'date_add', 'DESC')->result();
+				$list = $this->Distributormodel->select($dataSelect, 'm_distributor', 'date_add', 'DESC')->result();
 				echo json_encode(array('status' => '3','list' => $list));
 			}else{
 				echo json_encode(array( 'status'=>'2' ));
@@ -140,13 +103,6 @@ class Master extends MX_Controller {
     	}else{
     		echo "NOT FOUND";
     	}
-    }
-
-
-    function get_kota(){
-        $dataSelect['id_provinsi'] = $this->input->get("id_prov");
-    	$dataSelect['deleted'] = 1;
-    	echo json_encode($this->Distributormodel->select($dataSelect, 'm_kota', 'nama')->result());
     }
 
 }
