@@ -19,4 +19,7 @@ class Master extends MX_Controller {
     function index(){
     	$this->load->view('Laporan_stok_gudang/view');
     }
+    function cetak(){
+    	$this->load->view('Laporan_stok_gudang/cetak');
+    }
   }

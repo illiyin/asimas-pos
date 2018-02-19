@@ -19,4 +19,7 @@ class Master extends MX_Controller {
     function index(){
     	$this->load->view('Laporan_fefo/view');
     }
+    function cetak(){
+    	$this->load->view('Laporan_fefo/cetak');
+    }
   }

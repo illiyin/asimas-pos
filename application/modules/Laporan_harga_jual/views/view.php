@@ -42,15 +42,15 @@
       </table>
    </div>
    <!-- Button trigger modal -->
-   <button type="button" class="btn btn-add btn-lg">
+   <button type="button" class="btn btn-add btn-lg" onclick="gotoCetak()">
      Cetak Laporan
    </button>
 </div>
 <!-- /.container -->
 
 
-
-
 <script type="text/javascript">
-
+function gotoCetak(){
+  location.href="Laporan_harga_jual-master-cetak";
+}
 </script>

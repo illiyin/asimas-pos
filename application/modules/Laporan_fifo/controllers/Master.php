@@ -31,4 +31,19 @@ class Master extends MX_Controller {
     function distributor(){
     	$this->load->view('Laporan_fifo/distributor');
     }
+    function cetakbarang(){
+    	$this->load->view('Laporan_fifo/cetak-barang');
+    }
+    function cetakbahan(){
+    	$this->load->view('Laporan_fifo/cetak-bahan');
+    }
+    function cetaksupplier(){
+    	$this->load->view('Laporan_fifo/cetak-supplier');
+    }
+    function cetakprodusen(){
+    	$this->load->view('Laporan_fifo/cetak-produsen');
+    }
+    function cetakdistributor(){
+    	$this->load->view('Laporan_fifo/cetak-distributor');
+    }
   }
