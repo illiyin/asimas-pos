@@ -17,14 +17,15 @@ class Index extends MX_Controller {
     function index(){
         //$data['view'] = 'base_html/sale';
         //$this->load->view('base_html/base', $data);
-        redirect("index/modul/Transaksi_penjualan-Transaksi-index");
+        // redirect("index/modul/Transaksi_penjualan-Transaksi-index");
+        redirect("index/modul/Dashboard-master-index");
     }
     function base_sale(){
         $this->load->view('base_html/sale');
     }
     function sale(){
         $data['view'] = 'base_html/sale';
-        $this->load->view('base_html/base', $data);     
+        $this->load->view('base_html/base', $data);
     }
     function testSession(){
         print_r($this->session->userdata());
@@ -34,17 +35,17 @@ class Index extends MX_Controller {
         $data['nav_kategori'] = $this->Gmodel->rawQuery($sql)->result();
         // $data['nav_menu'] = $this->Gmodel->get("m_pegawai_permission", "id_menu, urutan, id", "ASC")->result();
         $data['nav_menu'] = $this->Gmodel->select(array('deleted' => 1), 'm_pegawai_permission', 'id_menu, urutan, id', 'ASC')->result();
-        
+
         if($modul != null){
             $realmodul = explode("-", $modul);
             $modul=str_replace("-", "/", $modul);
             $realmoduls = $realmodul[0]."-".$realmodul[1];
             $selectData['url'] = "index/modul/".$realmoduls;
             $selectDataPermission = $this->Gmodel->like('null', $selectData, 'm_pegawai_permission');
-            if($selectDataPermission->num_rows() > 0){            
+            if($selectDataPermission->num_rows() > 0){
                 $idPermission = $selectDataPermission->row()->id;
-                if($idPermission!=null && $this->session->userdata('user_permission')!=null){                
-                    if(in_array($idPermission, $this->session->userdata('user_permission'))){            
+                if($idPermission!=null && $this->session->userdata('user_permission')!=null){
+                    if(in_array($idPermission, $this->session->userdata('user_permission'))){
                         $data['view'] = $modul;
                     }else{
                         $data['view'] = "index/access_restricted";
@@ -59,11 +60,11 @@ class Index extends MX_Controller {
             $data['view'] = 'index/base_sale';
         }
 
-        //exception for Dev_menu & Dev_kategori
+        //exception for Dev_menu & Dev_kategori & dashboard
         $segment = strtolower($realmodul[0]);
-        if(($segment == 'dev_kategori') || ($segment == 'dev_menu') || ($segment == 'api')){
+        if(($segment == 'dev_kategori') || ($segment == 'dev_menu') || ($segment == 'api') || ($segment == 'dashboard')){
             $data['view'] = $modul;
-        } 
+        }
 
         //Hide navbar menu untuk segment Transaksi Penjualan & Transaksi Retur
         $data['segmen_hide'] = array(
