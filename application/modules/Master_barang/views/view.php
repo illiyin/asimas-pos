@@ -56,11 +56,15 @@
                       <p><b>Expire Date :</b> <span id="det_kode_barang"></span></p>
                       <p><b>Jumlah Masuk :</b> Rp <span id="det_harga_beli" class="money"></span></p>
                       <p><b>Stok Akhir:</b> <span id="det_stok"></span></p>
-                    </div>
-                    <div class="col-sm-6">
                       <p><b>Satuan :</b> <span id="det_satuan"></span></p>
                       <p><b>Kategori :</b> <span id="det_kategori"></span></p>
-                      <p><b>Deskripsi :</b> <span id="det_deskripsi"></span></p>
+                      <p><b>Deskripsi :</b> <span id="det_deskripsi"></span></p></div>
+                    <div class="col-sm-6">
+                      <h4>Detail Supplier</h4>
+                      <p><b>Nama Supplier :</b> <span id=""></span></p>
+                      <p><b>Alamat :</b>  <span id="" class="money"></span></p>
+                      <p><b>No. Telepon :</b> <span id=""></span></p>
+                      <p><b>Email :</b> <span id=""></span></p>
                     </div>
                   </div>
                  </div>
