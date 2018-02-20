@@ -136,7 +136,36 @@ class Master extends MX_Controller {
         }else{
             echo json_encode(array( 'status'=> 1, 'message' => 'No Batch sudah ada!'));
         }
-        // echo json_encode(array('params' => $params, 'expired_date' => $expiredDate));
+    }
+    function edit() {
+        $params = $this->input->post();
+
+        $expiredDate = explode("/", $params['expired_date']);
+        $condition['id'] = $params['id'];
+        $dataUpdate['id_satuan']        = $params['id_satuan'];
+        $dataUpdate['id_kategori_bahan']= $params['id_kategori'];
+        $dataUpdate['id_supplier']      = $params['id_supplier'];
+        $dataUpdate['nama_barang']      = $params['nama'];
+        $dataUpdate['jumlah_masuk']     = $params['jml_masuk'];
+        $dataUpdate['no_batch']         = $params['no_batch'];
+        $dataUpdate['expired_date']     = $expiredDate[2].'-'.$expiredDate[1].'-'.$expiredDate[0].' 00:00:00';
+        $dataUpdate['stok_akhir']       = $params['stok_akhir'];
+        $dataUpdate['keterangan']       = $params['deskripsi'];
+        $dataUpdate['edited_by']        = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;;
+        $dataUpdate['last_edited']      = date('Y-m-d H:i:s');
+
+        $checkData = $this->Barangmodel->select($condition, 'm_barang');
+        if($checkData->num_rows() > 0){
+            $update = $this->Barangmodel->update($condition, $dataUpdate, 'm_barang');
+            if($update){
+                $list = $this->dataBarang();
+                echo json_encode(array('status' => '3','list' => $list));
+            }else{
+                echo json_encode(array( 'status'=>'2' ));
+            }
+        }else{
+            echo json_encode(array( 'status'=>'1' ));
+        }
     }
     function delete() {
         $id = $this->input->post("id");

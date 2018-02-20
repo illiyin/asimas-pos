@@ -49,22 +49,22 @@
                     <img id="det_foto" class="media-object img-rounded" src="<?php //echo base_url()?>upload/master_barang/placeholder.png" alt="image" width="200px">
                  </div> -->
                  <div class="media-body">
-                  <h1 class="media-heading" id="det_nama">sfsdg</h1>
+                  <h1 class="media-heading" id="det_nama">{{ nama_barang }}</h1>
                   <div class="row">
                     <div class="col-sm-6">
-                      <p><b>No. Batch :</b> <span id="det_sku"></span></p>
-                      <p><b>Expire Date :</b> <span id="det_kode_barang"></span></p>
-                      <p><b>Jumlah Masuk :</b> Rp <span id="det_harga_beli" class="money"></span></p>
+                      <p><b>No. Batch :</b> <span id="det_nobatch"></span></p>
+                      <p><b>Expire Date :</b> <span id="det_expired"></span></p>
+                      <p><b>Jumlah Masuk :</b> <span id="det_jml_masuk"></span></p>
                       <p><b>Stok Akhir:</b> <span id="det_stok"></span></p>
                       <p><b>Satuan :</b> <span id="det_satuan"></span></p>
                       <p><b>Kategori :</b> <span id="det_kategori"></span></p>
                       <p><b>Deskripsi :</b> <span id="det_deskripsi"></span></p></div>
                     <div class="col-sm-6">
                       <h4>Detail Supplier</h4>
-                      <p><b>Nama Supplier :</b> <span id=""></span></p>
-                      <p><b>Alamat :</b>  <span id="" class="money"></span></p>
-                      <p><b>No. Telepon :</b> <span id=""></span></p>
-                      <p><b>Email :</b> <span id=""></span></p>
+                      <p><b>Nama Supplier :</b> <span id="sup_nama"></span></p>
+                      <p><b>Alamat :</b>  <span id="sup_alamat"></span></p>
+                      <p><b>No. Telepon :</b> <span id="sup_notelp"></span></p>
+                      <p><b>Email :</b> <span id="sup_email"></span></p>
                     </div>
                   </div>
                  </div>
@@ -212,6 +212,51 @@
     $("#stok_akhir").val("");
     $("#deskripsi").val("");
     $("#modalform").modal("show");
+  }
+  function showUpdate(i) {
+    load_select();
+    $("#myModalLabel").text("Ubah Barang");
+    var dataUpdate = jsonlist.filter(function (index) { return index.id == i });
+    var data = dataUpdate[0];
+    $("#id").val(data.id);
+    $("#nama").val(data.nama_barang);
+    $("#id_satuan").val(data.id_satuan);
+    $("#id_supplier").val(data.id_supplier);
+    $("#id_kategori").val(data.id_kategori_bahan);
+    $("#jml_masuk").val(data.jumlah_masuk);
+    $("#no_batch").val(data.no_batch);
+    var expiredDate = data.expired_date;
+    var datetime = expiredDate.split(" ");
+    var dateExplode = datetime[0].split("-");
+    var real_datetime = dateExplode[2]+'/'+dateExplode[1]+'/'+dateExplode[0];
+    $("#expired_date").val(real_datetime);
+    $("#stok_akhir").val(data.stok_akhir);
+    $("#deskripsi").val(data.keterangan);
+    $("#modalform").modal("show");
+  }
+  function showDetail(i){
+    var dataDetail = jsonlist.filter(function (index) { return index.id == i });
+    $("#det_nama").text(dataDetail[0].nama_barang ? dataDetail[0].nama_barang : '-');
+    $("#det_nobatch").text(dataDetail[0].no_batch ? dataDetail[0].no_batch : '-');
+    $("#det_expired").text(dataDetail[0].expired_date ? dataDetail[0].expired_date : '-');
+    $("#det_jml_masuk").text(dataDetail[0].jumlah_masuk ? dataDetail[0].jumlah_masuk : '-');
+    $("#det_stok").text(dataDetail[0].stok_akhir ? dataDetail[0].stok_akhir : '-');
+    var dataSatuan = getMasterById(jsonSatuan, dataDetail[0].id_satuan);
+    $("#det_satuan").text(dataSatuan.nama);
+    var dataKategori = getMasterById(jsonKategori, dataDetail[0].id_kategori_bahan);
+    $("#det_kategori").text(dataKategori.nama);
+    $("#det_deskripsi").text(dataDetail[0].keterangan ? dataDetail[0].keterangan : '-');
+    var dataSupplier = getMasterById(jsonSupplier, dataDetail[0].id_supplier);
+    $("#sup_nama").text(dataSupplier.nama);
+    $("#sup_email").text(dataSupplier.email);
+    $("#sup_notelp").text(dataSupplier.no_telp);
+    $("#sup_alamat").text(dataSupplier.alamat);
+    $("#Viewproduct").modal("show");
+  }
+
+  function getMasterById(jsonData, id){
+    data = jsonData.filter(function(index) {return index.id == id});
+    return data.length > 0 ? data[0] : false;
   }
 
   $("#myform").on('submit', function(e){
