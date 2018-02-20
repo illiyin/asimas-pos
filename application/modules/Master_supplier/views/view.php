@@ -74,14 +74,14 @@
              </div>
              <div class="col-sm-6">
                <div class="form-group">
-                 <label for="email">Lead Time</label>
-                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier" required="">
+                 <label for="leadtime">Lead Time</label>
+                 <input type="text" maxlength="50" name="leadtime" class="form-control" id="leadtime" placeholder="Lead Time" required="">
                </div>
              </div>
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="email">Minumum Order Quantity (MOQ)</label>
-                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier" required="">
+                 <input type="text" maxlength="50" name="moq" class="form-control" id="moq" placeholder="Minumum Order Quantity (MOQ)" required="">
                </div>
              </div>
              <div class="col-sm-6">
