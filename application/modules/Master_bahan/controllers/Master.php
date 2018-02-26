@@ -26,6 +26,7 @@ class Master extends MX_Controller {
 		//print_r($data);
     	$this->load->view('Master_bahan/view', $data);
     }
+    // TODOOOOO DISINI (datatables server)
     private function data($id = '') {
         $dataSelect['deleted'] = 1;
         if($id) $dataSelect['id'] = $id;

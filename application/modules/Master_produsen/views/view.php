@@ -86,52 +86,68 @@
 
 <script type="text/javascript">
 // initialize datatable
-  var table = $("#TableMain").DataTable({
-    "columnDefs": [ {
-            "searchable": false,
-            "orderable": false,
-            "targets": "no-sort"
-        } ],
-        // "order": [[ 1, 'asc' ]]
-  });
-  table.on( 'order.dt search.dt', function () {
-        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = "<span style='display:block' class='text-center'>"+(i+1)+"</span>";
-        } );
-  } ).draw();
+  // var table = $("#TableMain").DataTable({
+  //   "columnDefs": [ {
+  //           "searchable": false,
+  //           "orderable": false,
+  //           "targets": "no-sort"
+  //       } ],
+  //       // "order": [[ 1, 'asc' ]]
+  // });
+  // table.on( 'order.dt search.dt', function () {
+  //       table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+  //           cell.innerHTML = "<span style='display:block' class='text-center'>"+(i+1)+"</span>";
+  //       } );
+  // } ).draw();
 
   var jsonList = <?php echo $list; ?>;
 
   var awalLoad = true;
 
-  loadData(jsonList);
+  var initDataTable = $('#TableMain').DataTable({
+      "bProcessing": true,
+      "bServerSide": true,
+      "order": [[1, 'ASC']],
+      "ajax":{
+            url :"<?php echo base_url()?>Master_produsen/Master/data",
+            type: "post",  // type of method  , by default would be get
+            error: function(){  // error handling code
+              // $("#employee_grid_processing").css("display","none");
+            }
+          },
+      "columnDefs": [ {
+        "targets"  : 'no-sort',
+        "orderable": false,
+      }]
+    });
+  // loadData(jsonList);
 
-  function loadData(json){
-    //clear table
-    table.clear().draw();
-    for(var i=0;i<json.length;i++){
-        table.row.add( [
-            "",
-            json[i].nama,
-            json[i].alamat,
-            json[i].no_telp,
-            json[i].email,
-            // json[i].npwp,
-            // json[i].nama_bank,
-            // DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
-            '<td class="text-center"><div class="btn-group" >'+
-                '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
-                '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
-               '</div>'+
-            '</td>'
-        ] ).draw( false );
-    }
-    if (!awalLoad){
-      $('.divpopover').attr("data-content","ok");
-      $('.divpopover').popover();
-    }
-    awalLoad = false;
-  }
+  // function loadData(json){
+  //   //clear table
+   //  table.clear().draw();
+   //  for(var i=0;i<json.length;i++){
+  //       table.row.add( [
+  //           "",
+  //           json[i].nama,
+  //           json[i].alamat,
+  //           json[i].no_telp,
+  //           json[i].email,
+  //           // json[i].npwp,
+  //           // json[i].nama_bank,
+  //           // DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
+  //           '<td class="text-center"><div class="btn-group" >'+
+  //               '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
+  //               '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
+  //              '</div>'+
+  //           '</td>'
+  //       ] ).draw( false );
+   //  }
+   //  if (!awalLoad){
+    //   $('.divpopover').attr("data-content","ok");
+    //   $('.divpopover').popover();
+   //  }
+   //  awalLoad = false;
+  // }
 
 
   function showAdd(){
@@ -184,8 +200,9 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          jsonList = data.list;
-          loadData(jsonList);
+          // jsonList = data.list;
+          // loadData(jsonList);
+          initDataTable.ajax.reload();
           $("#modalform").modal('hide');
           // $("#notif-top").fadeIn(500);
           // $("#notif-top").fadeOut(2500);
@@ -198,7 +215,6 @@
             styling: 'bootstrap3'
           });
         }
-        console.log(data);
         $('#aSimpan').html('Simpan');
         $("#aSimpan").prop("disabled", false);
       }
@@ -220,7 +236,6 @@
             $("#aConfirm"+i).prop("disabled", true);
           },
           success: function (data) {
-            console.log(data);
             if (data.status == '3'){
              $("#aConfirm"+i).prop("disabled", false);
           // $("#notif-top").fadeIn(500);
@@ -233,8 +248,9 @@
                 delay: 5000,
                 styling: 'bootstrap3'
               });
-              jsonList = data.list;
-              loadData(jsonList);
+              initDataTable.ajax.reload();
+              // jsonList = data.list;
+              // loadData(jsonList);
             }
           }
         });
@@ -245,8 +261,7 @@
     var id  = element.replace("group","");
     var i = parseInt(id);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
-    $(el).popover();
-
+    $(el).popover("show");
   }
 
   //Hack untuk bootstrap popover (popover hilang jika diklik di luar)

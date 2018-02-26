@@ -89,12 +89,12 @@
                  <label for="">Status</label>
                  <div class="radio">
                    <label for="pre_approved">
-                     <input type="radio" name="approvement" value="1" id="pre_approved"> Pre-approved
+                     <input type="radio" name="approvement" value="0" id="pre_approved"> Pre-approved
                    </label>
                  </div>
                  <div class="radio">
                    <label for="approved">
-                     <input type="radio" name="approvement" value="2" id="approved"> Approved
+                     <input type="radio" name="approvement" value="1" id="approved"> Approved
                    </label>
                  </div>
                </div>
@@ -112,53 +112,70 @@
 <!-- /.Modal Add-->
 
 <script type="text/javascript">
-// initialize datatable
-  var table = $("#TableMain").DataTable({
-    "columnDefs": [ {
-            "searchable": false,
-            "orderable": false,
-            "targets": "no-sort"
-        } ],
-        // "order": [[ 1, 'asc' ]]
-  });
-  table.on( 'order.dt search.dt', function () {
-        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = "<span style='display:block' class='text-center'>"+(i+1)+"</span>";
-        } );
-  } ).draw();
+  // initialize datatable
+  // var table = $("#TableMain").DataTable({
+  //   "columnDefs": [ {
+  //           "searchable": false,
+  //           "orderable": false,
+  //           "targets": "no-sort"
+  //       } ],
+  //       // "order": [[ 1, 'asc' ]]
+  // });
+  // table.on( 'order.dt search.dt', function () {
+  //       table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+  //           cell.innerHTML = "<span style='display:block' class='text-center'>"+(i+1)+"</span>";
+  //       } );
+  // } ).draw();
 
   var jsonList = <?php echo $list; ?>;
 
   var awalLoad = true;
 
-  loadData(jsonList);
+  var initDataTable = $('#TableMain').DataTable({
+      "bProcessing": true,
+      "bServerSide": true,
+      "order": [[1, 'ASC']],
+      "ajax":{
+            url :"<?php echo base_url()?>Master_supplier/Master/data",
+            type: "post",  // type of method  , by default would be get
+            error: function(){  // error handling code
+              // $("#employee_grid_processing").css("display","none");
+            }
+          },
+      "columnDefs": [ {
+        "targets"  : 'no-sort',
+        "orderable": false,
+      }]
+    });
 
-  function loadData(json){
-    //clear table
-    table.clear().draw();
-    for(var i=0;i<json.length;i++){
-        table.row.add( [
-            "",
-            json[i].nama,
-            json[i].alamat,
-            json[i].no_telp,
-            json[i].email,
-            // json[i].npwp,
-            // json[i].nama_bank,
-            // DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
-            '<td class="text-center"><div class="btn-group" >'+
-                '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
-                '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
-               '</div>'+
-            '</td>'
-        ] ).draw( false );
-    }
-    if (!awalLoad){
-      $('.divpopover').attr("data-content","ok");
-      $('.divpopover').popover();
-    }
-    awalLoad = false;
-  }
+  // loadData(jsonList);
+
+  // function loadData(json){
+  //   //clear table
+  //   table.clear().draw();
+  //   for(var i=0;i<json.length;i++){
+  //       table.row.add( [
+  //           "",
+  //           json[i].nama,
+  //           json[i].alamat,
+  //           json[i].no_telp,
+  //           json[i].email,
+  //           // json[i].npwp,
+  //           // json[i].nama_bank,
+  //           // DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
+  //           '<td class="text-center"><div class="btn-group" >'+
+  //               '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
+  //               '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
+  //              '</div>'+
+  //           '</td>'
+  //       ] ).draw( false );
+  //   }
+  //   if (!awalLoad){
+  //     $('.divpopover').attr("data-content","ok");
+  //     $('.divpopover').popover();
+  //   }
+  //   awalLoad = false;
+  // }
 
 
   function showAdd(){
@@ -168,11 +185,8 @@
     $("#alamat").val("");
     $("#no_telp").val("");
     $("#email").val("");
-    $("#npwp").val("");
-    $("#nama_bank").val("");
-    $("#no_rekening").val("");
-    $("#rekening_an").val("");
-    $("#keterangan").val("");
+    $("#leadtime").val("");
+    $("#moq").val("");
     $("#modalform").modal("show");
   }
 
@@ -183,6 +197,9 @@
     $("#alamat").val(jsonList[i].alamat);
     $("#no_telp").val(jsonList[i].no_telp);
     $("#email").val(jsonList[i].email);
+    $("#leadtime").val(jsonList[i].lead_time);
+    $("#moq").val(jsonList[i].moq);
+    $("input[name=approvement][value='"+ jsonList[i].status +"']").prop("checked",true);
     $("#modalform").modal("show");
   }
 
@@ -211,8 +228,9 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          jsonList = data.list;
-          loadData(jsonList);
+          // jsonList = data.list;
+          // loadData(jsonList);
+          initDataTable.ajax.reload();
           $("#modalform").modal('hide');
           // $("#notif-top").fadeIn(500);
           // $("#notif-top").fadeOut(2500);
@@ -260,8 +278,9 @@
                 delay: 5000,
                 styling: 'bootstrap3'
               });
-              jsonList = data.list;
-              loadData(jsonList);
+              initDataTable.ajax.reload();
+              // jsonList = data.list;
+              // loadData(jsonList);
             }
           }
         });
@@ -272,7 +291,7 @@
     var id  = element.replace("group","");
     var i = parseInt(id);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
-    $(el).popover();
+    $(el).popover("show");
 
   }
 

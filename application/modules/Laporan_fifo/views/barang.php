@@ -21,27 +21,7 @@
           </thead>
 
           <tbody id='bodytable'>
-            <tr>
-              <td class="text-center">1</td>
-              <td>Jamur ABM</td>
-              <td>002</td>
-              <td>22</td>
-              <td>30/12/1988</td>
-            </tr>
-            <tr>
-              <td class="text-center">2</td>
-              <td>Jamur ABM</td>
-              <td>002</td>
-              <td>22</td>
-              <td>30/12/1988</td>
-            </tr>
-            <tr>
-              <td class="text-center">3</td>
-              <td>Jamur ABM</td>
-              <td>002</td>
-              <td>22</td>
-              <td>30/12/1988</td>
-            </tr>
+            
           </tbody>
       </table>
    </div>
@@ -57,4 +37,21 @@
 function gotoCetak(){
   location.href="Laporan_fifo-master-cetakbarang";
 }
+var initDataTable = $('#TableMainServer').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    // "order": [[4, 'DESC']],
+    "ajax":{
+          url :"<?php echo base_url()?>Laporan_fifo/DataTables/barang",
+          type: "post",  // type of method  , by default would be get
+          error: function(e){  // error handling code
+            console.log(e);
+            // $("#employee_grid_processing").css("display","none");
+          }
+        },
+    "columnDefs": [ {
+      "targets"  : 'no-sort',
+      "orderable": false,
+    }]
+  });
 </script>

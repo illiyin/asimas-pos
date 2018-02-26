@@ -20,7 +20,7 @@
           </thead>
 
           <tbody id='bodytable'>
-            <tr>
+            <!-- <tr>
               <td class="text-center">1</td>
               <td>Jamur ABM</td>
               <td>Jamur</td>
@@ -37,7 +37,7 @@
               <td>Kacang ABM</td>
               <td>Kacang </td>
               <td class="text-right">Rp. 13.000</td>
-            </tr>
+            </tr> -->
           </tbody>
       </table>
    </div>
@@ -53,4 +53,21 @@
 function gotoCetak(){
   location.href="Laporan_harga_beli-master-cetak";
 }
+var initDataTable = $('#TableMainServer').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    // "order": [[3, 'DESC']],
+    "ajax":{
+          url :"<?php echo base_url()?>Laporan_harga_beli/Master/data",
+          type: "post",  // type of method  , by default would be get
+          error: function(e){  // error handling code
+            console.log(e);
+            // $("#employee_grid_processing").css("display","none");
+          }
+        },
+    "columnDefs": [ {
+      "targets"  : 'no-sort',
+      "orderable": false,
+    }]
+  });
 </script>

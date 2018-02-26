@@ -53,4 +53,21 @@
 function gotoCetak(){
   location.href="Laporan_stok_gudang-master-cetak";
 }
+var initDataTable = $('#TableMainServer').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    // "order": [[3, 'DESC']],
+    "ajax":{
+          url :"<?php echo base_url()?>Laporan_stok_gudang/Master/data",
+          type: "post",  // type of method  , by default would be get
+          error: function(e){  // error handling code
+            console.log(e);
+            // $("#employee_grid_processing").css("display","none");
+          }
+        },
+    "columnDefs": [ {
+      "targets"  : 'no-sort',
+      "orderable": false,
+    }]
+  });
 </script>

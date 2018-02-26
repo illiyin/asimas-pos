@@ -8,13 +8,14 @@ class Master extends MX_Controller {
         $this->load->model('Laporanfifomodel');
         $this->modul .= $this->router->fetch_class();
         $this->fungsi = $this->router->fetch_method();
-        // $this->_insertLog();
+        $this->_insertLog();
     }
-    function testUri(){
-        print_r($this->uri->uri_to_assoc());
-    }
-    function checkAccess(){
-        print_r($this->session->userdata());
+    function _insertLog($fungsi = null){
+        $id_user = $this->session->userdata('id_user');
+        $dataInsert['id_user'] = $id_user;
+        $dataInsert['modul'] = $this->modul;
+        $dataInsert['fungsi'] = $this->fungsi;
+        $insertLog = $this->Laporanfifomodel->insert($dataInsert, 't_log');
     }
     function barang(){
     	$this->load->view('Laporan_fifo/barang');

@@ -24,8 +24,57 @@ class Master extends MX_Controller {
 		// print_r($data);
     	$this->load->view('Master_distributor/view', $data);
     }
+    function data() {
+        $requestData= $_REQUEST;
+        $columns = array(
+            // 0   =>  '#',
+            1   =>  'nama'
+            // 2   =>  'no_batch',
+            // 3   =>  'stok_akhir',
+            // 4   =>  'date_add'
+            // 5   =>  'aksi'
+        );
+        $sql = "SELECT * FROM m_distributor WHERE deleted = 1";
+        $query=$this->Distributormodel->rawQuery($sql);
+        $totalData = $query->num_rows();
+        $sql = "SELECT * ";
+        $sql.=" FROM m_distributor WHERE deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Distributormodel->rawQuery($sql);
+        $totalFiltered = $query->num_rows();
 
+        $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']." LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+        $query=$this->Distributormodel->rawQuery($sql);
 
+        $data = array(); $i=0;
+        foreach ($query->result_array() as $index => $row) {
+            $nestedData     =   array();
+            $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
+            $nestedData[]   =   $row["nama"];
+            $nestedData[]   =   $row["alamat"];
+            $nestedData[]   =   $row["no_telp"];
+            $nestedData[]   =   $row["email"];
+            $nestedData[]   .=   '<td class="text-center"><div class="btn-group">'
+                .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
+                .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$index.')"><i class="fa fa-pencil"></i></a>'
+            .'</td>';
+
+            $data[] = $nestedData; $i++;
+        }
+        $totalData = count($data);
+        $json_data = array(
+                    "draw"            => intval( $requestData['draw'] ),
+                    "recordsTotal"    => intval( $totalData ),
+                    "recordsFiltered" => intval( $totalFiltered ),
+                    "data"            => $data
+                    );
+        echo json_encode($json_data);
+    }
     function add(){
 		$params = $this->input->post();
 
