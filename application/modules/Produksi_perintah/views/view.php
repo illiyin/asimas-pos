@@ -21,7 +21,7 @@
       </thead>
 
       <tbody id='bodytable'>
-        <tr>
+        <!-- <tr>
           <td>1</td>
           <td><a href="Produksi_perintah-master-detail" title="Detail dan setujui">ZXS-234</a></td>
           <td>1</td>
@@ -46,7 +46,7 @@
               <a href="Produksi_perintah-master-cetak" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak"><i class="fa fa-print"></i></a>
             </div>
           </td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>
@@ -124,5 +124,63 @@
 <script type="text/javascript">
 function showPilihTipe() {
   $('#modalPilihTipe').modal('show');
+}
+var initDataTable = $('#TableMainServer').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    // "order": [[3, 'DESC']],
+    "ajax":{
+          url :"<?php echo base_url()?>Produksi_perintah/Master/data",
+          type: "post",  // type of method  , by default would be get
+          error: function(e){  // error handling code
+            console.log(e);
+            // $("#employee_grid_processing").css("display","none");
+          }
+        },
+    "columnDefs": [ {
+      "targets"  : 'no-sort',
+      "orderable": false,
+    }]
+  });
+
+function confirmDelete(el){
+  var element = $(el).attr("id");
+  var id  = element.replace("group","");
+  var i = parseInt(id);
+  $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
+  $(el).popover("show");
+}
+
+function deleteData(element){
+  var el = $(element).attr("id");
+  var id  = el.replace("aConfirm","");
+  var i = parseInt(id);
+  $.ajax({
+    type: 'post',
+    url: '<?php echo base_url('Produksi_perintah/Master/delete'); ?>/',
+    data: {"id":i},
+    dataType: 'json',
+    beforeSend: function() {
+      // kasi loading
+      $("#aConfirm"+i).html("Sedang Menghapus...");
+      $("#aConfirm"+i).prop("disabled", true);
+    },
+    success: function (data) {
+      if (data.status == '3'){
+        initDataTable.ajax.reload();
+       $("#aConfirm"+i).prop("disabled", false);
+    // $("#notif-top").fadeIn(500);
+    // $("#notif-top").fadeOut(2500);
+        new PNotify({
+          title: 'Sukses',
+          text: 'Data berhasil dihapus!',
+          type: 'success',
+          hide: true,
+          delay: 5000,
+          styling: 'bootstrap3'
+        });
+      }
+    }
+  });
 }
 </script>

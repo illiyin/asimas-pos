@@ -16,7 +16,7 @@
             <label for="" class="control-label">Revisi Ke</label>
           </div>
           <div class="col-sm-9">
-            <label for="" class="control-label">01</label>
+            <label for="" class="control-label">0</label>
           </div>
         </div>
         <div class="form-group">

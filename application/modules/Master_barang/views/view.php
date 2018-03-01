@@ -296,6 +296,15 @@
             delay: 5000,
             styling: 'bootstrap3'
           });
+        } else {
+          new PNotify({
+            title: 'Gagal',
+            text: data.message,
+            type: 'error',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
         }
         $('#aSimpan').html('Simpan');
         $("#aSimpan").prop("disabled", false);
@@ -316,33 +325,33 @@
     var id  = el.replace("aConfirm","");
     var i = parseInt(id);
     $.ajax({
-          type: 'post',
-          url: '<?php echo base_url('Master_barang/Master/delete'); ?>/',
-          data: {"id":i},
-          dataType: 'json',
-          beforeSend: function() {
-            // kasi loading
-            $("#aConfirm"+i).html("Sedang Menghapus...");
-            $("#aConfirm"+i).prop("disabled", true);
-          },
-          success: function (data) {
-            console.log(data);
-            if (data.status == '3'){
-              initDataTable.ajax.reload();
-             $("#aConfirm"+i).prop("disabled", false);
-          // $("#notif-top").fadeIn(500);
-          // $("#notif-top").fadeOut(2500);
-              new PNotify({
-                title: 'Sukses',
-                text: 'Data berhasil dihapus!',
-                type: 'success',
-                hide: true,
-                delay: 5000,
-                styling: 'bootstrap3'
-              });
-            }
-          }
-        });
+      type: 'post',
+      url: '<?php echo base_url('Master_barang/Master/delete'); ?>/',
+      data: {"id":i},
+      dataType: 'json',
+      beforeSend: function() {
+        // kasi loading
+        $("#aConfirm"+i).html("Sedang Menghapus...");
+        $("#aConfirm"+i).prop("disabled", true);
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.status == '3'){
+          initDataTable.ajax.reload();
+         $("#aConfirm"+i).prop("disabled", false);
+      // $("#notif-top").fadeIn(500);
+      // $("#notif-top").fadeOut(2500);
+          new PNotify({
+            title: 'Sukses',
+            text: 'Data berhasil dihapus!',
+            type: 'success',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
+        }
+      }
+    });
   }
 
   //Hack untuk bootstrap popover (popover hilang jika diklik di luar)

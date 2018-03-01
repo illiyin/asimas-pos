@@ -38,6 +38,8 @@ class Master extends MX_Controller {
       // $this->load->view('Produksi_perintah/view', $data);
     }
     function detail(){
+      $uid = $this->uri->segment(4);
+      if(!$uid) redirect('index/modul/Produksi_perintah-master-index');
       $this->load->view('Produksi_perintah/perintahDetail');
       // $this->load->view('Produksi_perintah/view', $data);
     }
@@ -48,7 +50,7 @@ class Master extends MX_Controller {
       $tanggalEfektif = $this->tanggalExplode($params['tanggal_efektif']);
       // Data Master
       $insertMaster['no_dokumen'] = $params['no_dokumen'];
-      $insertMaster['revisi'] = 1;
+      $insertMaster['revisi'] = 0;
       $insertMaster['tanggal_efektif'] = $tanggalEfektif;
       $insertMaster['no_perintah'] = $params['no_pp'];
       $insertMaster['no_sales_order'] = $params['no_so'];
@@ -123,6 +125,64 @@ class Master extends MX_Controller {
       }
 
       echo json_encode($response);
+    }
+    function data() {
+      $requestData= $_REQUEST;
+      $sql = "SELECT * FROM m_perintah_produksi WHERE deleted = 1";
+      $query=$this->Perintahproduksimodel->rawQuery($sql);
+      $totalData = $query->num_rows();
+      $sql = "SELECT * ";
+      $sql.=" FROM m_perintah_produksi WHERE deleted = 1";
+      if( !empty($requestData['search']['value']) ) {
+          $sql.=" AND ( no_dokumen LIKE '%".$requestData['search']['value']."%' )";
+      }
+      $query=$this->Perintahproduksimodel->rawQuery($sql);
+      $totalFiltered = $query->num_rows();
+
+      $sql .= " ORDER BY date_added DESC";
+      $query=$this->Perintahproduksimodel->rawQuery($sql);
+
+      $data = array(); $i=0;
+      foreach ($query->result_array() as $row) {
+          $nestedData     =   array();
+          $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
+          $nestedData[]   =   '<a href="Produksi_perintah-master-detail/'.base64_url_encode($row['id']).'" title="Detail dan Setujui">'.$row["no_dokumen"].'</a>';
+          $nestedData[]   =   $row["revisi"];
+          $nestedData[]   =   date('d/m/Y', strtotime($row["tanggal_efektif"]));
+          $nestedData[]  .=   '<td class="text-center"><div class="btn-group">'
+                .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
+                .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
+                .'<a href="Produksi_perintah-master-cetak" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak Dokumen"><i class="fa fa-print"></i></a>'
+               .'</div>'
+            .'</td>';
+
+          $data[] = $nestedData; $i++;
+      }
+      $totalData = count($data);
+      $json_data = array(
+                  "draw"            => intval( $requestData['draw'] ),
+                  "recordsTotal"    => intval( $totalData ),
+                  "recordsFiltered" => intval( $totalFiltered ),
+                  "data"            => $data
+                  );
+      echo json_encode($json_data);
+    }
+    function delete() {
+      $id = $this->input->post("id");
+      if($id != null){
+          $dataCondition['id'] = $id;
+          $dataUpdate['deleted'] = 0;
+          $update = $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
+          if($update){
+              $dataSelect['deleted'] = 1;
+              $list = $this->Perintahproduksimodel->select(array('deleted' => 0), 'm_perintah_produksi');
+              echo json_encode(array('status' => '3','list' => $list));
+          }else{
+              echo "1";
+          }
+      }else{
+          echo "0";
+      }
     }
     private function tanggalExplode($date) {
       $x = explode("/" , $date);

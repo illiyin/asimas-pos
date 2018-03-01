@@ -108,6 +108,7 @@ class Master extends MX_Controller {
 
         $expiredDate = explode("/", $params['expired_date']);
         $condition['no_batch'] = $params['no_batch'];
+        $condition['deleted'] = 1;
         $dataInsert['id_satuan']        = $params['id_satuan'];
         $dataInsert['id_kategori_bahan']= $params['id_kategori'];
         $dataInsert['id_supplier']      = $params['id_supplier'];
