@@ -1,4 +1,4 @@
-<div class="print-container">
+<div id="printSection" class="print-container">
   <table class="header">
     <tr>
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
@@ -21,13 +21,22 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Asdsafds</td>
-        <td>Malang</td>
-        <td>008</td>
-        <td>alamat@email.com</td>
-      </tr>
+      <?php 
+      if(empty($data_list)) { ?>
+        <tr><td colspan="5">Tidak ada data</td></tr>
+      <?php 
+      }
+      else {
+        foreach ($data_list as $key => $row) { ?>
+        <tr>
+          <td><?php echo ($key+1)?></td>
+          <td><?php echo $row->nama?></td>
+          <td><?php echo $row->alamat?></td>
+          <td><?php echo $row->no_telp?></td>
+          <td><?php echo $row->email?></td>
+        </tr>
+      <?php }
+      } ?>
     </tbody>
   </table>
 

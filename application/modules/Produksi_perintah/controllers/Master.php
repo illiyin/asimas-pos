@@ -34,14 +34,132 @@ class Master extends MX_Controller {
       // $this->load->view('Produksi_perintah/view', $data);
     }
     function cetak(){
-      $this->load->view('Produksi_perintah/perintahCetak');
+      $uid = $this->uri->segment(4);
+      if(!$uid) redirect('index/modul/Produksi_perintah-master-index');
+      $id = base64_url_decode($uid);
+      // Perintah Produksi
+      $perintahProduksi = $this->Perintahproduksimodel->select(array('id' => $id), 'm_perintah_produksi')->row();
+      // Bahan Baku & Penimbangan Aktual
+      $bahanBaku = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_baku')->result();
+      $dataBahanBaku = null;
+      foreach($bahanBaku as $row) {
+        $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+        $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
+        $satuanKaplet = $this->Perintahproduksimodel->select(array('id' => $row->satuan_kaplet), 'm_satuan')->row();
+        $dataBahanBaku[] = array(
+            'nama_bahan' => $bahan->nama,
+            'per_kaplet' => $row->per_kaplet,
+            'satuan_kaplet' => $satuanKaplet->nama,
+            'per_batch' => $row->per_batch,
+            'satuan_batch' => $satuanBatch->nama,
+            'jumlah_lot' => $row->jumlah_lot,
+            'jumlah_perlot' => $row->jumlah_perlot
+          );
+      }
+      // Bahan Kemas
+      $bahanKemas = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_kemas')->result();
+      $dataBahanKemas = null;
+      foreach($bahanKemas as $row) {
+        $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+        $satuan = $this->Perintahproduksimodel->select(array('id' => $row->satuan), 'm_satuan')->row();
+        $dataBahanKemas[] = array(
+            'nama_bahan' => $bahan->nama,
+            'jumlah' => $row->jumlah,
+            'satuan' => $satuan->nama,
+            'aktual' => $row->aktual
+          );
+      }
+      // Data
+      $data['perintah_produksi'] = $perintahProduksi;
+      $data['bahan_baku'] = $dataBahanBaku;
+      $data['bahan_kemas'] = $dataBahanKemas;
+      $this->load->view('Produksi_perintah/perintahCetak', $data);
       // $this->load->view('Produksi_perintah/view', $data);
     }
     function detail(){
       $uid = $this->uri->segment(4);
       if(!$uid) redirect('index/modul/Produksi_perintah-master-index');
-      $this->load->view('Produksi_perintah/perintahDetail');
+      $id = base64_url_decode($uid);
+      // Perintah Produksi
+      $perintahProduksi = $this->Perintahproduksimodel->select(array('id' => $id), 'm_perintah_produksi')->row();
+      // Bahan Baku & Penimbangan Aktual
+      $bahanBaku = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_baku')->result();
+      $dataBahanBaku = null;
+      foreach($bahanBaku as $row) {
+        $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+        $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
+        $satuanKaplet = $this->Perintahproduksimodel->select(array('id' => $row->satuan_kaplet), 'm_satuan')->row();
+        $dataBahanBaku[] = array(
+            'nama_bahan' => $bahan->nama,
+            'per_kaplet' => $row->per_kaplet,
+            'satuan_kaplet' => $satuanKaplet->nama,
+            'per_batch' => $row->per_batch,
+            'satuan_batch' => $satuanBatch->nama,
+            'jumlah_lot' => $row->jumlah_lot,
+            'jumlah_perlot' => $row->jumlah_perlot
+          );
+      }
+      // Bahan Kemas
+      $bahanKemas = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_kemas')->result();
+      $dataBahanKemas = null;
+      foreach($bahanKemas as $row) {
+        $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+        $satuan = $this->Perintahproduksimodel->select(array('id' => $row->satuan), 'm_satuan')->row();
+        $dataBahanKemas[] = array(
+            'nama_bahan' => $bahan->nama,
+            'jumlah' => $row->jumlah,
+            'satuan' => $satuan->nama,
+            'aktual' => $row->aktual
+          );
+      }
+      // Data
+      $data['perintah_produksi'] = $perintahProduksi;
+      $data['bahan_baku'] = $dataBahanBaku;
+      $data['bahan_kemas'] = $dataBahanKemas;
+      $this->load->view('Produksi_perintah/perintahDetail', $data);
       // $this->load->view('Produksi_perintah/view', $data);
+    }
+    function edit() {
+      $uid = $this->uri->segment(4);
+      if(!$uid) redirect('index/modul/Produksi_perintah-master-index');
+      $id = base64_url_decode($uid);
+      // Perintah Produksi
+      $perintahProduksi = $this->Perintahproduksimodel->select(array('id' => $id), 'm_perintah_produksi')->row();
+      // Bahan Baku & Penimbangan Aktual
+      $bahanBaku = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_baku')->result();
+      $dataBahanBaku = null;
+      foreach($bahanBaku as $row) {
+        $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+        $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
+        $satuanKaplet = $this->Perintahproduksimodel->select(array('id' => $row->satuan_kaplet), 'm_satuan')->row();
+        $dataBahanBaku[] = array(
+            'nama_bahan' => $bahan->nama,
+            'per_kaplet' => $row->per_kaplet,
+            'satuan_kaplet' => $satuanKaplet->nama,
+            'per_batch' => $row->per_batch,
+            'satuan_batch' => $satuanBatch->nama,
+            'jumlah_lot' => $row->jumlah_lot,
+            'jumlah_perlot' => $row->jumlah_perlot
+          );
+      }
+      // Bahan Kemas
+      $bahanKemas = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_kemas')->result();
+      $dataBahanKemas = null;
+      foreach($bahanKemas as $row) {
+        $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+        $satuan = $this->Perintahproduksimodel->select(array('id' => $row->satuan), 'm_satuan')->row();
+        $dataBahanKemas[] = array(
+            'nama_bahan' => $bahan->nama,
+            'jumlah' => $row->jumlah,
+            'satuan' => $satuan->nama,
+            'aktual' => $row->aktual
+          );
+      }
+      // Data
+      $data['perintah_produksi'] = $perintahProduksi;
+      $data['bahan_baku'] = $dataBahanBaku;
+      $data['bahan_kemas'] = $dataBahanKemas;
+      $this->load->view('Produksi_perintah/perintahEdit', $data);
     }
     function add(){
       $params = $this->input->post();
@@ -151,11 +269,11 @@ class Master extends MX_Controller {
           $nestedData[]   =   date('d/m/Y', strtotime($row["tanggal_efektif"]));
           $nestedData[]  .=   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
-                .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
-                .'<a href="Produksi_perintah-master-cetak" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak Dokumen"><i class="fa fa-print"></i></a>'
+                .'<a class="btn btn-sm btn-default" href="#" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil"></i></a>'
+                .'<a href="Produksi_perintah-master-cetak/'.base64_url_encode($row['id']).'" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak Dokumen"><i class="fa fa-print"></i></a>'
                .'</div>'
             .'</td>';
-
+          // Edit: Produksi_perintah-master-edit/'.base64_url_encode($row['id']).'
           $data[] = $nestedData; $i++;
       }
       $totalData = count($data);

@@ -33,18 +33,67 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_fifo/distributor');
     }
     function cetakbarang(){
-    	$this->load->view('Laporan_fifo/cetak-barang');
+        $sql = "SELECT * ";
+        $sql.=" FROM m_barang WHERE deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+        $sql.=" AND ( nama_barang LIKE '%".$requestData['search']['value']."%' ";
+        $sql.=" OR no_batch LIKE '%".$requestData['search']['value']."%' )";
+    }
+        $query=$this->Laporanfifomodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+        $this->load->view('Laporan_fifo/cetak-barang', $data);
     }
     function cetakbahan(){
-    	$this->load->view('Laporan_fifo/cetak-bahan');
+        $sql = "SELECT "; 
+        $sql .= "m_bahan.nama AS nama_bahan,
+                        m_bahan_kategori.nama AS kategori_bahan,
+                        m_bahan.tgl_datang AS tanggal_datang
+                        FROM m_bahan, m_bahan_kategori
+                        WHERE m_bahan.id_kategori_bahan = m_bahan_kategori.id AND m_bahan.deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+        $sql.=" AND ( m_bahan.nama LIKE '%".$requestData['search']['value']."%' ";
+        $sql.=" OR m_bahan_kategori.nama LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Laporanfifomodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+        $this->load->view('Laporan_fifo/cetak-bahan', $data);
     }
     function cetaksupplier(){
-    	$this->load->view('Laporan_fifo/cetak-supplier');
+        $sql = "SELECT * ";
+        $sql.=" FROM m_supplier WHERE deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Laporanfifomodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+        $this->load->view('Laporan_fifo/cetak-supplier', $data);
     }
     function cetakprodusen(){
-    	$this->load->view('Laporan_fifo/cetak-produsen');
+        $sql = "SELECT * ";
+        $sql.=" FROM m_produsen WHERE deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Laporanfifomodel->rawQuery($sql);
+        $this->load->view('Laporan_fifo/cetak-produsen', $data);
     }
     function cetakdistributor(){
-    	$this->load->view('Laporan_fifo/cetak-distributor');
+        $sql = "SELECT * ";
+        $sql.=" FROM m_distributor WHERE deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Laporanfifomodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+    	$this->load->view('Laporan_fifo/cetak-distributor', $data);
     }
   }

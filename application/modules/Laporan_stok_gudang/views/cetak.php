@@ -1,4 +1,4 @@
-<div class="print-container">
+<div id="printSection" class="print-container">
   <table class="header">
     <tr>
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
@@ -20,24 +20,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Jamur ABM</td>
-        <td>002</td>
-        <td>22</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Jamur ABM</td>
-        <td>002</td>
-        <td>22</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Jamur ABM</td>
-        <td>002</td>
-        <td>22</td>
-      </tr>
+      <?php 
+      if(empty($data_list)) { ?>
+        <tr><td colspan="5">Tidak ada data</td></tr>
+      <?php 
+      }
+      else {
+        foreach ($data_list as $key => $row) { ?>
+        <tr>
+          <td><?php echo ($key+1)?></td>
+          <td><?php echo $row->nama_barang?></td>
+          <td><?php echo $row->nama_kategori?></td>
+          <td><?php echo $row->stok_akhir?></td>
+        </tr>
+      <?php }
+      } ?>
     </tbody>
   </table>
 

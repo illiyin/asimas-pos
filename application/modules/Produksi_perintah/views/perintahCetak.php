@@ -10,15 +10,15 @@
         <table class="nested dok-detail">
           <tr>
             <td>No. Dokumen</td>
-            <td>: FRM-XXI</td>
+            <td>: <?= $perintah_produksi->no_dokumen ?></td>
           </tr>
           <tr>
             <td>Revisi</td>
-            <td>: 02</td>
+            <td>: <?= $perintah_produksi->revisi ?></td>
           </tr>
           <tr>
             <td>Tanggal Efektif</td>
-            <td>: 04/02/2018</td>
+            <td>: <?= date('d/m/Y', strtotime($perintah_produksi->tanggal_efektif)) ?></td>
           </tr>
         </table>
       </td>
@@ -31,15 +31,15 @@
         <table class="nested">
           <tr>
             <td>No. Perintah Produksi</td>
-            <td>: 1</td>
+            <td>: <?= $perintah_produksi->no_perintah ?></td>
           </tr>
           <tr>
             <td>No. Sales Order</td>
-            <td>: 1</td>
+            <td>: <?= $perintah_produksi->no_sales_order ?></td>
           </tr>
           <tr>
             <td>Estimasi Proses</td>
-            <td>: 5 hari</td>
+            <td>: <?= $perintah_produksi->estimasi_proses ?> hari</td>
           </tr>
         </table>
       </td>
@@ -47,19 +47,19 @@
         <table class="nested">
           <tr>
             <td>Nama Produk</td>
-            <td>: ABM Pro (ABP - 01)</td>
+            <td>: <?= $perintah_produksi->nama_produk ?></td>
           </tr>
           <tr>
             <td>Besar Batch</td>
-            <td>: 2000 botol @ 60 kaplet</td>
+            <td>: <?= $perintah_produksi->besar_batch ?></td>
           </tr>
           <tr>
             <td>Kode Produksi</td>
-            <td>: X-23</td>
+            <td>: <?= $perintah_produksi->kode_produksi ?></td>
           </tr>
           <tr>
             <td>Expire Date</td>
-            <td>: 31/12/2018</td>
+            <td>: <?= date('d/m/Y', strtotime($perintah_produksi->expired_date)); ?> </td>
           </tr>
         </table>
       </td>
@@ -79,22 +79,16 @@
       </tr>
     </thead>
     <tbody>
+      <?php $no = 1; foreach($bahan_baku as $row): ?>
       <tr>
-        <td>1</td>
-        <td>Simplisia ABM</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>kg</td>
+        <td><?= $no++ ?></td>
+        <td><?= $row['nama_bahan'] ?></td>
+        <td><?= $row['per_kaplet'] ?></td>
+        <td><?= $row['satuan_kaplet'] ?></td>
+        <td><?= $row['per_batch'] ?></td>
+        <td><?= $row['satuan_batch'] ?></td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Brotowali</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>gram</td>
-      </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 
@@ -107,6 +101,7 @@
         <th>Jumlah</th>
         <th>Satuan</th>
         <th>Per Lot</th>
+        <th>Total Lot</th>
         <th class="lot">Lot 1</th>
         <th class="lot">Lot 2</th>
         <th class="lot">Lot 3</th>
@@ -120,12 +115,14 @@
       </tr>
     </thead>
     <tbody>
+      <?php $no = 1; foreach($bahan_baku as $row): ?>
       <tr>
-        <td>1</td>
-        <td>Simplisia ABM</td>
-        <td>48</td>
-        <td>kg</td>
-        <td>-</td>
+        <td><?= $no++ ?></td>
+        <td><?= $row['nama_bahan'] ?></td>
+        <td><?= $row['per_batch'] ?></td>
+        <td><?= $row['satuan_batch'] ?></td>
+        <td><?= $row['jumlah_perlot'] ?></td>
+        <td><?= $row['jumlah_lot'] ?></td>
         <td></td>
         <td></td>
         <td></td>
@@ -137,23 +134,7 @@
         <td></td>
         <td></td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Brotowali</td>
-        <td>48</td>
-        <td>kg</td>
-        <td>-</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 
@@ -163,29 +144,21 @@
       <tr>
         <th class="nomer">No.</th>
         <th>Nama Bahan</th>
-        <th>Per Kaplet</th>
+        <th>Jumlah</th>
         <th>Satuan</th>
-        <th>Per Batch</th>
-        <th>Satuan</th>
+        <th>Aktual</th>
       </tr>
     </thead>
     <tbody>
+      <?php $no = 1; foreach($bahan_kemas as $row): ?>
       <tr>
-        <td>1</td>
-        <td>Simplisia ABM</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>kg</td>
+        <td><?= $no++ ?></td>
+        <td><?= $row['nama_bahan'] ?></td>
+        <td><?= $row['jumlah'] ?></td>
+        <td><?= $row['satuan'] ?></td>
+        <td><?= $row['aktual'] ?></td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Brotowali</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>gram</td>
-      </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 

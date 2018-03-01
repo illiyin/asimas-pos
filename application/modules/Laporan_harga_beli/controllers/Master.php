@@ -21,7 +21,18 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_harga_beli/view');
     }
     function cetak(){
-    	$this->load->view('Laporan_harga_beli/cetak');
+        $sql = "SELECT ";
+        $sql.="m_barang.nama_barang,
+                m_bahan.nama AS nama_bahan,
+                AVG(tt_gudang_masuk.harga_pembelian) AS harga_pembelian
+                FROM tt_gudang_masuk,m_barang, m_bahan
+                WHERE m_barang.id = tt_gudang_masuk.id_barang 
+                AND m_bahan.id = tt_gudang_masuk.id_bahan
+                AND tt_gudang_masuk.deleted = 1";
+        $sql .= " GROUP BY tt_gudang_masuk.id_barang";
+        $query=$this->Laporanhargabelimodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+    	$this->load->view('Laporan_harga_beli/cetak', $data);
     }
     function data(){
         $requestData= $_REQUEST;

@@ -328,7 +328,6 @@ $("#formBahanBaku").on('submit', function(e){
     var dataBahan = getMasterById(list_bahan, form[0].value);
     var satuanKaplet = getMasterById(list_satuan, form[2].value);
     var satuanBatch = getMasterById(list_satuan, form[4].value);
-    // console.log(form[0].value);
     tempBahanBaku.push({
         'id_bahan': form[0].value,
         'per_kaplet': form[1].value,
@@ -338,28 +337,8 @@ $("#formBahanBaku").on('submit', function(e){
         'jumlah_lot': form[5].value,
         'jumlah_perlot': form[6].value
     });
-    
-    // tempBahanBaku['num'] = num;
-    // tempBahanBaku['nama_bahan'] = dataBahan.nama;
-    // tempBahanBaku['per_kaplet'] = form[1].value;
-    // tempBahanBaku['satuan_kaplet'] = form[2].value;
-    // tempBahanBaku['per_batch'] = form[3].value;
-    // tempBahanBaku['satuan_batch'] = form[4].value;
-    // tempBahanBaku['jumlah_lot'] = form[5].value;
-    // tempBahanBaku['jumlah_perlot'] = form[6].value;
-
-
     $("#dataBahanBaku")
     .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>Per Kaplet: "+form[1].value+''+satuanKaplet.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td></tr>");
-    // $("#dataBahanBaku")
-    // .append("<tr>")
-    //   .append("<td>").append(num).append("</td>")
-    //   .append("<td>").append(dataBahan.nama).append("</td>")
-    //   .append("<td>").append("Per Kaplet:" + form[1].value + '' + satuanKaplet.nama).append("</td>")
-    //   .append("<td>").append("Per Batch:" + form[3].value + '' + satuanBatch.nama).append("</td>")
-    //   .append("<td>").append("Per Lot" + form[6].value).append("</td>")
-    //   .append("<td>").append("Jumlah Lot" + form[5].value).append("</td>")
-    // .append("</tr>");
     $("#formBahanBaku")[0].reset();
 });
 
@@ -398,20 +377,14 @@ $("#formPerintahProduksi").on('submit', function(e){
       data: form+"&bahan_baku="+JSON.stringify(tempBahanBaku)+"&bahan_kemas="+JSON.stringify(tempBahanKemas),
       dataType: 'json',
       beforeSend: function() {
-        // tambahkan loading
-        // $("#btnSubmit").prop("disabled", true);
-        // $('#btnSubmit').html('Sedang Menyimpan...');
+        $("#btnSubmit").prop("disabled", true);
+        $('#btnSubmit').html('Sedang Menyimpan...');
       },
       error: function(e) {
         console.log(e);
       },
       success: function (data) {
-        console.log(data);
-        var x = $.parseJSON(data.bahan_baku);
-        console.log(x.nama_bahan);
-        console.log(data.besar_batch);
-        // console.log(data.bahan_baku);
-        // console.log(data.bahan_kemas);
+        location.reload();
         $("#btnSubmit").prop("disabled", false);
         $('#btnSubmit').html('Submit Data');
       }

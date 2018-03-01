@@ -21,7 +21,18 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_stok_gudang/view');
     }
     function cetak(){
-    	$this->load->view('Laporan_stok_gudang/cetak');
+        $sql = "SELECT ";
+        $sql .= "m_barang.nama_barang,
+                m_bahan_kategori.nama AS nama_kategori,
+                m_barang.stok_akhir
+                FROM m_barang, m_bahan_kategori WHERE m_barang.deleted = 1 AND m_barang.id_kategori_bahan = m_bahan_kategori.id";
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" AND ( m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR m_bahan_kategori.nama LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Laporanstokgudangmodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+    	$this->load->view('Laporan_stok_gudang/cetak', $data);
     }
     function data(){
         $requestData= $_REQUEST;

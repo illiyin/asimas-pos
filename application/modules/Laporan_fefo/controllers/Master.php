@@ -21,7 +21,15 @@ class Master extends MX_Controller {
         $this->load->view('Laporan_fefo/view');
     }
     function cetak(){
-    	$this->load->view('Laporan_fefo/cetak');
+        $sql = "SELECT * ";
+        $sql.=" FROM m_barang WHERE deleted = 1";
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" AND ( nama_barang LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_batch LIKE '%".$requestData['search']['value']."%' )";
+        }
+        $query=$this->Laporanfefomodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
+    	$this->load->view('Laporan_fefo/cetak', $data);
     }
     function data() {
         $requestData= $_REQUEST;
