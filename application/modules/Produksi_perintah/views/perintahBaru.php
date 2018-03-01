@@ -328,10 +328,9 @@ $("#formBahanBaku").on('submit', function(e){
     var dataBahan = getMasterById(list_bahan, form[0].value);
     var satuanKaplet = getMasterById(list_satuan, form[2].value);
     var satuanBatch = getMasterById(list_satuan, form[4].value);
-
+    // console.log(form[0].value);
     tempBahanBaku.push({
-        'num': num,
-        'nama_bahan': dataBahan.nama,
+        'id_bahan': form[0].value,
         'per_kaplet': form[1].value,
         'satuan_kaplet': form[2].value,
         'per_batch': form[3].value,
@@ -373,7 +372,7 @@ $("#formBahanKemas").on('submit', function(e){
 
     tempBahanKemas.push({
         'num': num,
-        'nama_bahan': dataBahan.nama,
+        'id_bahan': form[0].value,
         'jumlah': form[1].value,
         'satuan': form[2].value,
         'aktual': form[3].value
