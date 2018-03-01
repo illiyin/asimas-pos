@@ -1,6 +1,6 @@
 <div class="container" style="margin-top:10px;margin-bottom:20px;">
   <h2>Dokumen Revisi</h2>
-  <form class="form-horizontal" action="index.html" method="post">
+  <form class="form-horizontal" action="<?= base_url() ?>index/modul/Produksi_perintah-master-index" method="post">
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="form-group">

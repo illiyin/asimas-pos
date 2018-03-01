@@ -120,8 +120,7 @@ class Master extends MX_Controller {
         if($checkData->num_rows() < 1){
             $insert = $this->Transaksigudangkeluarmodel->insert($dataInsert, 'tt_gudang_keluar');
             if($insert){
-                $list = $this->Transaksigudangkeluarmodel->select(array('deleted' => 1), 'tt_gudang_keluar', 'date_add', 'DESC');
-                echo json_encode(array('status' => 3,'list' => $list));
+                echo json_encode(array('status' => 3));
             }else{
                 echo json_encode(array('status' => 2));
             }

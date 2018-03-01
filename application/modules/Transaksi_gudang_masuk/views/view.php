@@ -230,8 +230,11 @@
     var dataProdusen = getMasterById(list_produsen, dataMaster[0].id_produsen);
     $("#nama_produsen").val(dataProdusen.id);
     // Data Barang
-    var detailBarang = list_barang.filter(function (index) { return index.id == id });
+    var detailBarang = list_barang.filter(function (index) { return index.id == dataMaster[0].id_barang });
     var data = detailBarang[0];
+    console.log(dataMaster[0].id_barang);
+    console.log(list_barang);
+    console.log(detailBarang);
     $("#nama_supplier").val(data.supplier.nama);
     $("#jumlah_masuk").val(data.jumlah_masuk);
     $("#id_satuan").val(data.satuan.nama);  
