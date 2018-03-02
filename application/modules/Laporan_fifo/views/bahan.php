@@ -51,7 +51,8 @@
 
 <script type="text/javascript">
 function gotoCetak(){
-  location.href="Laporan_fifo-master-cetakbahan";
+  window.open("<?php echo base_url()?>index/modul/Laporan_fifo-master-cetakbahan", "_blank");
+  // location.href="Laporan_fifo-master-cetakbahan";
 }
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,

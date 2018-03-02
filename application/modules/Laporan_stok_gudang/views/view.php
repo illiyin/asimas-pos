@@ -51,7 +51,8 @@
 
 <script type="text/javascript">
 function gotoCetak(){
-  location.href="Laporan_stok_gudang-master-cetak";
+  window.open("<?php echo base_url()?>index/modul/Laporan_stok_gudang-master-cetak", "_blank");
+  // location.href="Laporan_stok_gudang-master-cetak";
 }
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,

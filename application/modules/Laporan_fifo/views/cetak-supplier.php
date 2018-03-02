@@ -1,3 +1,8 @@
+<div class="container">
+  <div class="col-sm-12 text-right">
+    <button class="btn btn-default" title="Cetak Halaman" onclick="window.print();"><i class="fa fa-print"></i> Cetak</button>
+  </div>
+</div>
 <div id="printSection" class="print-container">
   <table class="header">
     <tr>
@@ -21,10 +26,10 @@
       </tr>
     </thead>
     <tbody>
-      <?php 
+      <?php
       if(empty($data_list)) { ?>
         <tr><td colspan="5">Tidak ada data</td></tr>
-      <?php 
+      <?php
       }
       else {
         foreach ($data_list as $key => $row) { ?>
@@ -80,7 +85,6 @@ table{
 .regular tr th{
   border: 1px solid #000;
   padding: 15px 10px;
-  text-align: center;
 }
 .nomer{
   width: 60px;
@@ -89,6 +93,54 @@ table{
   font-weight: bold;
   background-color: #9E9E9E;
   color: #fff;
+  text-align: center;
 }
 
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
 </style>
+
+<style>
+@page {
+  /* width = 21cm */
+  size: A4;
+  margin: 0 1.5cm 1cm;
+
+}
+
+
+
+@media print {
+
+  body {
+    font: 12pt Georgia, "Times New Roman", Times, serif;
+    line-height: 1.5;
+    padding-top: 0px;
+  }
+  table.header {
+    margin-bottom: 30px;
+  }
+  table.regular td{
+    padding: 10px!important;
+    /* line-height: 1.5; */
+  }
+
+  table{
+    width: 18cm;
+  }
+}
+</style>
+
+<script>
+  $('.navbar.navbar-default').hide();
+  $(document).ready(function() {
+    window.print();
+  });
+</script>
