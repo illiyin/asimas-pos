@@ -9,9 +9,12 @@ class Perintahproduksimodel extends CI_Model {
 		$this->db->close();
 		return $result;
 	}
-	public function select($condition, $table, $order_by="", $sort="ASC"){
+	public function select($condition, $table, $order_by="", $sort="ASC", $group = ''){
 		$this->load->database();
 		$this->db->where($condition);
+		if($group != '') {
+			$this->db->group_by($group);
+		}
 		$this->db->order_by($order_by, $sort);
 		$result = $this->db->get($this->table_prefix."".$table);
 		$this->db->close();
