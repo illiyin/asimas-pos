@@ -41,7 +41,8 @@
 
 <script type="text/javascript">
 function gotoCetak(){
-  location.href="Laporan_fifo-master-cetakdistributor";
+  window.open("<?php echo base_url()?>index/modul/Laporan_fifo-master-cetakdistributor", "_blank");
+  // location.href="Laporan_fifo-master-cetakdistributor";
 }
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,

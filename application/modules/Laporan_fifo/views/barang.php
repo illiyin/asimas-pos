@@ -21,7 +21,7 @@
           </thead>
 
           <tbody id='bodytable'>
-            
+
           </tbody>
       </table>
    </div>
@@ -35,7 +35,8 @@
 
 <script type="text/javascript">
 function gotoCetak(){
-  location.href="Laporan_fifo-master-cetakbarang";
+  window.open("<?php echo base_url()?>index/modul/Laporan_fifo-master-cetakbarang", "_blank");
+  // location.href="Laporan_fifo-master-cetakbarang";
 }
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,

@@ -51,7 +51,8 @@
 
 <script type="text/javascript">
 function gotoCetak(){
-  location.href="Laporan_harga_beli-master-cetak";
+  window.open("<?php echo base_url()?>index/modul/Laporan_harga_beli-master-cetak", "_blank");
+  // location.href="Laporan_harga_beli-master-cetak";
 }
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,
