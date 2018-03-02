@@ -8,7 +8,7 @@
             <label for="" class="control-label">No. Dokumen</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" required value="ND123">
+            <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" required>
           </div>
         </div>
         <div class="form-group">
@@ -25,7 +25,7 @@
           </div>
           <div class="col-sm-9">
             <div class="input-group">
-              <input type="text" class="form-control datepicker" name="tanggal_efektif" id="tanggal_efektif" required value="16/02/2018">
+              <input type="text" class="form-control datepicker" name="tanggal_efektif" id="tanggal_efektif" required>
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
@@ -39,7 +39,7 @@
             <label for="" class="control-label">No. Perintah Produksi</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_pp" id="no_pp" required value="NPP123">
+            <input type="text" class="form-control" name="no_pp" id="no_pp" required>
           </div>
         </div>
         <div class="form-group">
@@ -47,7 +47,7 @@
             <label for="" class="control-label">No. Sales Order</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_so" id="no_so" value="NSO01">
+            <input type="text" class="form-control" name="no_so" id="no_so" required>
           </div>
         </div>
         <div class="form-group">
@@ -55,7 +55,7 @@
             <label for="" class="control-label">Estimasi Proses</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="estimasi" id="estimasi" required value="5">
+            <input type="text" class="form-control" name="estimasi" id="estimasi" required>
           </div>
         </div>
         <div class="form-group">
@@ -63,7 +63,7 @@
             <label for="" class="control-label">Nama Produk</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="nama_produk" id="nama_produk" required value="PRODUK 1">
+            <input type="text" class="form-control" name="nama_produk" id="nama_produk" required>
           </div>
         </div>
         <div class="form-group">
@@ -71,7 +71,7 @@
             <label for="" class="control-label">Besar Batch</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="besar_batch" id="besar_batch" required value="5000">
+            <input type="text" class="form-control" name="besar_batch" id="besar_batch" required>
           </div>
         </div>
         <div class="form-group">
@@ -79,7 +79,7 @@
             <label for="" class="control-label">Kode Produksi</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi" required value="KP123">
+            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi" required>
           </div>
         </div>
         <div class="form-group">
@@ -88,7 +88,7 @@
           </div>
           <div class="col-sm-9">
             <div class="input-group">
-              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" required value="31/03/2018">
+              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" required>
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
