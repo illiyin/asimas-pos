@@ -81,10 +81,10 @@
       <!-- chart.js script -->
       <!--<script src="<?php echo base_url(); ?>assets/js/Chart.js"></script>-->
       <!-- highchart.js script -->
-      <!--<script src="<?php echo base_url(); ?>assets/js/highcharts.js"></script>
-      <script src="<?php echo base_url(); ?>assets/js/highcharts_modules/exporting.js"></script>-->
-      <script src="https://code.highcharts.com/highcharts.js"></script>
-      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="<?php echo base_url(); ?>assets/js/highcharts.js"></script>
+      <script src="<?php echo base_url(); ?>assets/js/highcharts_modules/exporting.js"></script>
+      <!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+      <!-- <script src="https://code.highcharts.com/modules/exporting.js"></script> -->
       <script src="<?php echo base_url(); ?>assets/js/highcharts_themes/dark-unica.js"></script>
       <!-- moment JS -->
       <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/moment.min.js"></script>

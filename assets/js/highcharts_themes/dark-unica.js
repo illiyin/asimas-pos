@@ -18,7 +18,7 @@
          * (c) 2010-2016 Torstein Honsi
          *
          * License: www.highcharts.com/license
-         * 
+         *
          * Dark theme for Highcharts JS
          * @author Torstein Honsi
          */
@@ -26,7 +26,7 @@
         /* global document */
         // Load the fonts
         Highcharts.createElement('link', {
-            href: 'https://fonts.googleapis.com/css?family=Unica+One',
+            href: 'fonts/unica_one.css',
             rel: 'stylesheet',
             type: 'text/css'
         }, null, document.getElementsByTagName('head')[0]);
