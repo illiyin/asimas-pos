@@ -10,6 +10,17 @@
 .filter-item input{
   margin: 0!important;
 }
+.mb-20{
+  margin-bottom: 20px;
+}
+#customdate{
+  display: none;
+  background-color: #efefef;
+  padding: 10px;
+}
+#customdate.open{
+  display: block;
+}
 </style>
 <!-- Page Content -->
 <div class="container">
@@ -19,7 +30,12 @@
     </div>
   </div>
   <div class="row">
-    <h3><strong>Transaksi</strong> - Laporan Transaksi Gudang</h3>
+    <div class="col-sm-6">
+      <h3><strong>Transaksi</strong> - Laporan Transaksi Gudang</h3>
+    </div>
+    <div class="col-sm-6 text-right">
+      <button class="btn btn-primary" onclick="showCetakChoice()"><i class="fa fa-print"></i> Cetak Laporan</button>
+    </div>
   </div>
   <div class="row panel panel-info">
     <div class="panel-body">
@@ -84,7 +100,7 @@
           <th class="text-center">Expire Date</th>
           <th class="text-center">Keterangan</th>
           <th class="text-center">Harga</th>
-          <th class="text-center no-sort" width="45">Aksi</th>
+          <!-- <th class="text-center no-sort" width="45">Aksi</th> -->
         </tr>
       </thead>
 
@@ -103,111 +119,91 @@
           <td>12/12/2019</td>
           <td>Sangat Terang</td>
           <td>300.000</td>
-          <td>
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td data-search="Biskuit AMB Supplier B Kategori A">Biskuit AMB</td>
-          <td>XX-3s</td>
-          <td>kg</td>
-          <td>300</td>
-          <td>23</td>
-          <td>420</td>
-          <td>50</td>
-          <td>50</td>
-          <td>50</td>
-          <td>12/12/2019</td>
-          <td>Terang</td>
-          <td>200.000</td>
-          <td>
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <!-- Button trigger modal -->
-  <!-- <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
-  Tambah Dokumen
+          <!-- <td>
+          <div class="btn-group" >
+          <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
+          <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
+        </div>
+      </td> -->
+    </tr>
+    <tr>
+      <td>2</td>
+      <td data-search="Biskuit AMB Supplier B Kategori A">Biskuit AMB</td>
+      <td>XX-3s</td>
+      <td>kg</td>
+      <td>300</td>
+      <td>23</td>
+      <td>420</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>12/12/2019</td>
+      <td>Terang</td>
+      <td>200.000</td>
+      <!-- <td>
+      <div class="btn-group" >
+      <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
+      <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
+    </div>
+  </td> -->
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
+Tambah Dokumen
 </button> -->
 </div>
 <!-- /.container -->
-<!-- Modal Detail Kategori Bahan baku -->
-<div class="modal fade" id="Viewproduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document" id="viewModal">
+<!-- Modal Pilihan Cetak -->
+<div class="modal fade" id="cetakChoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" id="viewModal">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="view">Detail Kategori Bahan</h4>
+        <h4 class="modal-title" id="view">Cetak Laporan</h4>
       </div>
       <div class="modal-body" id="modal-body">
-        <div id="viewSectionProduct">
-          <!-- view goes here -->
-          <div class="col-md-12"><div class="media">
-            <!-- <div class="media-left">
-            <img id="det_foto" class="media-object img-rounded" src="<?php echo base_url()?>upload/bahan_baku/placeholder.png" alt="image" width="200px">
-          </div> -->
-          <div class="media-body">
-            <h1 class="media-heading" id="det_nama">sfsdg</h1>
-            <div class="row">
-              <div class="col-sm-6">
-                <p><b>Kode :</b> <span id="det_kategori"></span></p>
+        <div class="row">
+          <div class="col-xs-6">
+            <button onclick="cetakDaily()" class="mb-20 btn btn-warning btn-block btn-lg" target="_blank">Hari Ini</button>
+          </div>
+          <div class="col-xs-6">
+            <button onclick="cetakWeekly()" class="mb-20 btn btn-info btn-block btn-lg" target="_blank">Minggu Ini</button>
+          </div>
+          <div class="col-xs-6">
+            <button onclick="cetakMonthly()" class="mb-20 btn btn-danger btn-block btn-lg" target="_blank">Bulan Ini</button>
+          </div>
+          <div class="col-xs-6">
+            <button class="mb-20 btn btn-default btn-block btn-lg" id="btnSesuaikan">Sesuaikan</button>
+          </div>
+          <div class="col-xs-12">
+            <div id="customdate">
+              <div class="input-daterange input-group input-group-lg" id="datepicker">
+                <input type="text" class="input-sm form-control" name="start" placeholder="Mulai Tanggal"/>
+                <span class="input-group-addon">s/d</span>
+                <input type="text" class="input-sm form-control" name="end" placeholder="Sampai Tanggal"/>
+                <span class="input-group-btn">
+                  <button onclick="cetakCustom()" class="btn btn-primary">Cetak</button>
+                </span>
               </div>
             </div>
           </div>
-        </div></div>
-        <div class="col-md-6">
-
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default hiddenpr" data-dismiss="modal">Close</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default hiddenpr" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
-</div>
 </div>
 <!-- /.Modal -->
 
-<!-- Modal Add -->
-<div class="modal fade" id="modalPilihTipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Pilih Tipe Dokumen</h4>
-      </div>
-      <form action="" method="POST" id="myform" enctype="multipart/form-data"> <div class="modal-body">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <a href="Produksi_perintah-master-perintahbaru" class="btn btn-primary btn-lg btn-block">Buat Baru</a>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <a href="Produksi_perintah-master-perintahrevisi" class="btn btn-default btn-lg btn-block">Revisi</a>
-            </div>
-          </div>
 
-
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- /.Modal Add-->
 <script type="text/javascript">
-function showPilihTipe() {
-  $('#modalPilihTipe').modal('show');
+function showCetakChoice() {
+  $('#cetakChoice').modal('show');
 }
 function filterColumn (i,keyword) {
   var tabel = $('#TableMainServer').DataTable();
@@ -255,4 +251,31 @@ $(document).ready(function() {
   })
 
 });
+
+$('#customdate .input-daterange').datepicker({
+  format: "dd/mm/yyyy"
+});
+
+function cetakDaily(){
+  window.open("<?php echo base_url()?>index/modul/Transaksi_gudang-master-cetak", "_blank");
+}
+function cetakWeekly(){
+  window.open("<?php echo base_url()?>index/modul/Transaksi_gudang-master-cetak", "_blank");
+}
+function cetakMonthly(){
+  window.open("<?php echo base_url()?>index/modul/Transaksi_gudang-master-cetak", "_blank");
+}
+function cetakCustom(){
+  window.open("<?php echo base_url()?>index/modul/Transaksi_gudang-master-cetak", "_blank");
+}
+
+$('#btnSesuaikan').on('click',function(){
+  var elem = $('#customdate');
+  if(elem.hasClass('open')){
+    elem.removeClass('open');
+  }else{
+    elem.addClass('open');
+  }
+})
+
 </script>
