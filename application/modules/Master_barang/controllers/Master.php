@@ -82,9 +82,9 @@ class Master extends MX_Controller {
             $nestedData     =   array();
             $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
             $nestedData[]   =   $row["nama_barang"];
-            $nestedData[]   =   $row["no_batch"];
+            $nestedData[]   =   strlen($row["no_batch"]) == 0 ? '<strong>Belum di Setting</strong>' : $row["no_batch"];
             $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["stok_akhir"]."</span>";
-            $nestedData[]   =   date("d-m-Y", strtotime($row["expired_date"]));
+            $nestedData[]   =   $row['expired_date'] == '0000-00-00' ? '<strong>Belum di Setting</strong>' : date("d-m-Y", strtotime($row["expired_date"]));
             $nestedData[]   .=   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
                 .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
@@ -111,11 +111,12 @@ class Master extends MX_Controller {
         $condition['deleted'] = 1;
         $dataInsert['id_satuan']        = $params['id_satuan'];
         $dataInsert['id_kategori_bahan']= $params['id_kategori'];
-        $dataInsert['id_supplier']      = $params['id_supplier'];
+        $dataInsert['id_supplier']      = isset($params['id_supplier']) ? $params['id_supplier'] : 0;
         $dataInsert['nama_barang']      = $params['nama'];
-        $dataInsert['jumlah_masuk']     = $params['jml_masuk'];
-        $dataInsert['no_batch']         = $params['no_batch'];
-        $dataInsert['expired_date']     = $expiredDate[2].'-'.$expiredDate[1].'-'.$expiredDate[0].' 00:00:00';
+        $dataInsert['jumlah_masuk']     = isset($params['jml_masuk']) ? $params['jml_masuk'] : 0;
+        $dataInsert['no_batch']         = isset($params['no_batch']) ? $params['no_batch'] : null;
+        $dataInsert['expired_date']     = isset($params['expired_date']) ?
+                 $expiredDate[2].'-'.$expiredDate[1].'-'.$expiredDate[0]: '0000-00-00';
         $dataInsert['stok_akhir']       = $params['stok_akhir'];
         $dataInsert['keterangan']       = $params['deskripsi'];
         $dataInsert['add_by']           = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;;

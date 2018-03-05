@@ -109,7 +109,7 @@
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_supplier">Supplier</label>
-                 <select name="id_supplier" class="form-control" id="id_supplier" required="">
+                 <select name="id_supplier" class="form-control" id="id_supplier">
                  </select>
                </div>
              </div>
@@ -123,19 +123,19 @@
              <div class="col-sm-6">
                 <div class="form-group">
                  <label for="jml_masuk">Jumlah Masuk</label>
-                 <input type="number" name="jml_masuk" maxlength="5" Required class="form-control" id="jml_masuk" placeholder="Jumlah masuk">
+                 <input type="number" name="jml_masuk" maxlength="5" class="form-control" id="jml_masuk" placeholder="Jumlah masuk">
                </div>
              </div>
              <div class="col-sm-6">
                 <div class="form-group">
                  <label for="no_batch">No. Batch</label>
-                 <input type="text" name="no_batch" maxlength="50" Required class="form-control" id="no_batch" placeholder="No. Batch">
+                 <input type="text" name="no_batch" maxlength="50" class="form-control" id="no_batch" placeholder="No. Batch">
                </div>
              </div>
              <div class="col-sm-6">
                 <div class="form-group">
                  <label for="expire_date">Expire Date</label>
-                 <input type="text" name="expired_date" maxlength="50" Required class="form-control datepicker" id="expired_date" placeholder="Expire date">
+                 <input type="text" name="expired_date" maxlength="50" class="form-control datepicker" id="expired_date" placeholder="Expire date">
                </div>
              </div>
              <div class="col-sm-6">

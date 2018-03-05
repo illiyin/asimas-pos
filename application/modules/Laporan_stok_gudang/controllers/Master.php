@@ -42,8 +42,12 @@ class Master extends MX_Controller {
         $sql = "SELECT ";
         $sql .= "m_barang.nama_barang,
                 m_bahan_kategori.nama AS nama_kategori,
-                m_barang.stok_akhir
-                FROM m_barang, m_bahan_kategori WHERE m_barang.deleted = 1 AND m_barang.id_kategori_bahan = m_bahan_kategori.id";
+                m_barang.stok_akhir,
+                m_supplier.moq,
+                m_supplier.lead_time
+                FROM m_barang, m_bahan_kategori, m_supplier 
+                WHERE m_barang.deleted = 1 AND m_barang.id_kategori_bahan = m_bahan_kategori.id
+                AND m_barang.id_supplier = m_supplier.id";
         if( !empty($requestData['search']['value']) ) {
             $sql.=" AND ( m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR m_bahan_kategori.nama LIKE '%".$requestData['search']['value']."%' )";
@@ -59,6 +63,8 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row["nama_barang"];
             $nestedData[]   =   $row["nama_kategori"];
             $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["stok_akhir"]."</span>";
+            $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["lead_time"]." Minggu</span>";
+            $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["moq"]."</span>";
 
             $data[] = $nestedData; $i++;
         }
