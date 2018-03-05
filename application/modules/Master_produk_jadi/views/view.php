@@ -24,7 +24,7 @@
       </thead>
 
       <tbody id='bodytable'>
-        <tr>
+        <!-- <tr>
           <td>1</td>
           <td>Paramex</td>
           <td>220-2</td>
@@ -39,7 +39,7 @@
               <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="showDetail()"><i class="fa fa-file-text-o"></i></a>
             </div>
           </td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>
@@ -91,7 +91,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Tambah Produk</h4>
+        <h4 class="modal-title" id="myModalLabel"></h4>
       </div>
       <form action="" method="POST" id="myform" enctype="multipart/form-data"> <div class="modal-body">
         <div class="row">
@@ -147,11 +147,153 @@
 <!-- /.Modal Add-->
 
 <script type="text/javascript">
+var list_data = <?php echo json_encode($list_data); ?>;
+var initDataTable = $('#TableMainServer').DataTable({
+  "bProcessing": true,
+  "bServerSide": true,
+  // "order": [[4, 'DESC']],
+  "ajax":{
+        url :"<?php echo base_url()?>Master_produk_jadi/Master/data",
+        type: "post",  // type of method  , by default would be get
+        error: function(e){  // error handling code
+          console.log(e);
+          // $("#employee_grid_processing").css("display","none");
+        }
+      },
+  "columnDefs": [ {
+    "targets"  : 'no-sort',
+    "orderable": false,
+  }]
+  });
 function showAdd(){
+  $("#id").val("");
+  $("#nama").val("");
+  $("#no_purchase").val("");
+  $("#no_sales").val("");
+  $("#harga").val("");
+  $("#expired_date").val("");
+  $("#stok").val("");
+  $("#myModalLabel").text("Tambah Produk Jadi");
   $('#modalform').modal('show');
 }
-function showDetail(){
+function showUpdate(id){
+  var data = list_data.filter(function (index) { return index.id == id })[0];
+  $("#id").val(data.id);
+  $("#nama").val(data.nama_barang);
+  $("#no_purchase").val(data.no_po);
+  $("#no_sales").val(data.no_so);
+  $("#harga").val(data.harga);
+  var dateExplode = data.expired_date.split("-");
+  var real_datetime = dateExplode[2]+'/'+dateExplode[1]+'/'+dateExplode[0];
+  $("#expired_date").val(real_datetime);
+  $("#stok").val(data.stok);
+  $("#myModalLabel").text("Ubah Produk Jadi");
+  $('#modalform').modal('show');
+}
+function showDetail(id){
+  var data = list_data.filter(function (index) { return index.id == id })[0];
+  $("#det_nama").text(data.nama_barang);
+  $("#det_purchase").text(data.no_po);
+  $("#det_sales").text(data.no_so);
+  $("#det_harga").text(data.harga);
+  var dateExplode = data.expired_date.split("-");
+  var real_datetime = dateExplode[2]+'/'+dateExplode[1]+'/'+dateExplode[0];
+  $("#det_expired").text(real_datetime);
+  $("#det_stok").text(data.stok);
   $('#Viewproduct').modal('show');
+}
+$("#myform").on('submit', function(e){
+    e.preventDefault();
+    var notifText = 'Data berhasil ditambahkan!';
+    var action = "<?php echo base_url('Master_produk_jadi/Master/add')?>/";
+    if ($("#id").val() != ""){
+      action = "<?php echo base_url('Master_produk_jadi/Master/edit')?>/";
+      notifText = 'Data berhasil diubah!';
+    }
+    var params = new FormData(jQuery('#myform')[0]);
+
+    $.ajax({
+      url: action,
+      type: 'post',
+      data: params,
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      beforeSend: function() {
+        // tambahkan loading
+        $("#aSimpan").prop("disabled", true);
+        $('#aSimpan').html('Sedang Menyimpan...');
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.status == '3'){
+          initDataTable.ajax.reload();
+          $('#aSimpan').html('Simpan');
+          $("#aSimpan").prop("disabled", false);
+          $("#modalform").modal('hide');
+          new PNotify({
+            title: 'Sukses',
+            text: notifText,
+            type: 'success',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
+        } else {
+          new PNotify({
+            title: 'Gagal',
+            text: data.message,
+            type: 'error',
+            hide: true,
+            delay: 5000,
+            styling: 'bootstrap3'
+          });
+        }
+        $('#aSimpan').html('Simpan');
+        $("#aSimpan").prop("disabled", false);
+      }
+    });
+  });
+function confirmDelete(el){
+  var element = $(el).attr("id");
+  var id  = element.replace("group","");
+  var i = parseInt(id);
+  $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
+  $(el).popover("show");
+}
+
+function deleteData(element){
+  var el = $(element).attr("id");
+  var id  = el.replace("aConfirm","");
+  var i = parseInt(id);
+  $.ajax({
+    type: 'post',
+    url: '<?php echo base_url('Master_produk_jadi/Master/delete'); ?>/',
+    data: {"id":i},
+    dataType: 'json',
+    beforeSend: function() {
+      // kasi loading
+      $("#aConfirm"+i).html("Sedang Menghapus...");
+      $("#aConfirm"+i).prop("disabled", true);
+    },
+    success: function (data) {
+      if (data.status == '3'){
+        initDataTable.ajax.reload();
+       $("#aConfirm"+i).prop("disabled", false);
+    // $("#notif-top").fadeIn(500);
+    // $("#notif-top").fadeOut(2500);
+        new PNotify({
+          title: 'Sukses',
+          text: 'Data berhasil dihapus!',
+          type: 'success',
+          hide: true,
+          delay: 5000,
+          styling: 'bootstrap3'
+        });
+      }
+    }
+  });
 }
 
 //Hack untuk bootstrap popover (popover hilang jika diklik di luar)
