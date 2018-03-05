@@ -292,7 +292,6 @@
     var i = parseInt(id);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
     $(el).popover("show");
-
   }
 
   //Hack untuk bootstrap popover (popover hilang jika diklik di luar)

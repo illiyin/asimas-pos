@@ -16,28 +16,12 @@
                   <th class="text-center">Nama Barang</th>
                   <th class="text-center">Kategori</th>
                   <th class="text-center">Stok Akhir</th>
+                  <th class="text-center">Lead Time</th>
+                  <th class="text-center">MOQ</th>
               </tr>
           </thead>
 
           <tbody id='bodytable'>
-            <tr>
-              <td class="text-center">1</td>
-              <td>Jamur ABM</td>
-              <td>Jamur</td>
-              <td>22</td>
-            </tr>
-            <tr>
-              <td class="text-center">2</td>
-              <td>Jamur ABM</td>
-              <td>Jamur</td>
-              <td>22</td>
-            </tr>
-            <tr>
-              <td class="text-center">3</td>
-              <td>Jamur ABM</td>
-              <td>Jamur</td>
-              <td>22</td>
-            </tr>
           </tbody>
       </table>
    </div>
