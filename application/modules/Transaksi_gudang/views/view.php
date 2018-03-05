@@ -21,7 +21,7 @@
   <div class="row">
     <h3><strong>Transaksi</strong> - Laporan Transaksi Gudang</h3>
   </div>
-  <div class="panel panel-info">
+  <div class="row panel panel-info">
     <div class="panel-body">
       <div class="row">
         <div class="col-sm-9">
