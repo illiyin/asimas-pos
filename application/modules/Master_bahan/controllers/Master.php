@@ -28,9 +28,16 @@ class Master extends MX_Controller {
     }
     // TODOOOOO DISINI (datatables server)
     private function data($id = '') {
-        $dataSelect['deleted'] = 1;
-        if($id) $dataSelect['id'] = $id;
-        $query = $this->Bahanmodel->select($dataSelect, 'm_bahan')->result();
+        $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan,
+        bahan.nama AS nama_bahan, bahan.kode_bahan, tbahan.jumlah_masuk,
+        tbahan.jumlah_keluar, tbahan.saldo_bulan_sekarang, tbahan.saldo_bulan_kemarin,
+        bahan.tgl_datang, bahan.date_add , bahan.last_edited
+        FROM m_bahan bahan, tt_bahan tbahan
+        WHERE bahan.deleted = 1 
+        AND bahan.id = tbahan.id_bahan";
+        if($id) $sql.= " AND bahan.id = '".$id."'";
+
+        $query = $this->Bahanmodel->rawQuery($sql)->result();
         $data = null;
         foreach($query as $row) {
             $kategori = $this->Bahanmodel->select(array('id' => $row->id_kategori_bahan), 'm_bahan_kategori')->row();
@@ -43,7 +50,7 @@ class Master extends MX_Controller {
                             'kode' => $kategori->kode_kategori,
                             'nama' => $kategori->nama,
                         ),
-                    'nama_bahan' => $row->nama,
+                    'nama_bahan' => $row->nama_bahan,
                     'kode_bahan' => $row->kode_bahan,
                     'jumlah_masuk' => $row->jumlah_masuk,
                     'jumlah_keluar' => $row->jumlah_keluar,
@@ -65,21 +72,24 @@ class Master extends MX_Controller {
         $dataInsert['id_satuan']            = $params['id_satuan'];
         $dataInsert['nama']                 = $params['nama'];
         $dataInsert['kode_bahan']           = $params['kode_bahan'];
-        $dataInsert['jumlah_masuk']         = $params['jumlah_masuk'];
-        $dataInsert['jumlah_keluar']        = $params['jumlah_keluar'];
-        $dataInsert['saldo_bulan_sekarang'] = $params['saldo_sekarang'];
-        $dataInsert['saldo_bulan_kemarin']  = $params['saldo_kemarin'];
         $dataInsert['tgl_datang']           = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0].' 00:00:00';
         $dataInsert['date_add']             = date("Y-m-d H:i:s");
         $dataInsert['add_by']               = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $dataInsert['last_edited']          = date("Y-m-d H:i:s");
         $dataInsert['edited_by']            = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
-        $dataInsert['deleted']              = 1;
+        $dataInsert['deleted']              = 1;    
 
         $checkData = $this->Bahanmodel->select($condition, 'm_bahan');
         if($checkData->num_rows() < 1){
-            $insert = $this->Bahanmodel->insert($dataInsert, 'm_bahan');
+            $insert = $this->Bahanmodel->insert_id($dataInsert, 'm_bahan');
             if($insert){
+                $insertStok['id_bahan']             = $insert;
+                $insertStok['jumlah_masuk']         = $params['jumlah_masuk'];
+                $insertStok['jumlah_keluar']        = $params['jumlah_keluar'];
+                $insertStok['saldo_bulan_sekarang'] = $params['saldo_sekarang'];
+                $insertStok['saldo_bulan_kemarin']  = $params['saldo_kemarin'];
+                $insertStok['tanggal']              = date('Y-m-1');
+                $insertStok = $this->Bahanmodel->insert($insertStok, 'tt_bahan');
                 $list = $this->data();
                 echo json_encode(array('status' => 3,'list' => $list));
             }else{
@@ -99,10 +109,6 @@ class Master extends MX_Controller {
         $dataUpdate['id_satuan']            = $params['id_satuan'];
         $dataUpdate['nama']                 = $params['nama'];
         $dataUpdate['kode_bahan']           = $params['kode_bahan'];
-        $dataUpdate['jumlah_masuk']         = $params['jumlah_masuk'];
-        $dataUpdate['jumlah_keluar']        = $params['jumlah_keluar'];
-        $dataUpdate['saldo_bulan_sekarang'] = $params['saldo_sekarang'];
-        $dataUpdate['saldo_bulan_kemarin']  = $params['saldo_kemarin'];
         $dataUpdate['tgl_datang']           = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0].' 00:00:00';
         $dataUpdate['last_edited']          = date("Y-m-d H:i:s");
         $dataUpdate['edited_by']            = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
@@ -112,6 +118,11 @@ class Master extends MX_Controller {
         if($checkData->num_rows() > 0){
             $update = $this->Bahanmodel->update($dataCondition, $dataUpdate, 'm_bahan');
             if($update){
+                $stokUpdate['jumlah_masuk']         = $params['jumlah_masuk'];
+                $stokUpdate['jumlah_keluar']        = $params['jumlah_keluar'];
+                $stokUpdate['saldo_bulan_sekarang'] = $params['saldo_sekarang'];
+                $stokUpdate['saldo_bulan_kemarin']  = $params['saldo_kemarin'];
+                $updateStok = $this->Bahanmodel->update(array('id_bahan' => $params['id']), $stokUpdate, 'tt_bahan');
                 $list = $this->data();
                 echo json_encode(array('status' => '3','list' => $list));
             }else{

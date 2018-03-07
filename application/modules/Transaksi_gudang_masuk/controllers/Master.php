@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Master extends MX_Controller {
     private $modul = "Transaksi_gudang_masuk/";
     private $fungsi = "";
-	function __construct() {
+    function __construct() {
         parent::__construct();
         $this->load->model('Transaksigudangmasukmodel');
         $this->modul .= $this->router->fetch_class();
@@ -23,7 +23,9 @@ class Master extends MX_Controller {
         $data['list_barang'] = $this->dataBarang();
         $data['list_produsen'] = $this->Transaksigudangmasukmodel->select($dataSelect, 'm_produsen')->result();
         $data['list_bahan'] = $this->Transaksigudangmasukmodel->select($dataSelect, 'm_bahan')->result();
-    	$this->load->view('Transaksi_gudang_masuk/view', $data);
+        $data['list_supplier'] = $this->Transaksigudangmasukmodel->select($dataSelect, 'm_supplier')->result();
+        $data['list_kategori_bahan'] = $this->Transaksigudangmasukmodel->select($dataSelect, 'm_bahan_kategori')->result();
+        $this->load->view('Transaksi_gudang_masuk/view', $data);
     }
     private function dataBarang($id = '') {
         $dataSelect['deleted'] = 1;
@@ -60,68 +62,31 @@ class Master extends MX_Controller {
     function data() {
         $requestData= $_REQUEST;
         $columns = array(
-            0  =>  'no_transaksi',
-            1   =>  'nama_barang',
-            2   =>  'nama_supplier',
-            3   =>  'satuan',
-            4   =>  'no_batch',
-            5   =>  'kode_bahan',
-            6   =>  'nama_produsen',
-            7   =>  'keterangan',
+            0 => 'no_transaksi',
+            1 => 'no_batch',
+            2 => 'nama_bahan',
+            3 => 'nama_supplier',
+            4 => 'nama_produsen',
+            5 => 'jumlah_masuk',
+            6 => 'expired_date',
+            7 => 'tanggal_masuk'
         );
-        $sql = "SELECT 
-                tt_gudang_masuk.id,
-                tt_gudang_masuk.no_transaksi, 
-                m_barang.nama_barang,
-                m_barang.jumlah_masuk,
-                m_supplier.nama AS nama_supplier,
-                m_satuan.nama AS satuan,
-                m_barang.no_batch,
-                m_barang.expired_date,
-                m_bahan.kode_bahan,
-                m_barang.keterangan,
-                m_produsen.nama AS nama_produsen,
-                tt_gudang_masuk.date_add
-                FROM tt_gudang_masuk, m_barang, m_produsen, m_bahan, m_supplier, m_satuan
-                WHERE tt_gudang_masuk.id_barang = m_barang.id AND
-                tt_gudang_masuk.id_produsen = m_produsen.id AND
-                tt_gudang_masuk.id_bahan = m_bahan.id AND
-                m_barang.id_satuan = m_satuan.id AND
-                m_barang.id_supplier = m_supplier.id AND
-                tt_gudang_masuk.deleted = 1";
+        $sql = "SELECT * FROM tt_gudang_masuk WHERE deleted = 1";
         $query=$this->Transaksigudangmasukmodel->rawQuery($sql);
         $totalData = $query->num_rows();
 
         // Filter
-        $sql = "SELECT";
-        $sql.=" tt_gudang_masuk.id,
-                tt_gudang_masuk.no_transaksi, 
-                m_barang.nama_barang,
-                m_barang.jumlah_masuk,
-                m_supplier.nama AS nama_supplier,
-                m_satuan.nama AS satuan,
-                m_barang.no_batch,
-                m_barang.expired_date,
-                m_bahan.kode_bahan,
-                m_barang.keterangan,
-                m_produsen.nama AS nama_produsen,
-                tt_gudang_masuk.date_add
-                FROM tt_gudang_masuk, m_barang, m_produsen, m_bahan, m_supplier, m_satuan
-                WHERE tt_gudang_masuk.id_barang = m_barang.id AND
-                tt_gudang_masuk.id_produsen = m_produsen.id AND
-                tt_gudang_masuk.id_bahan = m_bahan.id AND
-                m_barang.id_satuan = m_satuan.id AND
-                m_barang.id_supplier = m_supplier.id AND
-                tt_gudang_masuk.deleted = 1";
+        $sql = "SELECT
+                gm.id, gm.no_transaksi, gm.no_batch,
+                bahan.nama AS nama_bahan, produsen.nama AS nama_produsen, 
+                supplier.nama AS nama_supplier, gm.jumlah_masuk, gm.harga_pembelian,
+                gm.expired_date, gm.tanggal_masuk
+                FROM tt_gudang_masuk gm, m_bahan bahan, m_produsen produsen, m_supplier supplier
+                WHERE gm.deleted = 1 AND gm.id_bahan = bahan.id 
+                AND gm.id_produsen = produsen.id AND gm.id_supplier = supplier.id";
+
         if( !empty($requestData['search']['value']) ) {
-            $sql.=" AND ( tt_gudang_masuk.no_transaksi LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_supplier.nama LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_satuan.nama LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_barang.no_batch LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_bahan.kode_bahan LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_produsen.nama LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_barang.keterangan LIKE '%".$requestData['search']['value']."%' )";
+            $sql.=" AND ( gm.no_transaksi LIKE '%".$requestData['search']['value']."%' )";
         }
         $query=$this->Transaksigudangmasukmodel->rawQuery($sql);
         $totalFiltered = $query->num_rows();
@@ -134,18 +99,16 @@ class Master extends MX_Controller {
             $nestedData     =   array();
             $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
             $nestedData[]   =   $row['no_transaksi'];
-            $nestedData[]   =   $row['nama_barang'];
-            $nestedData[]   =   $row['nama_supplier'];
-            $nestedData[]   =   $row['satuan'];
-            $nestedData[]   =   $row['jumlah_masuk'];
             $nestedData[]   =   $row['no_batch'];
-            $nestedData[]   =   $row['expired_date'];
-            $nestedData[]   =   $row['kode_bahan'];
+            $nestedData[]   =   $row['nama_bahan'];
+            $nestedData[]   =   $row['nama_supplier'];
             $nestedData[]   =   $row['nama_produsen'];
-            $nestedData[]   =   $row['keterangan'];
+            $nestedData[]   =   $row['jumlah_masuk'];
+            $nestedData[]   =   date('d/m/Y', strtotime($row['expired_date']));
+            $nestedData[]   =   date('d/m/Y', strtotime($row['tanggal_masuk']));
             $nestedData[]   .=   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
-                .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
+                // .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
                .'</div>'
             .'</td>';
 
@@ -165,12 +128,16 @@ class Master extends MX_Controller {
 
         $condition['no_transaksi']          = $params['no_transaksi'];
         $dateExplode                        = explode("/", $params['tanggal_masuk']);
+        $expiredExplode                     = explode("/", $params['expire_date']);
         $dataInsert['no_transaksi']         = $params['no_transaksi'];
-        $dataInsert['id_barang']            = $params['id_barang'];
-        $dataInsert['id_produsen']          = $params['id_produsen'];
+        $dataInsert['no_batch']             = $params['no_batch'];
         $dataInsert['id_bahan']             = $params['id_bahan'];
+        $dataInsert['id_produsen']          = $params['id_produsen'];
+        $dataInsert['id_supplier']          = $params['id_supplier'];
         $dataInsert['harga_pembelian']      = $params['harga_beli'];
-        $dataInsert['tanggal_masuk']        = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0].' 00:00:00';
+        $dataInsert['jumlah_masuk']         = $params['jumlah_masuk'];
+        $dataInsert['tanggal_masuk']        = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0];
+        $dataInsert['expired_date']         = $expiredExplode[2].'-'.$expiredExplode[1].'-'.$expiredExplode[0];
         $dataInsert['date_add']             = date("Y-m-d H:i:s");
         $dataInsert['add_by']               = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $dataInsert['last_edited']          = date("Y-m-d H:i:s");
@@ -191,32 +158,32 @@ class Master extends MX_Controller {
             echo json_encode(array( 'status'=> 1, 'message' => 'No transaksi sudah ada!'));
         }
     }
-    function edit() {
-        $params = $this->input->post();
+    // function edit() {
+    //     $params = $this->input->post();
 
-        $condition['id'] = $params['id'];
-        $dateExplode                        = explode("/", $params['tanggal_masuk']);
-        $dataUpdate['id_barang']            = $params['id_barang'];
-        $dataUpdate['id_produsen']          = $params['id_produsen'];
-        $dataUpdate['id_bahan']             = $params['id_bahan'];
-        $dataUpdate['harga_pembelian']      = $params['harga_beli'];
-        $dataUpdate['tanggal_masuk']        = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0].' 00:00:00';
-        $dataUpdate['edited_by']        = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;;
-        $dataUpdate['last_edited']      = date('Y-m-d H:i:s');
+    //     $condition['id'] = $params['id'];
+    //     $dateExplode                        = explode("/", $params['tanggal_masuk']);
+    //     $dataUpdate['id_barang']            = $params['id_barang'];
+    //     $dataUpdate['id_produsen']          = $params['id_produsen'];
+    //     $dataUpdate['id_bahan']             = $params['id_bahan'];
+    //     $dataUpdate['harga_pembelian']      = $params['harga_beli'];
+    //     $dataUpdate['tanggal_masuk']        = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0].' 00:00:00';
+    //     $dataUpdate['edited_by']        = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;;
+    //     $dataUpdate['last_edited']      = date('Y-m-d H:i:s');
 
-        $checkData = $this->Transaksigudangmasukmodel->select($condition, 'tt_gudang_masuk');
-        if($checkData->num_rows() > 0){
-            $update = $this->Transaksigudangmasukmodel->update($condition, $dataUpdate, 'tt_gudang_masuk');
-            if($update){
-                $list = $this->Transaksigudangmasukmodel->select(array('deleted' => 1), 'tt_gudang_masuk', 'date_add', 'DESC');
-                echo json_encode(array('status' => '3','list' => $list));
-            }else{
-                echo json_encode(array( 'status'=>'2' , 'message' => "Error code 2"));
-            }
-        }else{
-            echo json_encode(array( 'status'=>'1' , 'message' => "Error code 1"));
-        }
-    }
+    //     $checkData = $this->Transaksigudangmasukmodel->select($condition, 'tt_gudang_masuk');
+    //     if($checkData->num_rows() > 0){
+    //         $update = $this->Transaksigudangmasukmodel->update($condition, $dataUpdate, 'tt_gudang_masuk');
+    //         if($update){
+    //             $list = $this->Transaksigudangmasukmodel->select(array('deleted' => 1), 'tt_gudang_masuk', 'date_add', 'DESC');
+    //             echo json_encode(array('status' => '3','list' => $list));
+    //         }else{
+    //             echo json_encode(array( 'status'=>'2' , 'message' => "Error code 2"));
+    //         }
+    //     }else{
+    //         echo json_encode(array( 'status'=>'1' , 'message' => "Error code 1"));
+    //     }
+    // }
     function delete() {
         $id = $this->input->post("id");
         if($id != null){

@@ -329,8 +329,8 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          jsonList = data.list;
-          loadData(jsonList);
+          jsonlist = data.list;
+          loadData(jsonlist);
           $("#modalform").modal('hide');
           // $("#notif-top").fadeIn(500);
           // $("#notif-top").fadeOut(2500);

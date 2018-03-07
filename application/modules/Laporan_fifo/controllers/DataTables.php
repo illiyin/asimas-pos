@@ -89,6 +89,56 @@ class DataTables extends MX_Controller {
                 );
     echo json_encode($json_data);
   }
+  function realsupplier() {
+    $requestData= $_REQUEST;
+    $sql = "SELECT id_bahan, id_supplier FROM tt_gudang_masuk GROUP BY id_bahan, id_supplier";
+    $query = $this->Laporanfifomodel->rawQuery($sql);
+    $totalData = $query->num_rows();
+
+    $tmpdata = null;
+    foreach($query->result() as $row) {
+      $bahan = $this->Laporanfifomodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+      $supplier = $this->Laporanfifomodel->select(array('id' => $row->id_supplier), 'm_supplier')->row();
+
+        $temporary = array(
+            'nama_bahan' => $bahan->nama,
+            'nama_supplier' => $supplier->nama,
+            'alamat' => $supplier->alamat,
+            'no_telp' => $supplier->no_telp,
+            'email' => $supplier->email
+        );
+        
+    //   if( !empty($requestData['search']['value']) ) {
+    //     $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+    //     $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
+    //     $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
+    //     $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+    // }
+      $tmpdata[] = $temporary;
+    }
+    
+
+    $data = array(); $i=0;
+    foreach ($tmpdata as $row) {
+        $nestedData     =   array();
+        $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
+        $nestedData[]   =   $row["nama_supplier"];
+        $nestedData[]   =   $row["nama_bahan"];
+        $nestedData[]   =   $row["alamat"];
+        $nestedData[]   =   $row["no_telp"];
+        $nestedData[]   =   $row["email"];
+
+        $data[] = $nestedData; $i++;
+    }
+    $totalData = count($data);
+    $json_data = array(
+                "draw"            => intval( $requestData['draw'] ),
+                "recordsTotal"    => intval( $totalData ),
+                "recordsFiltered" => intval( 0 ),
+                "data"            => $data,
+                );
+    echo json_encode($json_data);
+  }
   function supplier() {
   	$requestData= $_REQUEST;
     $sql = "SELECT * FROM m_supplier WHERE deleted = 1";
@@ -205,6 +255,26 @@ class DataTables extends MX_Controller {
                 "data"            => $data
                 );
     echo json_encode($json_data);
+  }
+  function test(){
+    $sql = "SELECT id_bahan, id_supplier FROM tt_gudang_masuk GROUP BY id_bahan, id_supplier";
+    $query = $this->Laporanfifomodel->rawQuery($sql)->result();
+
+    $data = null;
+    foreach($query as $row) {
+      $bahan = $this->Laporanfifomodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+      $supplier = $this->Laporanfifomodel->select(array('id' => $row->id_supplier), 'm_supplier')->row();
+
+      $data[] = array(
+            'nama_bahan' => $bahan->nama,
+            'nama_supplier' => $supplier->nama,
+            'alamat' => $supplier->alamat,
+            'no_telp' => $supplier->no_telp,
+            'email' => $supplier->email
+        );
+    }
+
+    echo json_encode($data);
   }
 
 }

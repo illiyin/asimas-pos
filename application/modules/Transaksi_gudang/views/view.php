@@ -75,7 +75,6 @@
           <th class="text-center">Nama Bahan</th>
           <th class="text-center">Kode Bahan</th>
           <th class="text-center">Satuan</th>
-          <th class="text-center">Jumlah</th>
           <th class="text-center">Stok Awal</th>
           <th class="text-center">Keluar</th>
           <th class="text-center">Masuk</th>
@@ -84,7 +83,6 @@
           <th class="text-center">Expire Date</th>
           <th class="text-center">Keterangan</th>
           <th class="text-center">Harga</th>
-          <th class="text-center no-sort" width="45">Aksi</th>
         </tr>
       </thead>
 
@@ -95,7 +93,6 @@
           <td>XX-3s</td>
           <td>g</td>
           <td>300</td>
-          <td>23</td>
           <td>420</td>
           <td>50</td>
           <td>50</td>
@@ -103,12 +100,6 @@
           <td>12/12/2019</td>
           <td>Sangat Terang</td>
           <td>300.000</td>
-          <td>
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-            </div>
-          </td>
         </tr>
         <tr>
           <td>2</td>
@@ -116,7 +107,6 @@
           <td>XX-3s</td>
           <td>kg</td>
           <td>300</td>
-          <td>23</td>
           <td>420</td>
           <td>50</td>
           <td>50</td>
@@ -124,12 +114,6 @@
           <td>12/12/2019</td>
           <td>Terang</td>
           <td>200.000</td>
-          <td>
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-            </div>
-          </td>
         </tr>
       </tbody>
     </table>

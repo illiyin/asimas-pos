@@ -48,10 +48,11 @@
           <thead>
               <tr>
                   <th class="text-center no-sort">#</th>
-                  <th class="text-center">Nama  Supplier</th>
-                  <th class="text-center">Alamat</th>
-                  <th class="text-center">No. Telepon</th>
-                  <th class="text-center">Email</th>
+                  <th class="text-center no-sort">Nama Supplier</th>
+                  <th class="text-center no-sort">Nama Bahan</th>
+                  <th class="text-center no-sort">Alamat</th>
+                  <th class="text-center no-sort">No. Telepon</th>
+                  <th class="text-center no-sort">Email</th>
               </tr>
           </thead>
 
@@ -100,7 +101,7 @@ var initDataTable = $('#TableMainServer').DataTable({
     "bServerSide": true,
     // "order": [[3, 'DESC']],
     "ajax":{
-          url :"<?php echo base_url()?>Laporan_fifo/DataTables/supplier",
+          url :"<?php echo base_url()?>Laporan_fifo/DataTables/realsupplier",
           type: "post",  // type of method  , by default would be get
           error: function(e){  // error handling code
             console.log(e);

@@ -104,7 +104,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="id_bahan">Nama Bahan</label>
-                <select name="id_bahan" class="form-control" id="id_bahan" required="required">
+                <select name="id_bahan" class="form-control" id="id_bahan" required="required" onchange="selectBahan(this.value)">
                   <option value="" disabled selected>-- Pilih Bahan --</option>
                   <?php foreach($list_bahan as $row): ?>
                   <option value="<?= $row->id ?>"><?php echo $row->nama ?></option>
@@ -115,7 +115,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="id_satuan">Satuan</label>
-                <select name="id_satuan" class="form-control" id="id_satuan" required="required">
+                <select name="id_satuan" class="form-control" id="id_satuan" readonly>
                   <option value="" disabled selected>-- Pilih Satuan --</option>
                   <?php foreach($list_satuan as $row): ?>
                   <option value="<?= $row->id ?>"><?php echo $row->nama ?></option>
@@ -228,6 +228,10 @@ function showUpdate(id){
 function getMasterById(jsonData, id){
   data = jsonData.filter(function(index) {return index.id == id});
   return data.length > 0 ? data[0] : false;
+}
+function selectBahan(id){
+  var dataBahan = getMasterById(list_bahan, id);
+  $("#id_satuan").val(dataBahan.id_satuan);
 }
 
 $("#myform").on('submit', function(e){
