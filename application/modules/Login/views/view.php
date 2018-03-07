@@ -92,7 +92,7 @@
                       });
           }
           else if(data.status == '1') {
-            var defRedir = "<?php echo base_url('index/modul/Log_aktivitas-log-index')?>";
+            var defRedir = "<?php echo base_url('index/modul/Dashboard-master-index')?>";
             var logRedir = "<?php echo base_url('index/login')?>";
             var redir = "<?php echo urldecode($redir)?>";
             if(redir != '') {

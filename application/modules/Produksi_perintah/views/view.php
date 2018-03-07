@@ -16,7 +16,9 @@
           <th class="text-center">No. Dokumen</th>
           <th class="text-center">Revisi Ke</th>
           <th class="text-center">Tanggal Efektif</th>
+          <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
           <th class="text-center no-sort">Aksi</th>
+          <?php endif; ?>
         </tr>
       </thead>
 
@@ -50,10 +52,12 @@
       </tbody>
     </table>
   </div>
+  <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
     Tambah Dokumen
   </button>
+  <?php endif; ?>
 </div>
 <!-- /.container -->
 <!-- Modal Detail Kategori Bahan baku -->

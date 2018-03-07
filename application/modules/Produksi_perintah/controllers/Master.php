@@ -18,7 +18,8 @@ class Master extends MX_Controller {
         $insertLog = $this->Perintahproduksimodel->insert($inseRtmaster, 't_log');
     }
     function index(){
-      $this->load->view('Produksi_perintah/view');
+      $data['session_detail'] = pegawaiLevel($this->session->userdata('id_user_level'));
+      $this->load->view('Produksi_perintah/view', $data);
       // $this->load->view('Produksi_perintah/view', $data);
     }
 

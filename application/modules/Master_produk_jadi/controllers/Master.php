@@ -19,6 +19,7 @@ class Master extends MX_Controller {
     }
     function index(){
         $dataSelect['deleted'] = 1;
+        $data['session_detail'] = pegawaiLevel($this->session->userdata('id_user_level'));
         $data['list_data'] = $this->Masterprodukjadimodel->select($dataSelect, 'm_produk_jadi', 'date_added', 'DESC')->result();
         $this->load->view('Master_produk_jadi/view', $data);
     }

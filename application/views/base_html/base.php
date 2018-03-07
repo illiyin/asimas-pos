@@ -181,12 +181,12 @@
                             <?php if($access_granted == 1) {
                               $disable_class = '';
                               $href = base_url().$nav_item->url;
-                            } ?>
+                             ?>
                               <li class="flat-box <?php echo $disable_class;?>">
                                 <a href="<?php echo $href; ?>"><i class="<?php echo $nav_item_icon?>"></i> <?php echo ucfirst($nav_item->nama);?></a>
                               </li>
 
-                          <?php } ?>
+                          <?php }} ?>
                         <?php } ?>
 
                       <?php } ?>

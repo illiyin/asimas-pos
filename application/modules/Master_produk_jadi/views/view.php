@@ -19,7 +19,9 @@
           <th class="text-center">Harga</th>
           <th class="text-center">Tanggal Expired</th>
           <th class="text-center">Stok</th>
+          <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
           <th class="text-center no-sort" width="130">Aksi</th>
+          <?php endif; ?>
         </tr>
       </thead>
 
@@ -43,10 +45,12 @@
       </tbody>
     </table>
   </div>
+  <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-add btn-lg"  onclick="showAdd()">
     Tambah Produk
   </button>
+  <?php endif; ?>
 </div>
 <!-- /.container -->
 <!-- Modal Detail -->
