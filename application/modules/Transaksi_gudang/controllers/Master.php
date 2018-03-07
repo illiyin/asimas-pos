@@ -22,6 +22,11 @@ class Master extends MX_Controller {
     	$this->load->view('Transaksi_gudang/view');
     	// $this->load->view('Produksi_perintah/view', $data);
     }
+    function cetak(){
+
+    	$this->load->view('Transaksi_gudang/cetak');
+    	// $this->load->view('Produksi_perintah/view', $data);
+    }
 
 
 
