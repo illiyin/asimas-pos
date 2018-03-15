@@ -13,10 +13,10 @@
           <th class="text-center">No. Batch</th>
           <th class="text-center">Nama Bahan</th>
           <th class="text-center">Nama Supplier</th>
-          <th class="text-center">Nama Produsen</th>
-          <th class="text-center">Jumlah Masuk</th>
-          <th class="text-center">Expire Date</th>
-          <th class="text-center">Tanggal Masuk</th>
+          <th class="text-center no-sort">Nama Produsen</th>
+          <th class="text-center no-sort">Jumlah Masuk</th>
+          <th class="text-center no-sort">Expire Date</th>
+          <th class="text-center no-sort">Tanggal Masuk</th>
           <th class="text-center hidden-xs no-sort">Aksi</th>
         </tr>
       </thead>
@@ -57,8 +57,8 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="harga_beli">Harga Pembelian</label>
-                <input type="text" class="form-control" name="harga_beli" id="harga_beli" placeholder="Harga Pembelian" required />
+                <label for="no_so">No. SO</label>
+                <input type="text" class="form-control" name="no_so" id="no_so" placeholder="No. Sales Order" required />
               </div>
             </div>
             <div class="col-sm-6">
@@ -176,7 +176,7 @@
     $("#nama_bahan").val("");
     $("#nama_produsen").val("");
     $("#jumlah_masuk").val("");
-    $("#harga_beli").val("");
+    $("#no_so").val("");
     $("#kode_bahan").val("");
     $("#kategori_bahan").val("");
     $("#tanggal_masuk").val("");

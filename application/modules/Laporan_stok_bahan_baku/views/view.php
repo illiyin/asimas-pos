@@ -6,7 +6,7 @@
   </div>
 </div>
   <div class="row">
-    <h3><strong>Laporan</strong> - Stok Gudang</h3>
+    <h3><strong>Laporan</strong> - Stok Bahan Baku</h3>
   </div>
    <div class="row" style="margin-top:10px;">
       <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -37,15 +37,14 @@
 
 <script type="text/javascript">
 function gotoCetak(){
-  window.open("<?php echo base_url()?>index/modul/Laporan_stok_gudang-master-cetak", "_blank");
-  // location.href="Laporan_stok_gudang-master-cetak";
+  window.open("<?php echo base_url()?>index/modul/Laporan_stok_bahan_baku-master-cetak", "_blank");
 }
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,
     "bServerSide": true,
     // "order": [[3, 'DESC']],
     "ajax":{
-          url :"<?php echo base_url()?>Laporan_stok_gudang/Master/data",
+          url :"<?php echo base_url()?>Laporan_stok_bahan_baku/Master/data",
           type: "post",  // type of method  , by default would be get
           error: function(e){  // error handling code
             console.log(e);

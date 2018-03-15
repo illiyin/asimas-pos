@@ -53,14 +53,14 @@
               </select>
 
             </div>
-            <div class="filter-item">
+           <!--  <div class="filter-item">
               <select class="form-control" name="" id="filter_supplier" data-column="1">
                 <option value="" data-filter="0">Filter Supplier</option>
                 <option value="sup_a" data-filter="Supplier A">Supplier A</option>
                 <option value="sup_b" data-filter="Supplier B">Supplier B</option>
               </select>
 
-            </div>
+            </div> -->
             <div class="filter-item">
               <select class="form-control" name="" id="filter_kategori" data-column="1">
                 <option value="" data-filter="0">Filter Kategori</option>
@@ -87,13 +87,13 @@
     <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">
       <thead>
         <tr>
-          <th class="text-center no-sort">#</th>
+          <th class="text-center">No Transaksi</th>
           <th class="text-center">Nama Bahan</th>
           <th class="text-center">Kode Bahan</th>
           <th class="text-center">Satuan</th>
           <th class="text-center">Stok Awal</th>
-          <th class="text-center">Keluar</th>
           <th class="text-center">Masuk</th>
+          <th class="text-center">Keluar</th>
           <th class="text-center">Stok Akhir</th>
           <th class="text-center">Batch</th>
           <th class="text-center">Expire Date</th>
@@ -103,9 +103,9 @@
       </thead>
 
       <tbody id='bodytable'>
-        <tr>
-          <td>1</td>
-          <td data-search="Brotowali Supplier A Kategori B">Brotowali</td>
+        <!-- <tr>
+          <td data-search="Brotowali Supplier A Kategori B">1</td>
+          <td>Brotowali</td>
           <td>XX-3s</td>
           <td>g</td>
           <td>300</td>
@@ -118,8 +118,8 @@
           <td>300.000</td>
         </tr>
         <tr>
-          <td>2</td>
-          <td data-search="Biskuit AMB Supplier B Kategori A">Biskuit AMB</td>
+          <td data-search="Biskuit AMB Supplier B Kategori A">2</td>
+          <td>Biskuit AMB</td>
           <td>XX-3s</td>
           <td>kg</td>
           <td>300</td>
@@ -130,51 +130,12 @@
           <td>12/12/2019</td>
           <td>Terang</td>
           <td>200.000</td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>
-  <!-- Button trigger modal -->
-  <!-- <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
-  Tambah Dokumen
-=======
-          <!-- <td>
-          <div class="btn-group" >
-          <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-          <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-        </div>
-      </td> -->
-    </tr>
-    <tr>
-      <td>2</td>
-      <td data-search="Biskuit AMB Supplier B Kategori A">Biskuit AMB</td>
-      <td>XX-3s</td>
-      <td>kg</td>
-      <td>300</td>
-      <td>23</td>
-      <td>420</td>
-      <td>50</td>
-      <td>50</td>
-      <td>50</td>
-      <td>12/12/2019</td>
-      <td>Terang</td>
-      <td>200.000</td>
-      <!-- <td>
-      <div class="btn-group" >
-      <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-      <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-    </div>
-  </td> -->
-</tr>
-</tbody>
-</table>
 </div>
-<!-- Button trigger modal -->
-<!-- <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
-Tambah Dokumen
->>>>>>> 89437afed5fb6e0e990e7b7c914558448bc79e9d
-</button> -->
-</div>
+
 <!-- /.container -->
 <!-- Modal Pilihan Cetak -->
 <div class="modal fade" id="cetakChoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -243,7 +204,22 @@ function filterGlobal (keyword) {
 }
 $(document).ready(function() {
   $('#TableMainServer').DataTable({
-    dom: "lrtip",
+    "bProcessing": true,
+    "bServerSide": true,
+    // "order": [[3, 'DESC']],
+    "ajax":{
+          url :"<?php echo base_url()?>Transaksi_gudang/Master/data",
+          type: "post",  // type of method  , by default would be get
+          error: function(e){  // error handling code
+            console.log(e);
+            // $("#employee_grid_processing").css("display","none");
+          }
+        },
+    "columnDefs": [ {
+      "targets"  : 'no-sort',
+      "orderable": false,
+    }],
+    // dom: "lrtip",
   });
   $('.filter-item select').on('change',function(){
     // var keyword = $('option:selected',this).attr('data-filter');

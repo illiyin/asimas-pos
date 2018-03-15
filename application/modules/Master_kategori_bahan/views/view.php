@@ -183,11 +183,12 @@ var initDataTable = $('#TableMain').DataTable({
     $("#modalform").modal("show");
   }
 
-  function showUpdate(i){
+  function showUpdate(id){
+    var data = jsonList.filter(function (index) { return index.id == id })[0];
     $("#myModalLabel").text("Ubah Kategori Bahan");
-    $("#id").val(jsonList[i].id);
-    $("#nama").val(jsonList[i].nama);
-    $("#kode_kategori").val(jsonList[i].kode_kategori);
+    $("#id").val(data.id);
+    $("#nama").val(data.nama);
+    $("#kode_kategori").val(data.kode_kategori);
     $("#modalform").modal("show");
   }
 
@@ -216,7 +217,7 @@ var initDataTable = $('#TableMain').DataTable({
       },
       success: function (data) {
         if (data.status == '3'){
-          // jsonList = data.list;
+          jsonList = data.list;
           // loadData(jsonList);
           initDataTable.ajax.reload();
           $("#modalform").modal('hide');

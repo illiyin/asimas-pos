@@ -34,7 +34,7 @@ class Index extends MX_Controller {
         $data['nav_kategori'] = $this->Gmodel->rawQuery($sql)->result();
         // $data['nav_menu'] = $this->Gmodel->get("m_pegawai_permission", "id_menu, urutan, id", "ASC")->result();
         $data['nav_menu'] = $this->Gmodel->select(array('deleted' => 1), 'm_pegawai_permission', 'id_menu, urutan, id', 'ASC')->result();
-
+        
         if($modul != null){
             $realmodul = explode("-", $modul);
             $modul=str_replace("-", "/", $modul);

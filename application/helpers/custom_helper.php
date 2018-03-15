@@ -14,3 +14,7 @@ function pegawaiLevel($id) {
 	$query = $CI->db->get_where('m_pegawai_level', array('id' => $id));
 	return $query->row();
 }
+
+function toRupiah($number) {
+	return "Rp".number_format($number, 0, '.', '.');
+}

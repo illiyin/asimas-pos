@@ -1,11 +1,11 @@
-<?php
+    <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Master extends MX_Controller {
-    private $modul = "Laporan_stok_gudang/";
+    private $modul = "Laporan_stok_bahan_baku/";
     private $fungsi = "";
 	function __construct() {
         parent::__construct();
-        $this->load->model('Laporanstokgudangmodel');
+        $this->load->model('Laporanstokbahanbaku');
         $this->modul .= $this->router->fetch_class();
         $this->fungsi = $this->router->fetch_method();
         $this->_insertLog();
@@ -15,10 +15,10 @@ class Master extends MX_Controller {
         $dataInsert['id_user'] = $id_user;
         $dataInsert['modul'] = $this->modul;
         $dataInsert['fungsi'] = $this->fungsi;
-        $insertLog = $this->Laporanstokgudangmodel->insert($dataInsert, 't_log');
+        $insertLog = $this->Laporanstokbahanbaku->insert($dataInsert, 't_log');
     }
     function index(){
-    	$this->load->view('Laporan_stok_gudang/view');
+    	$this->load->view('Laporan_stok_bahan_baku/view');
     }
     function cetak(){
         $sql = "SELECT ";
@@ -30,26 +30,26 @@ class Master extends MX_Controller {
             $sql.=" AND ( m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR m_bahan_kategori.nama LIKE '%".$requestData['search']['value']."%' )";
         }
-        $query=$this->Laporanstokgudangmodel->rawQuery($sql);
+        $query=$this->Laporanstokbahanbaku->rawQuery($sql);
         $data['data_list'] = $query->result();
     	$this->load->view('Laporan_stok_gudang/cetak', $data);
     }
     function data(){
         $requestData= $_REQUEST;
         $sql = "SELECT * FROM tt_bahan";
-        $query=$this->Laporanstokgudangmodel->rawQuery($sql);
+        $query=$this->Laporanstokbahanbaku->rawQuery($sql);
         $totalData = $query->num_rows();
         $sql = "SELECT
                 bahan.nama AS nama_bahan , kategori.nama AS nama_kategori,
                 tbahan.saldo_bulan_kemarin AS stok_awal , tbahan.saldo_bulan_sekarang AS stok_akhir, tbahan.tanggal
                 FROM m_bahan bahan, m_bahan_kategori kategori , tt_bahan tbahan
-                WHERE bahan.id_kategori_bahan = kategori.id AND tbahan.id_bahan = bahan.id";
+                WHERE bahan.id_kategori_bahan = kategori.id AND tbahan.id_bahan = bahan.id AND kategori.nama LIKE '%bahan baku%'";
         if( !empty($requestData['search']['value']) ) {
             $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
         }
         $totalFiltered = $query->num_rows();
-        $query=$this->Laporanstokgudangmodel->rawQuery($sql);
+        $query=$this->Laporanstokbahanbaku->rawQuery($sql);
 
         $data = array(); $i=0;
         foreach ($query->result_array() as $row) {

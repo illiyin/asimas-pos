@@ -17,7 +17,7 @@
                   <th class="text-center">Nama Bahan</th>
                   <th class="text-center">Kategori Bahan</th>
                   <!-- <th class="text-center">Stok</th> -->
-                  <th class="text-center" class="hidden-xs">Tanggal Buat</th>
+                  <th class="text-center no-sort hidden-xs">Tanggal Buat</th>
                   <th class="text-center no-sort">Aksi</th>
               </tr>
           </thead>
@@ -34,7 +34,7 @@
 </div>
 <!-- /.container -->
 <!-- Modal Detail Bahan baku -->
-<div class="modal fade" id="Viewproduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
    <div class="modal-dialog modal-lg" role="document" id="viewModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -49,10 +49,18 @@
                     <img id="det_foto" class="media-object img-rounded" src="<?php echo base_url()?>upload/bahan_baku/placeholder.png" alt="image" width="200px">
                  </div> -->
                  <div class="media-body">
-                  <h1 class="media-heading" id="det_nama">sfsdg</h1>
+                  <h1 class="media-heading" id="det_nama"></h1>
                   <div class="row">
                     <div class="col-sm-6">
+                      <p><b>Kode Bahan :</b> <span id="det_kode"></span></p>
+                      <p><b>Satuan :</b> <span id="det_satuan"></span></p>
                       <p><b>Kategori :</b> <span id="det_kategori"></span></p>
+                      <p><b>Jumlah Masuk :</b> <span id="det_jml_masuk"></span></p>
+                      <p><b>Jumlah Keluar :</b> <span id="det_jml_keluar"></span></p>
+                      <p><b>Saldo Bulan <span id="det_tahunbulan_sekarang"></span> :</b> <span id="det_saldo_sekarang"></span></p>
+                      <p><b>Saldo Bulan <span id="det_tahunbulan_kemarin"></span> :</b> <span id="det_saldo_kemarin"></span></p>
+                      <p><b>Tanggal Datang :</b> <span id="det_tanggal_datang"></span></p>
+                      <p><b>Expired Date :</b> <span id="det_expired"></span></p>
                     </div>
                   </div>
                  </div>
@@ -105,7 +113,7 @@
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Kode</label>
-                 <input type="text" name="kode_bahan" maxlength="50" Required class="form-control" id="kode_bahan">
+                 <input type="text" name="kode_bahan" maxlength="50" class="form-control" id="kode_bahan">
                  </select>
                </div>
              </div>
@@ -140,7 +148,14 @@
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Tgl. Datang</label>
-                 <input type="text" name="tgl_datang" maxlength="50" Required class="form-control datepicker" id="tgl_datang">
+                 <input type="text" name="tgl_datang" maxlength="50" class="form-control datepicker" id="tgl_datang">
+                 </select>
+               </div>
+             </div>
+            <div class="col-sm-6">
+               <div class="form-group">
+                 <label for="id_kategori">Expired Date</label>
+                 <input type="text" name="expired_date" maxlength="50" class="form-control datepicker" id="expired_date">
                  </select>
                </div>
              </div>
@@ -155,6 +170,7 @@
  </div>
 </div>
 <!-- /.Modal Add-->
+
 
 <script type="text/javascript">
   // initialize datatable
@@ -197,6 +213,7 @@
             // json[i].nama_bank,
             DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
             '<td class="text-center"><div class="btn-group" >'+
+                '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Detail Data" onclick="showDetail('+i+')"><i class="fa fa-file-text-o"></i></a>'+
                 '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
                 '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
                '</div>'+
@@ -237,9 +254,49 @@
     $("#saldo_kemarin").val("");
     $("#saldo_sekarang").val("");
     $("#tgl_datang").val("");
+    $("#expired_date").val("");
     $("#modalform").modal("show");
   }
+  function showDetail(i) {
+    var data = jsonlist[i];
+    $("#det_nama").text(data.nama_bahan);
+    $("#det_kode").text(data.kode_bahan);
+    var dataSatuan = getMasterById(jsonSatuan, data.id_satuan);
+    $("#det_satuan").text(dataSatuan.nama);
+    var dataKategori = getMasterById(jsonKategori, data.kategori.id);
+    $("#det_kategori").text(dataKategori.nama);
+    $("#det_jml_masuk").text(data.jumlah_masuk);
+    $("#det_jml_keluar").text(data.jumlah_keluar);
+    var getTanggal = data.tanggal.split('-');
+    var thisMonth = parseInt(getTanggal[1]);
+    var prevMonth = getTanggal[1] - 1;
+    $("#det_tahunbulan_sekarang").text('('+getMonth(thisMonth)+' '+getTanggal[0]+')');
+    $("#det_tahunbulan_kemarin").text('('+getMonth(prevMonth)+' '+getTanggal[0]+')');
+    $("#det_saldo_sekarang").text(data.saldo_bulan_sekarang);
+    $("#det_saldo_kemarin").text(data.saldo_bulan_kemarin);
+    var tanggal_datang = data.tanggal_datang != '0000-00-00' ? explodeDate(data.tanggal_datang) : 'Tidak di setting';
+    var expired_date = data.expired_date != '0000-00-00' ? explodeDate(data.expired_date) : 'Tidak di setting';
+    $("#det_tanggal_datang").text(tanggal_datang);
+    $("#det_expired").text(expired_date);
+    $("#detailModal").modal("show");
+  }
+  function getMonth(n) {
+    var month = new Array();
+    month[1] = "Januari";
+    month[2] = "Febuari";
+    month[3] = "Maret";
+    month[4] = "April";
+    month[5] = "Mei";
+    month[6] = "Juni";
+    month[7] = "Juli";
+    month[8] = "Agustus";
+    month[9] = "September";
+    month[10] = "Oktober";
+    month[11] = "November";
+    month[12] = "Desember";
 
+    return month[n];
+  }
   function showUpdate(i){
     load_select();
     $("#myModalLabel").text("Ubah Bahan");
@@ -252,14 +309,21 @@
     $("#jumlah_keluar").val(jsonlist[i].jumlah_keluar);
     $("#saldo_kemarin").val(jsonlist[i].saldo_bulan_kemarin);
     $("#saldo_sekarang").val(jsonlist[i].saldo_bulan_sekarang);
-    var tanggal_datang = jsonlist[i].tanggal_datang;
-    var datetime = tanggal_datang.split(" ");
-    var dateExplode = datetime[0].split("-");
-    var real_datetime = dateExplode[2]+'/'+dateExplode[1]+'/'+dateExplode[0];
-    $("#tgl_datang").val(real_datetime);
+    var tanggal_datang = explodeDate(jsonlist[i].tanggal_datang);
+    var expired_date = explodeDate(jsonlist[i].expired_date);
+    $("#tgl_datang").val(tanggal_datang);
+    $("#expired_date").val(expired_date);
     $("#modalform").modal("show");
   }
-
+  function explodeDate(param) {
+    var x = param.split('-');
+    var result = x[2] + '/' + x[1] + '/' + x[0];
+    return result;
+  }
+  function getMasterById(jsonData, id){
+    data = jsonData.filter(function(index) {return index.id == id});
+    return data.length > 0 ? data[0] : false;
+  }
   function confirmDelete(el){
     var element = $(el).attr("id");
     var id  = element.replace("group","");

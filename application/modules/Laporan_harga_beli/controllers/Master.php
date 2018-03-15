@@ -35,46 +35,37 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_harga_beli/cetak', $data);
     }
     function data(){
-        $requestData= $_REQUEST;
-        $sql = "SELECT * FROM tt_gudang_masuk WHERE deleted = 1";
-        $query=$this->Laporanhargabelimodel->rawQuery($sql);
-        $totalData = $query->num_rows();
-        $sql = "SELECT ";
-        $sql.="m_barang.nama_barang,
-                m_bahan.nama AS nama_bahan,
-                AVG(tt_gudang_masuk.harga_pembelian) AS harga_pembelian
-                FROM tt_gudang_masuk,m_barang, m_bahan
-                WHERE m_barang.id = tt_gudang_masuk.id_barang 
-                AND m_bahan.id = tt_gudang_masuk.id_bahan
-                AND tt_gudang_masuk.deleted = 1";
-        if( !empty($requestData['search']['value']) ) {
-            $sql.=" AND ( m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' )";
-            // $sql.=" OR m_bahan.nama LIKE '%".$requestData['search']['value']."%' )";
-        }
-        $sql .= " GROUP BY tt_gudang_masuk.id_barang";
-        $query=$this->Laporanhargabelimodel->rawQuery($sql);
-        $totalFiltered = $query->num_rows();
+      $requestData = $_REQUEST;
+      $sql = "SELECT bahan.nama AS nama_bahan,
+            SUM(gm.harga_pembelian / gm.jumlah_masuk) / COUNT(*) AS total
+            FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori
+            WHERE gm.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
+            AND gm.deleted = 1
+            AND kategori.nama LIKE '%produk jadi%'";
+      if( !empty($requestData['search']['value']) ) {
+        $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' )";
+      }
 
-        $sql .= " ORDER BY tt_gudang_masuk.date_add DESC";
-        $query=$this->Laporanhargabelimodel->rawQuery($sql);
+      $sql.= " GROUP BY gm.id_bahan";
+      $query=$this->Laporanhargabelimodel->rawQuery($sql);
+      $totalFiltered = $query->num_rows();
+      
+      $data = array(); $i = 0;
+      foreach($query->result_array() as $row) {
+        $nestedData     =   array();
+        $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
+        $nestedData[]   =   $row["nama_bahan"];
+        $nestedData[]   =   $row['total'] === 0 ? 0 : toRupiah($row['total']);
 
-        $data = array(); $i=0;
-        foreach ($query->result_array() as $row) {
-            $nestedData     =   array();
-            $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
-            $nestedData[]   =   $row["nama_barang"];
-            $nestedData[]   =   $row["nama_bahan"];
-            $nestedData[]   =   "Rp".number_format($row['harga_pembelian'], 2, ',','.');
-
-            $data[] = $nestedData; $i++;
-        }
-        $totalData = count($data);
-        $json_data = array(
-                    "draw"            => intval( $requestData['draw'] ),
-                    "recordsTotal"    => intval( $totalData ),
-                    "recordsFiltered" => intval( $totalFiltered ),
-                    "data"            => $data
-                    );
-        echo json_encode($json_data);
+        $data[] = $nestedData; $i++;
+      }
+      $totalData = count($data);
+      $json_data = array(
+        "draw"            => intval( $requestData['draw'] ),
+        "recordsTotal"    => intval( $totalData ),
+        "recordsFiltered" => intval( $totalFiltered ),
+        "data"            => $data
+        );
+      echo json_encode($json_data);
     }
   }

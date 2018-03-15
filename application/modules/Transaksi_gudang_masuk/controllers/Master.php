@@ -67,9 +67,6 @@ class Master extends MX_Controller {
             2 => 'nama_bahan',
             3 => 'nama_supplier',
             4 => 'nama_produsen',
-            5 => 'jumlah_masuk',
-            6 => 'expired_date',
-            7 => 'tanggal_masuk'
         );
         $sql = "SELECT * FROM tt_gudang_masuk WHERE deleted = 1";
         $query=$this->Transaksigudangmasukmodel->rawQuery($sql);
@@ -79,7 +76,7 @@ class Master extends MX_Controller {
         $sql = "SELECT
                 gm.id, gm.no_transaksi, gm.no_batch,
                 bahan.nama AS nama_bahan, produsen.nama AS nama_produsen, 
-                supplier.nama AS nama_supplier, gm.jumlah_masuk, gm.harga_pembelian,
+                supplier.nama AS nama_supplier, gm.jumlah_masuk, gm.no_so,
                 gm.expired_date, gm.tanggal_masuk
                 FROM tt_gudang_masuk gm, m_bahan bahan, m_produsen produsen, m_supplier supplier
                 WHERE gm.deleted = 1 AND gm.id_bahan = bahan.id 
@@ -88,6 +85,7 @@ class Master extends MX_Controller {
         if( !empty($requestData['search']['value']) ) {
             $sql.=" AND ( gm.no_transaksi LIKE '%".$requestData['search']['value']."%' )";
         }
+        
         $query=$this->Transaksigudangmasukmodel->rawQuery($sql);
         $totalFiltered = $query->num_rows();
 
@@ -134,7 +132,7 @@ class Master extends MX_Controller {
         $dataInsert['id_bahan']             = $params['id_bahan'];
         $dataInsert['id_produsen']          = $params['id_produsen'];
         $dataInsert['id_supplier']          = $params['id_supplier'];
-        $dataInsert['harga_pembelian']      = $params['harga_beli'];
+        $dataInsert['no_so']                = $params['no_so'];
         $dataInsert['jumlah_masuk']         = $params['jumlah_masuk'];
         $dataInsert['tanggal_masuk']        = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0];
         $dataInsert['expired_date']         = $expiredExplode[2].'-'.$expiredExplode[1].'-'.$expiredExplode[0];
