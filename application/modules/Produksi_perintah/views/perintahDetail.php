@@ -166,7 +166,7 @@
     <div class="panel-body text-right">
       <a href="<?= base_url() ?>index/modul/Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
       <?php if($session_detail->id == 5 || strpos(strtolower($session_detail->name), 'ppic') === true): ?>
-      <button class="btn btn-success">Setujui</button>
+      <button id="setujui23" class="btn btn-success" data-toggle="popover" data-placement="top" onclick="confirmApprove(this)" data-html="true" title="Setujui dokumen ini?" >Setujui</button>
       <?php endif; ?>
     </div>
   </div>
@@ -295,3 +295,12 @@ table.panel .ttd-field{
   width: 33.33%;
 }
 </style>
+<script type="text/javascript">
+function confirmApprove(el){
+  var element = $(el).attr("id");
+  var id  = element.replace("setujui","");
+  var i = parseInt(id);
+  $(el).attr("data-content","<button class=\'btn btn-success btn-block myconfirm\'  href=\'#\' onclick=\'approveData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-check-circle\'></i> Ya</button>");
+  $(el).popover("show");
+}
+</script>

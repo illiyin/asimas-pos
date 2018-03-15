@@ -1,3 +1,16 @@
+<style media="screen">
+.multi-filter{
+  width: 100%;
+}
+.filter-item{
+  width: 24%;
+  display: inline-block;
+}
+.filter-item select,
+.filter-item input{
+  margin: 0!important;
+}
+</style>
 <!-- Page Content -->
 <div class="container">
   <div class="row" style='min-height:80px;'>
@@ -7,6 +20,28 @@
   </div>
   <div class="row">
     <h3><strong>Produksi</strong> - Perintah Produksi</h3>
+  </div>
+  <div class="row panel panel-info">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-2">
+          <label for="filter_bahan" class="control-label" style="margin-top:5px;">Filter Status:</label>
+        </div>
+        <div class="col-sm-10">
+          <div class="multi-filter">
+            <div class="filter-item">
+              <select class="form-control" name="" id="filter_bahan" data-column="4">
+                <option value="" data-filter="0">Semua</option>
+                <option value="approved" data-filter="approved">Disetujui</option>
+                <option value="notapproved" data-filter="notapproved">Belum Disetujui</option>
+              </select>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="row" style="margin-top:10px;">
     <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -104,6 +139,25 @@
 function showPilihTipe() {
   $('#modalPilihTipe').modal('show');
 }
+function filterColumn (i,keyword) {
+  var tabel = $('#TableMainServer').DataTable();
+  if(keyword!="0"){
+    tabel.column(i).search(keyword, true, false ).draw();
+  }else{
+    tabel.draw();
+  }
+}
+$('.filter-item select').on('change',function(){
+  // var keyword = $('option:selected',this).attr('data-filter');
+  // var keyword = $('#filter_bahan option:selected').attr('data-filter') +' '+ $('#filter_supplier option:selected').attr('data-filter') +' '+ $('#filter_kategori option:selected').attr('data-filter');
+  var keyword='';
+  var k1 = $('#filter_bahan option:selected').attr('data-filter');
+  if(k1!=0){
+    keyword+=k1;
+  }
+  filterColumn($(this).attr('data-column'),keyword);
+  // console.log(keyword);
+})
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,
     "bServerSide": true,
