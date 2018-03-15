@@ -16,6 +16,7 @@
           <th class="text-center">No. Dokumen</th>
           <th class="text-center">Revisi Ke</th>
           <th class="text-center">Tanggal Efektif</th>
+          <th class="text-center">Status</th>
           <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
           <th class="text-center no-sort">Aksi</th>
           <?php endif; ?>
@@ -23,32 +24,6 @@
       </thead>
 
       <tbody id='bodytable'>
-        <!-- <tr>
-          <td>1</td>
-          <td><a href="Produksi_perintah-master-detail" title="Detail dan setujui">ZXS-234</a></td>
-          <td>1</td>
-          <td>12/03/2018</td>
-          <td>
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-              <a href="Produksi_perintah-master-cetak" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak"><i class="fa fa-print"></i></a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td><a href="Produksi_perintah-master-detail" title="Detail dan setujui">ZXS-234</a></td>
-          <td>1</td>
-          <td>12/03/2018</td>
-          <td>
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-              <a href="Produksi_perintah-master-cetak" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak"><i class="fa fa-print"></i></a>
-            </div>
-          </td>
-        </tr> -->
       </tbody>
     </table>
   </div>

@@ -89,14 +89,6 @@
         <td><?= $row['satuan_batch'] ?></td>
       </tr>
       <?php endforeach; ?>
-      <!-- <tr>
-        <td>2</td>
-        <td>Brotowali</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>gram</td>
-      </tr> -->
     </tbody>
   </table>
 
@@ -143,40 +135,6 @@
         <td></td>
       </tr>
       <?php endforeach; ?>
-      <!-- <tr>
-        <td>1</td>
-        <td>Simplisia ABM</td>
-        <td>48</td>
-        <td>kg</td>
-        <td>-</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Brotowali</td>
-        <td>48</td>
-        <td>kg</td>
-        <td>-</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr> -->
     </tbody>
   </table>
 
@@ -201,29 +159,15 @@
         <td><?= $row['aktual'] ?></td>
       </tr>
       <?php endforeach; ?>
-      <<!-- tr>
-        <td>1</td>
-        <td>Simplisia ABM</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>kg</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Brotowali</td>
-        <td>400</td>
-        <td>mg</td>
-        <td>48</td>
-        <td>gram</td>
-      </tr> -->
     </tbody>
   </table>
 
   <div class="panel panel-default">
     <div class="panel-body text-right">
       <a href="<?= base_url() ?>index/modul/Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
+      <?php if($session_detail->id == 5 || strpos(strtolower($session_detail->name), 'ppic') === true): ?>
       <button class="btn btn-success">Setujui</button>
+      <?php endif; ?>
     </div>
   </div>
 

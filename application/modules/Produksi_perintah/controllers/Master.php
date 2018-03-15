@@ -121,6 +121,7 @@ class Master extends MX_Controller {
       $data['perintah_produksi'] = $perintahProduksi;
       $data['bahan_baku'] = $dataBahanBaku;
       $data['bahan_kemas'] = $dataBahanKemas;
+      $data['session_detail'] = pegawaiLevel($this->session->userdata('id_user_level'));
       $this->load->view('Produksi_perintah/perintahDetail', $data);
       // $this->load->view('Produksi_perintah/view', $data);
     }
@@ -273,6 +274,7 @@ class Master extends MX_Controller {
           $nestedData[]   =   '<a href="Produksi_perintah-master-detail/'.base64_url_encode($row['id']).'" title="Detail dan Setujui">'.$row["no_dokumen"].'</a>';
           $nestedData[]   =   $row["revisi"];
           $nestedData[]   =   date('d/m/Y', strtotime($row["tanggal_efektif"]));
+          $nestedData[]   =   ($row["status"] == 0 ? 'Belum Disetujui' : 'Disetujui');
           $nestedData[]  .=   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
                 .'<a class="btn btn-sm btn-default" href="#" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil"></i></a>'
