@@ -25,17 +25,16 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-sm-2">
-          <label for="filter_bahan" class="control-label" style="margin-top:5px;">Filter Status:</label>
+          <label for="filter_status" class="control-label" style="margin-top:5px;">Filter Status:</label>
         </div>
         <div class="col-sm-10">
           <div class="multi-filter">
             <div class="filter-item">
-              <select class="form-control" name="" id="filter_bahan" data-column="4">
+              <select class="form-control" name="" id="filter_status" data-column="4">
                 <option value="" data-filter="0">Semua</option>
                 <option value="approved" data-filter="approved">Disetujui</option>
                 <option value="notapproved" data-filter="notapproved">Belum Disetujui</option>
               </select>
-
             </div>
 
           </div>
@@ -48,10 +47,10 @@
       <thead>
         <tr>
           <th class="text-center no-sort">#</th>
-          <th class="text-center">No. Dokumen</th>
-          <th class="text-center">Revisi Ke</th>
-          <th class="text-center">Tanggal Efektif</th>
-          <th class="text-center">Status</th>
+          <th class="text-center no-sort">No. Dokumen</th>
+          <th class="text-center no-sort">Revisi Ke</th>
+          <th class="text-center no-sort">Tanggal Efektif</th>
+          <th class="text-center no-sort">Status</th>
           <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
           <th class="text-center no-sort">Aksi</th>
           <?php endif; ?>
@@ -62,7 +61,7 @@
       </tbody>
     </table>
   </div>
-  <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
+  <?php if($session_detail->id == 5): ?>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
     Tambah Dokumen
@@ -70,43 +69,6 @@
   <?php endif; ?>
 </div>
 <!-- /.container -->
-<!-- Modal Detail Kategori Bahan baku -->
-<div class="modal fade" id="Viewproduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document" id="viewModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="view">Detail Kategori Bahan</h4>
-      </div>
-      <div class="modal-body" id="modal-body">
-        <div id="viewSectionProduct">
-          <!-- view goes here -->
-          <div class="col-md-12"><div class="media">
-            <!-- <div class="media-left">
-            <img id="det_foto" class="media-object img-rounded" src="<?php echo base_url()?>upload/bahan_baku/placeholder.png" alt="image" width="200px">
-          </div> -->
-          <div class="media-body">
-            <h1 class="media-heading" id="det_nama">sfsdg</h1>
-            <div class="row">
-              <div class="col-sm-6">
-                <p><b>Kode :</b> <span id="det_kategori"></span></p>
-              </div>
-            </div>
-          </div>
-        </div></div>
-        <div class="col-md-6">
-
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default hiddenpr" data-dismiss="modal">Close</button>
-    </div>
-  </div>
-</div>
-</div>
-<!-- /.Modal -->
-
 <!-- Modal Add -->
 <div class="modal fade" id="modalPilihTipe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -149,9 +111,9 @@ function filterColumn (i,keyword) {
 }
 $('.filter-item select').on('change',function(){
   // var keyword = $('option:selected',this).attr('data-filter');
-  // var keyword = $('#filter_bahan option:selected').attr('data-filter') +' '+ $('#filter_supplier option:selected').attr('data-filter') +' '+ $('#filter_kategori option:selected').attr('data-filter');
+  // var keyword = $('#filter_status option:selected').attr('data-filter') +' '+ $('#filter_supplier option:selected').attr('data-filter') +' '+ $('#filter_kategori option:selected').attr('data-filter');
   var keyword='';
-  var k1 = $('#filter_bahan option:selected').attr('data-filter');
+  var k1 = $('#filter_status option:selected').attr('data-filter');
   if(k1!=0){
     keyword+=k1;
   }
@@ -216,4 +178,14 @@ function deleteData(element){
     }
   });
 }
+//Hack untuk bootstrap popover (popover hilang jika diklik di luar)
+$(document).on('click', function (e) {
+  $('[data-toggle="popover"],[data-original-title]').each(function () {
+      //the 'is' for buttons that trigger popups
+      //the 'has' for icons within a button that triggers a popup
+      if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+          (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false  // fix for BS 3.3.6
+      }
+  });
+});
 </script>

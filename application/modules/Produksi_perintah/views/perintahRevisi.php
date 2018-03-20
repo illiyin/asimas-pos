@@ -1,6 +1,7 @@
 <div class="container" style="margin-top:10px;margin-bottom:20px;">
   <h2>Dokumen Revisi</h2>
-  <form class="form-horizontal" action="" method="post" name="formPerintahProduksi" id="formPerintahProduksi">
+  <form class="form-horizontal" action="#" method="post" name="formPerintahProduksi" id="formPerintahProduksi">
+    <?php if($session_detail->id == 9): ?>
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="form-group">
@@ -8,12 +9,7 @@
             <label for="" class="control-label">No. Dokumen</label>
           </div>
           <div class="col-sm-9">
-            <select name="no_dokumen" id="id_dokumen" class="form-control">
-              <option value="" disabled selected>--Pilih No. Dokumen--</option>
-            <?php foreach($list_dokumen as $list){ ?>
-              <option value="<?php echo $list->no_dokumen ?>"><?php echo $list->no_dokumen;?></option>
-            <?php } ?>
-            </select>
+            <input type="text" class="form-control" name="no_dokumen" id="no_dokumen">
           </div>
         </div>
         <div class="form-group">
@@ -21,7 +17,7 @@
             <label for="" class="control-label">Revisi Ke</label>
           </div>
           <div class="col-sm-9">
-            <label for="" class="control-label"><input name="revisi" id="revisi" type="text" class="form-control" readonly></label>
+            <label for="" class="control-label">0</label>
           </div>
         </div>
         <div class="form-group">
@@ -30,21 +26,46 @@
           </div>
           <div class="col-sm-9">
             <div class="input-group">
-              <input type="text" class="form-control datepicker"  name="tanggal_efektif" id="tanggal_efektif" >
+              <input type="text" class="form-control datepicker" name="tanggal_efektif" id="tanggal_efektif" required>
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="panel panel-default" id="detail_perintah" style="display: none">
+    <?php endif; ?>
+    <div class="panel panel-default">
       <div class="panel-body">
+        <?php if($session_detail->id == 5): ?>
+        <?php if($is_revisi): ?>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">No. Dokumen</label>
+          </div>
+          <div class="col-sm-9">
+            <select name="no_dokumen" id="id_dokumen" class="form-control" onchange="selectRevisi(this.value)">
+              <option value="" disabled selected>--Pilih No. Dokumen--</option>
+            <?php foreach($list_dokumen as $list){ ?>
+              <option value="<?php echo $list->id ?>"><?php echo $list->no_dokumen;?></option>
+            <?php } ?>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="revisiNumber">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Revisi Ke</label>
+          </div>
+          <div class="col-sm-9">
+            <label for="" class="control-label" id="revisiValue"></label>
+          </div>
+        </div>
+        <?php endif; ?>
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">No. Perintah Produksi</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_pp" id="no_perintah">
+            <input type="text" class="form-control" name="no_pp" id="no_pp" required>
           </div>
         </div>
         <div class="form-group">
@@ -52,7 +73,7 @@
             <label for="" class="control-label">No. Sales Order</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_so" id="no_sales_order">
+            <input type="text" class="form-control" name="no_so" id="no_so" required>
           </div>
         </div>
         <div class="form-group">
@@ -60,23 +81,7 @@
             <label for="" class="control-label">Estimasi Proses</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="estimasi" id="estimasi_proses">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Nama Produk</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="nama_produk" id="nama_produk">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Besar Batch</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="besar_batch" id="besar_batch">
+            <input type="text" class="form-control" name="estimasi" id="estimasi" required>
           </div>
         </div>
         <div class="form-group">
@@ -84,24 +89,42 @@
             <label for="" class="control-label">Kode Produksi</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi">
+            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi" required>
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-3">
-            <label for="" class="control-label">Expire Date</label>
+            <label for="" class="control-label">Expired Date</label>
           </div>
           <div class="col-sm-9">
             <div class="input-group">
-              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date">
+              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" required>
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
         </div>
+        <?php elseif($session_detail->id == 9): ?>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Nama Produk</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="nama_produk" id="nama_produk" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Besar Batch</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="besar_batch" id="besar_batch" required>
+          </div>
+        </div>
+        <?php endif; ?>
       </div>
     </div>
 
-    <div id="detail_bahan" style="display: none">
+    <?php if($session_detail->id == 9): ?>
     <div class="">
       <button class="btn btn-warning" onclick="showBahanBaku()" type="button">Tambah Bahan Baku</button>
       <button class="btn btn-warning" onclick="showBahanKemas()" type="button">Tambah Bahan Kemas</button>
@@ -118,15 +141,14 @@
       <h3>Bahan Kemas:</h3>
       <table class="table" id="dataBahanKemas">
       </table>
-
     </div>
+    <?php endif; ?>
 
     <div class="panel panel-default">
       <div class="panel-body text-right">
         <a href="Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
-        <button class="btn btn-success">Submit Data</button>
+        <button class="btn btn-success" id="btnSubmit">Submit Data</button>
       </div>
-    </div>
     </div>
   </form>
 </div>
@@ -284,9 +306,18 @@
   </div>
 </div>
 <!-- /.tutup Modal-->
-  <script type="text/javascript">
+<script type="text/javascript">
 var list_satuan = <?php echo json_encode($list_satuan); ?>;
 var list_bahan = <?php echo json_encode($list_bahan); ?>;
+var list_dokumen = <?php echo json_encode($list_dokumen); ?>;
+$(document).ready(function(){
+  $("#revisiNumber").hide();
+});
+function selectRevisi(id) {
+  var data = getMasterById(list_dokumen, id);
+  $("#revisiNumber").show();
+  $("#revisiValue").text(data.revisi + 1);
+}
 function showBahanBaku() {
   $("#formBahanBaku")[0].reset();
   $('#modalBahanBaku').modal('show');
@@ -343,17 +374,14 @@ $("#formBahanKemas").on('submit', function(e){
 
 $("#formPerintahProduksi").on('submit', function(e){
   e.preventDefault();
-  var form = $("#formPerintahProduksi").serialize();
-  console.log("Bahan Baku ",tempBahanBaku);
-  console.log("Bahan Kemas ", tempBahanKemas);
-  // console.log(form);
-
-  //"&bahan_baku="+tempBahanBaku+"&bahan_kemas="+tempBahanKemas
-  var action = "<?php echo base_url('Produksi_perintah/Master/add')?>/";
+  var form = $("#formPerintahProduksi").serialize()
+  var action = "<?php echo base_url('Produksi_perintah/Master/addData')?>/";
+  var no_dokumen = $("#id_dokumen").find(":selected").text();
+  var revisi = $("#revisiValue").text();
   $.ajax({
       url: action,
       type: 'post',
-      data: form+"&bahan_baku="+JSON.stringify(tempBahanBaku)+"&bahan_kemas="+JSON.stringify(tempBahanKemas),
+      data: form+"&bahan_baku="+JSON.stringify(tempBahanBaku)+"&bahan_kemas="+JSON.stringify(tempBahanKemas)+"&no_dokumen="+no_dokumen+"&revisi="+revisi,
       dataType: 'json',
       beforeSend: function() {
         $("#btnSubmit").prop("disabled", true);
@@ -363,9 +391,17 @@ $("#formPerintahProduksi").on('submit', function(e){
         console.log(e);
       },
       success: function (data) {
-        location.reload();
+        $("#formPerintahProduksi")[0].reset();
         $("#btnSubmit").prop("disabled", false);
         $('#btnSubmit').html('Submit Data');
+        new PNotify({
+          title: data.status ? 'Sukses' : 'Gagal',
+          text: data.message,
+          type: data.status ? 'success' : 'error',
+          hide: true,
+          delay: 3000,
+          styling: 'bootstrap3'
+        });
       }
     });
 });
@@ -374,30 +410,4 @@ function getMasterById(jsonData, id){
   data = jsonData.filter(function(index) {return index.id == id});
   return data.length > 0 ? data[0] : false;
 }
-$('#id_dokumen option').click(function(){
-  var id = $(this).attr("value");
-  $.ajax({
-        url: "<?php echo base_url('Produksi_perintah/Master/loadperintah')?>",
-        data: "id="+id,
-        success: function(data)
-        { 
-          $.each(JSON.parse(data), function(index, value){
-              if($("#"+index).is("span")){
-                $("#"+index).text(value);
-              }
-
-              else if($("#"+index).is("input")){
-                $("#"+index).val(value);
-              }
-
-              else{
-                $("#"+index).html(value);
-              }
-
-          });
-          $("#detail_perintah").removeAttr("style");
-          $("#detail_bahan").removeAttr("style");
-        }
-    });
-  });
 </script>

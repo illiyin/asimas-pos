@@ -27,7 +27,13 @@ class Master extends MX_Controller {
     	$this->load->view('Master_bahan/view', $data);
     }
     public function data() {
-        
+        $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan,
+        bahan.nama AS nama_bahan, bahan.kode_bahan, tbahan.jumlah_masuk,
+        tbahan.jumlah_keluar, tbahan.saldo_bulan_sekarang, tbahan.saldo_bulan_kemarin,
+        bahan.tgl_datang, bahan.date_add , bahan.last_edited, bahan.expired_date, tbahan.tanggal
+        FROM m_bahan bahan, tt_bahan tbahan
+        WHERE bahan.deleted = 1 
+        AND bahan.id = tbahan.id_bahan";
     }
     private function dataBahan($id = '') {
         $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan,

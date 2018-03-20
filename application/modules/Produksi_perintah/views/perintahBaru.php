@@ -1,6 +1,7 @@
 <div class="container" style="margin-top:10px;margin-bottom:20px;">
   <h2>Dokumen Baru</h2>
   <form class="form-horizontal" action="#" method="post" name="formPerintahProduksi" id="formPerintahProduksi">
+    <?php if($session_detail->id == 9): ?>
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="form-group">
@@ -32,8 +33,10 @@
         </div>
       </div>
     </div>
+    <?php endif; ?>
     <div class="panel panel-default">
       <div class="panel-body">
+        <?php if($session_detail->id == 5): ?>
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">No. Perintah Produksi</label>
@@ -60,22 +63,6 @@
         </div>
         <div class="form-group">
           <div class="col-sm-3">
-            <label for="" class="control-label">Nama Produk</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="nama_produk" id="nama_produk" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Besar Batch</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="besar_batch" id="besar_batch" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
             <label for="" class="control-label">Kode Produksi</label>
           </div>
           <div class="col-sm-9">
@@ -93,9 +80,28 @@
             </div>
           </div>
         </div>
+        <?php elseif($session_detail->id == 9): ?>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Nama Produk</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="nama_produk" id="nama_produk" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Besar Batch</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="besar_batch" id="besar_batch" required>
+          </div>
+        </div>
+        <?php endif; ?>
       </div>
     </div>
 
+    <?php if($session_detail->id == 9): ?>
     <div class="">
       <button class="btn btn-warning" onclick="showBahanBaku()" type="button">Tambah Bahan Baku</button>
       <button class="btn btn-warning" onclick="showBahanKemas()" type="button">Tambah Bahan Kemas</button>
@@ -105,43 +111,15 @@
     <div class="tambahan-bahan-baku">
       <h3>Bahan Baku:</h3>
       <table class="table" id="dataBahanBaku">
-        <!-- <tr>
-          <td>1</td>
-          <td>Simplisia ABM</td>
-          <td>Per Kaplet: 400mg</td>
-          <td>Per Batch: 48kg</td>
-          <td>Per Lot: 0</td>
-          <td>Jumlah Lot: 1</td>
-        </tr> -->
-<!--         <tr>
-          <td>2</td>
-          <td>Simplisia ABM</td>
-          <td>Per Kaplet: 400mg</td>
-          <td>Per Batch: 48kg</td>
-          <td>Per Lot: 0</td>
-          <td>Jumlah Lot: 1</td>
-        </tr> -->
       </table>
 
     </div>
     <div class="tambahan-bahan-kemas">
       <h3>Bahan Kemas:</h3>
       <table class="table" id="dataBahanKemas">
-       <!--  <tr>
-          <td>1</td>
-          <td>Botol Ester C</td>
-          <td>Jumlah: 2000pcs</td>
-          <td>Aktual: 2100pcs</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Botol Ester D</td>
-          <td>Jumlah: 2000pcs</td>
-          <td>Aktual: 2100pcs</td>
-        </tr> -->
       </table>
-
     </div>
+    <?php endif; ?>
 
     <div class="panel panel-default">
       <div class="panel-body text-right">
@@ -364,13 +342,8 @@ $("#formBahanKemas").on('submit', function(e){
 
 $("#formPerintahProduksi").on('submit', function(e){
   e.preventDefault();
-  var form = $("#formPerintahProduksi").serialize();
-  console.log("Bahan Baku ",tempBahanBaku);
-  console.log("Bahan Kemas ", tempBahanKemas);
-  // console.log(form);
-
-  //"&bahan_baku="+tempBahanBaku+"&bahan_kemas="+tempBahanKemas
-  var action = "<?php echo base_url('Produksi_perintah/Master/add')?>/";
+  var form = $("#formPerintahProduksi").serialize()
+  var action = "<?php echo base_url('Produksi_perintah/Master/addData')?>/";
   $.ajax({
       url: action,
       type: 'post',
@@ -384,9 +357,17 @@ $("#formPerintahProduksi").on('submit', function(e){
         console.log(e);
       },
       success: function (data) {
-        location.reload();
+        $("#formPerintahProduksi")[0].reset();
         $("#btnSubmit").prop("disabled", false);
         $('#btnSubmit').html('Submit Data');
+        new PNotify({
+          title: data.status ? 'Sukses' : 'Gagal',
+          text: data.message,
+          type: data.status ? 'success' : 'error',
+          hide: true,
+          delay: 3000,
+          styling: 'bootstrap3'
+        });
       }
     });
 });

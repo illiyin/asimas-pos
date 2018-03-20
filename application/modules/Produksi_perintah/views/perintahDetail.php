@@ -166,7 +166,7 @@
     <div class="panel-body text-right">
       <a href="<?= base_url() ?>index/modul/Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
       <?php if($session_detail->id == 5 || strpos(strtolower($session_detail->name), 'ppic') === true): ?>
-      <button id="setujui23" class="btn btn-success" data-toggle="popover" data-placement="top" onclick="confirmApprove(this)" data-html="true" title="Setujui dokumen ini?" >Setujui</button>
+      <button id="setujui<?= base64_url_decode($this->uri->segment(4)) ?>" class="btn btn-success" data-toggle="popover" data-placement="top" onclick="confirmApprove(this)" data-html="true" title="Setujui dokumen ini?" <?= $perintah_produksi->status == 1 ? 'disabled' : null;?>>Setujui</button>
       <?php endif; ?>
     </div>
   </div>
@@ -303,4 +303,43 @@ function confirmApprove(el){
   $(el).attr("data-content","<button class=\'btn btn-success btn-block myconfirm\'  href=\'#\' onclick=\'approveData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-check-circle\'></i> Ya</button>");
   $(el).popover("show");
 }
+
+function approveData(element) {
+  var el = $(element).attr("id");
+  var id  = el.replace("aConfirm","");
+  var i = parseInt(id);
+  $.ajax({
+    type: 'post',
+    url: '<?php echo base_url('Produksi_perintah/Master/approve'); ?>/',
+    data: {"id":i},
+    dataType: 'json',
+    beforeSend: function() {
+      // kasi loading
+      $("#aConfirm"+i).html("Sedang Menghapus...");
+      $("#aConfirm"+i).prop("disabled", true);
+    },
+    success: function (data) {
+      $("#setujui<?= base64_url_decode($this->uri->segment(4)) ?>").prop('disabled', true);
+      $("#aConfirm"+i).html("OK");
+      new PNotify({
+        title: 'Sukses',
+        text: data.message,
+        type: 'success',
+        hide: true,
+        delay: 5000,
+        styling: 'bootstrap3'
+      });
+    }
+  });
+}
+//Hack untuk bootstrap popover (popover hilang jika diklik di luar)
+$(document).on('click', function (e) {
+  $('[data-toggle="popover"],[data-original-title]').each(function () {
+      //the 'is' for buttons that trigger popups
+      //the 'has' for icons within a button that triggers a popup
+      if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+          (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false  // fix for BS 3.3.6
+      }
+  });
+});
 </script>
