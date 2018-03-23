@@ -28,7 +28,7 @@
           </div>
           <div class="col-sm-9">
             <div class="input-group">
-              <input type="text" class="form-control datepicker" name="tanggal_efektif" id="tanggal_efektif" />
+              <input type="text" class="form-control datepicker" name="tanggal_efektif" id="tanggal_efektif" value="<?= $perintah_produksi->tanggal_efektif == '0000-00-00' ? null : date('d/m/Y', strtotime($perintah_produksi->tanggal_efektif)) ?>"/>
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
@@ -44,7 +44,7 @@
             <label for="" class="control-label">No. Perintah Produksi</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_pp" id="no_pp" />
+            <input type="text" class="form-control" name="no_pp" id="no_pp" value="<?= $perintah_produksi->no_perintah ?>" />
           </div>
         </div>
         <div class="form-group">
@@ -52,7 +52,7 @@
             <label for="" class="control-label">No. Sales Order</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_so" id="no_so" />
+            <input type="text" class="form-control" name="no_so" id="no_so" value="<?= $perintah_produksi->no_sales_order ?>" />
           </div>
         </div>
         <div class="form-group">
@@ -60,7 +60,7 @@
             <label for="" class="control-label">Estimasi Proses</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="estimasi" id="estimasi" />
+            <input type="text" class="form-control" name="estimasi" id="estimasi" value="<?= $perintah_produksi->estimasi_proses ?>" />
           </div>
         </div>
         <div class="form-group">
@@ -68,7 +68,7 @@
             <label for="" class="control-label">Kode Produksi</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi" />
+            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi" value="<?= $perintah_produksi->kode_produksi ?>" />
           </div>
         </div>
         <div class="form-group">
@@ -77,7 +77,7 @@
           </div>
           <div class="col-sm-9">
             <div class="input-group">
-              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" />
+              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" value="<?= $perintah_produksi->expired_date == '0000-00-00' ? null : date('d/m/Y', strtotime($perintah_produksi->expired_date)) ?>" />
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
@@ -88,7 +88,7 @@
             <label for="" class="control-label">Nama Produk</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="nama_produk" id="nama_produk" />
+            <input type="text" class="form-control" name="nama_produk" id="nama_produk" value="<?= $perintah_produksi->nama_produk ?>" />
           </div>
         </div>
         <div class="form-group">
@@ -96,7 +96,7 @@
             <label for="" class="control-label">Besar Batch</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="besar_batch" id="besar_batch" />
+            <input type="text" class="form-control" name="besar_batch" id="besar_batch" value="<?= $perintah_produksi->besar_batch ?>" />
           </div>
         </div>
         <?php endif; ?>
@@ -288,6 +288,51 @@
 <script type="text/javascript">
 var list_satuan = <?php echo json_encode($list_satuan); ?>;
 var list_bahan = <?php echo json_encode($list_bahan); ?>;
+var bahan_baku = <?php echo json_encode($list_bahan_baku); ?>;
+var bahan_kemas = <?php echo json_encode($list_bahan_kemas); ?>;
+var tempBahanBaku = [];
+var tempBahanKemas = [];
+var numBahanBaku = 1;
+var numBahanKemas = 1;
+$(document).ready(function(){
+  // Append Bahan Baku ke Table
+  if(bahan_baku != null) {
+    for(i = 0; i < bahan_baku.length; i++){
+      var data = bahan_baku[i];
+      var num = numBahanBaku++;
+      tempBahanBaku.push({
+          'num': num,
+          'id_bahan': data.id_bahan,
+          'per_kaplet': data.per_kaplet,
+          'id_satuan_kaplet': data.id_satuan_kaplet,
+          'satuan_kaplet': data.satuan_kaplet,
+          'per_batch': data.per_batch,
+          'id_satuan_batch': data.id_satuan_batch,
+          'satuan_batch': data.satuan_batch,
+          'jumlah_lot': data.jumlah_lot,
+          'jumlah_perlot': data.jumlah_perlot
+      });
+       $("#dataBahanBaku")
+        .append("<tr id='bahanbaku"+num+"'><td>"+ data.nama_bahan +"</td><td>Per Kaplet: "+data.per_kaplet+''+data.satuan_kaplet+"</td><td>Per Batch: "+data.per_batch+''+data.satuan_batch+"</td><td>Per Lot: "+data.jumlah_perlot+"</td><td>Jumlah Lot: "+data.jumlah_lot+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
+    }
+  }
+  // Append Bahan Kemas ke Table
+  if(bahan_kemas != null) {
+    for(i = 0; i < bahan_kemas.length; i++){
+      var data = bahan_kemas[i];
+      var num = numBahanKemas++;
+      tempBahanKemas.push({
+          'num': num,
+          'id_bahan': data.id_bahan,
+          'jumlah': data.jumlah,
+          'satuan': data.satuan,
+          'aktual': data.aktual
+      });
+       $("#dataBahanKemas")
+      .append("<tr id='bahankemas"+num+"'><td>"+ data.nama_bahan +"</td><td>Jumlah: "+data.jumlah+''+data.satuan+"</td><td>Aktual: "+data.aktual+"</td><td><span onclick='deleteBahanKemas("+num+")' class='fa fa-times'></span></td></tr>");
+    } 
+  }
+});
 function showBahanBaku() {
   $("#formBahanBaku")[0].reset();
   $('#modalBahanBaku').modal('show');
@@ -296,11 +341,6 @@ function showBahanKemas() {
   $("#formBahanKemas")[0].reset();
   $('#modalBahanKemas').modal('show');
 }
-
-var tempBahanBaku = [];
-var tempBahanKemas = [];
-var numBahanBaku = 1;
-var numBahanKemas = 1;
 $("#formBahanBaku").on('submit', function(e){
     e.preventDefault();
     var num = numBahanBaku++;
@@ -309,6 +349,7 @@ $("#formBahanBaku").on('submit', function(e){
     var satuanKaplet = getMasterById(list_satuan, form[2].value);
     var satuanBatch = getMasterById(list_satuan, form[4].value);
     tempBahanBaku.push({
+        'num': num,
         'id_bahan': form[0].value,
         'per_kaplet': form[1].value,
         'satuan_kaplet': form[2].value,
@@ -318,7 +359,7 @@ $("#formBahanBaku").on('submit', function(e){
         'jumlah_perlot': form[6].value
     });
     $("#dataBahanBaku")
-    .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>Per Kaplet: "+form[1].value+''+satuanKaplet.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td></tr>");
+    .append("<tr id='bahanbaku"+num+"'><td>"+ dataBahan.nama +"</td><td>Per Kaplet: "+form[1].value+''+satuanKaplet.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
     $("#formBahanBaku")[0].reset();
 });
 
@@ -338,12 +379,27 @@ $("#formBahanKemas").on('submit', function(e){
     });
 
     $("#dataBahanKemas")
-    .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>Jumlah: "+form[1].value+''+satuanKemas.nama+"</td><td>Aktual: "+form[3].value+"</td></tr>");
+    .append("<tr id='bahankemas"+num+"'><td>"+ dataBahan.nama +"</td><td>Jumlah: "+form[1].value+''+satuanKemas.nama+"</td><td>Aktual: "+form[3].value+"</td><td><span onclick='deleteBahanKemas("+num+")' class='fa fa-times'></span></td></tr>");
     $("#formBahanKemas")[0].reset();
 });
 
+function deleteBahanBaku(n){
+  data = tempBahanBaku.filter(function(index) {return index.num == n})[0];
+  var index = tempBahanBaku.indexOf(data);
+  tempBahanBaku.splice(index, 1);
+  $("#bahanbaku"+n).remove();
+}
+
+function deleteBahanKemas(n){
+  data = tempBahanKemas.filter(function(index) {return index.num == n})[0];
+  var index = tempBahanKemas.indexOf(data);
+  tempBahanKemas.splice(index, 1);
+  $("#bahankemas"+n).remove();
+}
+
 $("#formPerintahProduksi").on('submit', function(e){
   e.preventDefault();
+  console.log(JSON.stringify(tempBahanBaku));
   var form = $("#formPerintahProduksi").serialize();
   var action = "<?php echo base_url('Produksi_perintah/Master/editData')?>/";
   $.ajax({
@@ -359,16 +415,28 @@ $("#formPerintahProduksi").on('submit', function(e){
         console.log(e);
       },
       success: function (data) {
+        // New Field Value
+        $list = data.list;
+        // R&D
+        $("#tanggal_efektif").attr('value', $list.tanggal_efektif);
+        $("#nama_produk").attr('value', $list.nama_produk);
+        $("#besar_batch").attr('value', $list.besar_batch);
+        // PPIC
+        $("#no_pp").attr('value', $list.no_pp);
+        $("#no_so").attr('value', $list.no_so);
+        $("#estimasi").attr('value', $list.estimasi);
+        $("#kode_produksi").attr('value', $list.kode_produksi);
+        $("#expired_date").attr('value', $list.expired_date);
         // Clear Field
-        numBahanBaku = 1;
-        numBahanKemas = 1;
-        tempBahanBaku = [];
-        tempBahanKemas = [];
-        $("#dataBahanBaku").html('');
-        $("#dataBahanKemas").html('');
+        // numBahanBaku = 1;
+        // numBahanKemas = 1;
+        // tempBahanBaku = [];
+        // tempBahanKemas = [];
+        // $("#dataBahanBaku").html('');
+        // $("#dataBahanKemas").html('');
         $("#formPerintahProduksi")[0].reset();
         $("#btnSubmit").prop("disabled", false);
-        $('#btnSubmit').html('Submit Data');
+        $('#btnSubmit') .html('Submit Data');
         new PNotify({
           title: data.status ? 'Sukses' : 'Gagal',
           text: data.message,

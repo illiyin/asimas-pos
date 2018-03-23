@@ -123,16 +123,12 @@
         <td><?= $row['satuan_batch'] ?></td>
         <td><?= $row['jumlah_perlot'] ?></td>
         <td><?= $row['jumlah_lot'] ?></td>
+        <?php if($row['jumlah_lot'] > 0 ):
+          for($i = 0; $i < $row['jumlah_lot']; $i++): ?>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <?php endfor; else:?>
+        <td colspan="10"></td>
+      <?php endif; ?>
       </tr>
       <?php endforeach; ?>
     </tbody>
@@ -319,16 +315,35 @@ function approveData(element) {
       $("#aConfirm"+i).prop("disabled", true);
     },
     success: function (data) {
-      $("#setujui<?= base64_url_decode($this->uri->segment(4)) ?>").prop('disabled', true);
+      console.log(data);
+      if(data.status == true){
+        new PNotify({
+          title: 'Sukses',
+          text: data.message,
+          type: 'success',
+          hide: true,
+          delay: 5000,
+          styling: 'bootstrap3'
+        });
+        $("#setujui<?= base64_url_decode($this->uri->segment(4)) ?>").prop('disabled', true);
+      } else {
+        var $data = data.status.list_bahan;
+        var $message = '';
+        for (var i = 0; i < $data.length; i++) {
+          var row = $data[i];
+          var type = row.type == 'bahan_baku' ? "Bahan Baku" : "Bahan Kemas";
+          $message += "<p>Bahan <strong>" + row.nama_bahan + "</strong> Stok kurang dari <strong>"+row.stok_kurang+"</strong> ("+type+")</p>";
+        }
+        swal({
+          title: "Perhatian!",
+          text: $message,
+          icon: "warning",
+          dangerMode: true,
+          html: true
+        });
+      }
       $("#aConfirm"+i).html("OK");
-      new PNotify({
-        title: 'Sukses',
-        text: data.message,
-        type: 'success',
-        hide: true,
-        delay: 5000,
-        styling: 'bootstrap3'
-      });
+      $("#aConfirm"+i).prop('disabled', false);
     }
   });
 }

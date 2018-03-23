@@ -84,6 +84,12 @@
                 <input type="text" class="form-control" name="kategori_bahan" id="kategori_bahan" disabled>
               </div>
             </div>
+             <div class="col-sm-6" id="hargapembelian">
+              <div class="form-group">
+                <label for="harga_pembelian">Harga Pembelian</label>
+                <input type="text" class="form-control" name="harga_pembelian" id="harga_pembelian" onkeydown="return numericOnly(event)">
+              </div>
+            </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="nama_produsen">Nama Produsen</label>
@@ -144,6 +150,13 @@
 </div>
 <!-- /.Modal Ubah-->
 <script type="text/javascript">
+  $(document).ready(function(){
+    $("#hargapembelian").hide();
+    $('#no_transaksi').mask('0000/AAAA/AAAA/AA/0000', {
+      reverse: false,
+      placeholder: "____/____/____/__/____"
+    });
+  });
   var list_barang = <?php echo json_encode($list_barang); ?>;
   var list_data = <?php echo json_encode($list); ?>;
   var list_produsen = <?php echo json_encode($list_produsen); ?>;
@@ -192,6 +205,11 @@
     var dataKategori = getMasterById(list_kategori_bahan, dataBahan.id_kategori_bahan);
     $("#kode_bahan").val(dataBahan.kode_bahan);
     $("#kategori_bahan").val(dataKategori.nama);
+    if(!dataKategori.nama.toLowerCase().match(/produk jadi.*/)) {
+      $("#hargapembelian").show();
+    } else {
+      $("#hargapembelian").hide();
+    }
   }
   $("#myform").on('submit', function(e){
     e.preventDefault();

@@ -141,7 +141,7 @@
              <div class="col-sm-6">
                 <div class="form-group">
                  <label for="stok_akhir">Stok Akhir</label>
-                 <input type="text" name="stok_akhir" maxlength="50" Required class="form-control" id="stok_akhir" placeholder="Stok Akhir">
+                 <input type="text" name="stok_akhir" maxlength="50" Required class="form-control" id="stok_akhir" placeholder="Stok Akhir" onkeydown="return numericOnly(event)">
                </div>
              </div>
              <div class="col-sm-12">

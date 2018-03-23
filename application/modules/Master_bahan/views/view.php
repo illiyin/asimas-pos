@@ -13,10 +13,8 @@
           <thead>
               <tr>
                   <th class="text-center no-sort">#</th>
-                  <!-- <th class="text-center no-sort">Foto</th> -->
                   <th class="text-center">Nama Bahan</th>
                   <th class="text-center">Kategori Bahan</th>
-                  <!-- <th class="text-center">Stok</th> -->
                   <th class="text-center no-sort hidden-xs">Tanggal Buat</th>
                   <th class="text-center no-sort">Aksi</th>
               </tr>
@@ -120,28 +118,28 @@
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Jumlah Keluar</label>
-                 <input type="text" name="jumlah_keluar" maxlength="50" Required class="form-control" id="jumlah_keluar">
+                 <input type="text" name="jumlah_keluar" maxlength="50" Required class="form-control" id="jumlah_keluar" onkeydown="return numericOnly(event)">
                  </select>
                </div>
              </div>
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Jumlah Masuk</label>
-                 <input type="text" name="jumlah_masuk" maxlength="50" Required class="form-control" id="jumlah_masuk">
+                 <input type="text" name="jumlah_masuk" maxlength="50" Required class="form-control" id="jumlah_masuk" onkeydown="return numericOnly(event)">
                  </select>
                </div>
              </div>
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Saldo Bulan Sebelumnya</label>
-                 <input type="text" name="saldo_kemarin" maxlength="50" Required class="form-control" id="saldo_kemarin">
+                 <input type="text" name="saldo_kemarin" maxlength="50" Required class="form-control" id="saldo_kemarin" onkeydown="return numericOnly(event)">
                  </select>
                </div>
              </div>
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Saldo Bulan Ini</label>
-                 <input type="text" name="saldo_sekarang" maxlength="50" Required class="form-control" id="saldo_sekarang">
+                 <input type="text" name="saldo_sekarang" maxlength="50" Required class="form-control" id="saldo_sekarang" onkeydown="return numericOnly(event)">
                  </select>
                </div>
              </div>
@@ -171,62 +169,28 @@
 </div>
 <!-- /.Modal Add-->
 
-
 <script type="text/javascript">
-  // initialize datatable
-  var table = $("#TableMainServer").DataTable({
-    "columnDefs": [ {
-            "searchable": false,
-            "orderable": false,
-            "targets": "no-sort"
-        } ],
-        // "order": [[ 1, 'asc' ]]
-  });
-  table.on( 'order.dt search.dt', function () {
-        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = "<span style='display:block' class='text-center'>"+(i+1)+"</span>";
-        } );
-  } ).draw();
-
   var jsonlist = <?php echo $list; ?>;
   var jsonSatuan = <?php echo $list_satuan; ?>;
   var jsonKategori = <?php echo $list_kategori; ?>;
 
-  var awalLoad = true;
-  loadData(jsonlist);
-
-  function loadData(json){
-    //clear table
-    if(json != null) {
-    table.clear().draw();
-    for(var i=0;i<json.length;i++){
-        table.row.add( [
-            "",
-            json[i].nama_bahan,
-            json[i].kategori.nama,
-            // "Tanggal Buat " + i,
-            // json[i].nama,
-            // json[i].alamat,
-            // json[i].no_telp,
-            // json[i].email,
-            // json[i].npwp,
-            // json[i].nama_bank,
-            DateFormat.format.date(json[i].date_add, "dd-MM-yyyy HH:mm"),
-            '<td class="text-center"><div class="btn-group" >'+
-                '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Detail Data" onclick="showDetail('+i+')"><i class="fa fa-file-text-o"></i></a>'+
-                '<a id="group'+json[i].id+'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'+
-                '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('+i+')"><i class="fa fa-pencil"></i></a>'+
-               '</div>'+
-            '</td>'
-        ] ).draw( false );
-    }
-    if (!awalLoad){
-      $('.divpopover').attr("data-content","ok");
-      $('.divpopover').popover();
-    }
-    awalLoad = false;
-    }
-  }
+  var initDataTable = $('#TableMainServer').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    // "order": [[4, 'DESC']],
+    "ajax":{
+          url :"<?php echo base_url()?>Master_bahan/Master/data",
+          type: "post",  // type of method  , by default would be get
+          error: function(e){  // error handling code
+            console.log(e);
+            // $("#employee_grid_processing").css("display","none");
+          }
+        },
+    "columnDefs": [ {
+      "targets"  : 'no-sort',
+      "orderable": false,
+    }]
+  });
 
   function load_select_option(json, target_id, nama=""){
     var html = "";
@@ -258,7 +222,7 @@
     $("#modalform").modal("show");
   }
   function showDetail(i) {
-    var data = jsonlist[i];
+    var data = getMasterById(jsonlist, i);
     $("#det_nama").text(data.nama_bahan);
     $("#det_kode").text(data.kode_bahan);
     var dataSatuan = getMasterById(jsonSatuan, data.id_satuan);
@@ -300,17 +264,18 @@
   function showUpdate(i){
     load_select();
     $("#myModalLabel").text("Ubah Bahan");
-    $("#id").val(jsonlist[i].id);
-    $("#nama").val(jsonlist[i].nama_bahan);
-    $("#id_satuan").val(jsonlist[i].id_satuan);
-    $("#id_kategori").val(jsonlist[i].kategori.id);
-    $("#kode_bahan").val(jsonlist[i].kode_bahan);
-    $("#jumlah_masuk").val(jsonlist[i].jumlah_masuk);
-    $("#jumlah_keluar").val(jsonlist[i].jumlah_keluar);
-    $("#saldo_kemarin").val(jsonlist[i].saldo_bulan_kemarin);
-    $("#saldo_sekarang").val(jsonlist[i].saldo_bulan_sekarang);
-    var tanggal_datang = explodeDate(jsonlist[i].tanggal_datang);
-    var expired_date = explodeDate(jsonlist[i].expired_date);
+    var data = getMasterById(jsonlist, i);
+    $("#id").val(data.id);
+    $("#nama").val(data.nama_bahan);
+    $("#id_satuan").val(data.id_satuan);
+    $("#id_kategori").val(data.kategori.id);
+    $("#kode_bahan").val(data.kode_bahan);
+    $("#jumlah_masuk").val(data.jumlah_masuk);
+    $("#jumlah_keluar").val(data.jumlah_keluar);
+    $("#saldo_kemarin").val(data.saldo_bulan_kemarin);
+    $("#saldo_sekarang").val(data.saldo_bulan_sekarang);
+    var tanggal_datang = explodeDate(data.tanggal_datang);
+    var expired_date = explodeDate(data.expired_date);
     $("#tgl_datang").val(tanggal_datang);
     $("#expired_date").val(expired_date);
     $("#modalform").modal("show");
@@ -329,7 +294,7 @@
     var id  = element.replace("group","");
     var i = parseInt(id);
     $(el).attr("data-content","<button class=\'btn btn-danger myconfirm\'  href=\'#\' onclick=\'deleteData(this)\' id=\'aConfirm"+i+"\' style=\'min-width:85px\'><i class=\'fa fa-trash\'></i> Ya</button>");
-    $(el).popover();
+    $(el).popover('show');
   }
 
   function deleteData(element){
@@ -359,9 +324,7 @@
                 delay: 5000,
                 styling: 'bootstrap3'
               });
-              table.clear().draw();
-              jsonList = data.list;
-              loadData(jsonList);
+              initDataTable.ajax.reload();
             }
           }
         });
@@ -393,8 +356,7 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          jsonlist = data.list;
-          loadData(jsonlist);
+         initDataTable.ajax.reload();
           $("#modalform").modal('hide');
           // $("#notif-top").fadeIn(500);
           // $("#notif-top").fadeOut(2500);

@@ -51,7 +51,7 @@
           <th class="text-center no-sort">Revisi Ke</th>
           <th class="text-center no-sort">Tanggal Efektif</th>
           <th class="text-center no-sort">Status</th>
-          <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
+          <?php if($session_detail->id == 9 || $session_detail->id == 5): ?>
           <th class="text-center no-sort">Aksi</th>
           <?php endif; ?>
         </tr>

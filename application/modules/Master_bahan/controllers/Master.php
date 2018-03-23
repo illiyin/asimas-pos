@@ -27,13 +27,52 @@ class Master extends MX_Controller {
     	$this->load->view('Master_bahan/view', $data);
     }
     public function data() {
-        $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan,
+        $requestData = $_REQUEST;
+        $sql = "SELECT * FROM m_bahan WHERE deleted = 1";
+        $query=$this->Bahanmodel->rawQuery($sql);
+        $totalData = $query->num_rows();
+
+        $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan, kategori.nama AS nama_kategori,
         bahan.nama AS nama_bahan, bahan.kode_bahan, tbahan.jumlah_masuk,
         tbahan.jumlah_keluar, tbahan.saldo_bulan_sekarang, tbahan.saldo_bulan_kemarin,
         bahan.tgl_datang, bahan.date_add , bahan.last_edited, bahan.expired_date, tbahan.tanggal
-        FROM m_bahan bahan, tt_bahan tbahan
+        FROM m_bahan bahan, tt_bahan tbahan, m_bahan_kategori kategori
         WHERE bahan.deleted = 1 
+        AND bahan.id_kategori_bahan = kategori.id
         AND bahan.id = tbahan.id_bahan";
+        if( !empty($requestData['search']['value']) ) {
+          $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
+          $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
+        }
+
+        $sql .= " ORDER BY bahan.date_add DESC";
+        $query=$this->Bahanmodel->rawQuery($sql);
+        $totalFiltered = $query->num_rows();
+
+        $data = array(); $i=0;
+        foreach ($query->result_array() as $row) {
+            $nestedData     =   array();
+            $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
+            $nestedData[]   =   $row["nama_bahan"];
+            $nestedData[]   =   $row["nama_kategori"];
+            $nestedData[]   =   date("d/m/Y H:i", strtotime($row['date_add']));
+            $nestedData[]   .=   '<td class="text-center"><div class="btn-group">'
+                .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
+                .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
+                .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="showDetail('.$row["id"].')"><i class="fa fa-file-text-o"></i></a>'
+               .'</div>'
+            .'</td>';
+
+            $data[] = $nestedData; $i++;
+        }
+        $totalData = count($data);
+        $json_data = array(
+                    "draw"            => intval( $requestData['draw'] ),
+                    "recordsTotal"    => intval( $totalData ),
+                    "recordsFiltered" => intval( $totalFiltered ),
+                    "data"            => $data
+                    );
+        echo json_encode($json_data);
     }
     private function dataBahan($id = '') {
         $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan,

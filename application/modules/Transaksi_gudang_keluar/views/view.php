@@ -23,42 +23,6 @@
       </thead>
 
       <tbody id='bodytable'>
-       <!--  <tr>
-          <td class="text-center">1</td>
-          <td>11/11/2019</td>
-          <td>Brotowali</td>
-          <td>kg</td>
-          <td>234</td>
-          <td>ACD-121</td>
-          <td>21/11/2019</td>
-          <td>xx-2212</td>
-          <td>PT. Distribusi Indonesia</td>
-          <td>Kurang terang</td>
-          <td class="text-center hidden-xs no-sort">
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td class="text-center">2</td>
-          <td>11/11/2019</td>
-          <td>Brotowali</td>
-          <td>kg</td>
-          <td>234</td>
-          <td>ACD-121</td>
-          <td>21/11/2019</td>
-          <td>xx-2212</td>
-          <td>PT. Distribusi Indonesia</td>
-          <td>Kurang terang</td>
-          <td class="text-center hidden-xs no-sort">
-            <div class="btn-group" >
-              <a id="group" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>
-              <a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate()"><i class="fa fa-pencil"></i></a>
-            </div>
-          </td>
-        </tr> -->
       </tbody>
     </table>
   </div>
@@ -126,7 +90,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="jumlah_keluar">Jumlah Keluar</label>
-                <input type="text" class="form-control" name="jumlah_keluar" id="jumlah_keluar" placeholder="Jumlah Keluar">
+                <input type="text" class="form-control" name="jumlah_keluar" id="jumlah_keluar" placeholder="Jumlah Keluar" onkeydown="return numericOnly(event)">
               </div>
             </div>
             <div class="col-sm-6">
@@ -173,6 +137,12 @@
   </div>
   <!-- /.Modal Ubah-->
 <script type="text/javascript">
+$(document).ready(function(){
+  $('#no_transaksi').mask('0000/AAAA/AAAA/AA/0000', {
+    reverse: false,
+    placeholder: "____/____/____/__/____"
+  });
+});
 var jsonList = <?php echo json_encode($list_data); ?>;
 var list_distributor = <?php echo json_encode($list_distributor); ?>;
 var list_satuan = <?php echo json_encode($list_satuan); ?>;

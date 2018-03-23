@@ -83,4 +83,10 @@ class Perintahproduksimodel extends CI_Model {
 		$last_row = $this->db->select('id')->order_by('id',"desc")->limit(1)->get($table)->row();
 		return !empty($last_row) ? $last_row->id : 0;
 	}
+	public function update_batch($data, $table, $field_title){
+		$this->load->database();
+		$result = $this->db->update_batch($table, $data, $field_title);
+		$this->db->close();
+		return $result;
+	}
 }

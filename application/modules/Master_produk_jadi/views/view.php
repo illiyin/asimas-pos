@@ -43,7 +43,7 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="harga">Harga Pembelian</label>
-              <input type="text" name="harga" maxlength="50" Required class="form-control" id="harga" placeholder="Harga Pembelian">
+              <input type="text" name="harga" maxlength="50" Required class="form-control" id="harga" placeholder="Harga Pembelian" onkeydown="return numericOnly(event)">
               <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id" placeholder="ID Barang">
             </div>
           </div>
