@@ -21,12 +21,24 @@ class Transaksigudangkeluarmodel extends CI_Model {
 		$this->db->close();
 		return $result;
 	}
-	public function select($condition, $table){
+	public function select($condition='', $table, $order_by='', $sort='ASC'){
 		$this->load->database();
-		$this->db->where($condition);
-		$result = $this->db->get($this->table_prefix."".$table);
+		if($condition) {
+			$this->db->where($condition);
+		}
+		if($order_by) {
+			$this->db->order_by($order_by, $sort);
+		}
+		$result = $this->db->get($table);
 		$this->db->close();
 		return $result;
+	}
+	public function insert_id($data, $table){
+		$this->load->database();
+		$result = $this->db->insert($this->table_prefix."".$table, $data);
+		$insert_id = $this->db->insert_id();
+		$this->db->close();
+		return $insert_id;
 	}
 	public function insert($data, $table){
 		$this->load->database();

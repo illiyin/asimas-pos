@@ -15,10 +15,10 @@
           <th class="text-center no-sort">#</th>
           <th class="text-center">Nama Bahan</th>
           <th class="text-center">No. Sales Order</th>
-          <th class="text-center">Harga Beli</th>
+          <th class="text-center">Harga Per Item</th>
           <th class="text-center">Tanggal Expired</th>
           <th class="text-center">Jumlah Masuk</th>
-          <th class="text-center">Harga Per Item</th>
+          <th class="text-center">Jumlah HPP</th>
           <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
           <th class="text-center no-sort">Aksi</th>
           <?php endif; ?>

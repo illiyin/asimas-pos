@@ -14,10 +14,12 @@
               <tr>
                   <th class="text-center no-sort">#</th>
                   <th class="text-center">Nama Bahan</th>
-                  <th class="text-center">Kategori</th>
+                  <th class="text-center">Satuan</th>
                   <th class="text-center">Stok Awal</th>
+                  <th class="text-center">Masuk</th>
+                  <th class="text-center">Keluar</th>
                   <th class="text-center">Stok Akhir</th>
-                  <th class="text-center">Tanggal</th>
+                  <th class="text-center">Expired Date</th>
               </tr>
           </thead>
 
@@ -25,12 +27,10 @@
           </tbody>
       </table>
    </div>
-   <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
    <!-- Button trigger modal -->
    <button type="button" class="btn btn-add btn-lg" onclick="gotoCetak()">
      Cetak Laporan
    </button>
-   <?php endif; ?>
 </div>
 <!-- /.container -->
 

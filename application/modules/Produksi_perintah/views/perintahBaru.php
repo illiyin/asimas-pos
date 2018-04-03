@@ -147,8 +147,8 @@
             <div class="col-sm-9">
               <select name="bahan" class="form-control" id="bahan"="">
                 <option value="" disabled selected>--Pilih Bahan--</option>
-                <?php foreach($list_bahan as $row): ?>
-                <option value="<?= $row->id ?>"><?= $row->nama ?></option>
+                <?php foreach($bahan_baku as $row): ?>
+                <option value="<?= $row->id ?>"><?= $row->nama_bahan ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
@@ -238,8 +238,8 @@
             <div class="col-sm-9">
               <select name="bahan_kemas" class="form-control" id="bahan_kemas"="">
                 <option value="" disabled selected>--Pilih Bahan--</option>
-                <?php foreach($list_bahan as $row): ?>
-                <option value="<?= $row->id ?>"><?= $row->nama ?></option>
+                <?php foreach($bahan_kemas as $row): ?>
+                <option value="<?= $row->id ?>"><?= $row->nama_bahan ?></option>
                 <?php endforeach; ?>
               </select>
             </div>

@@ -15,8 +15,11 @@
           <th class="text-center">Nama Supplier</th>
           <th class="text-center no-sort">Nama Produsen</th>
           <th class="text-center no-sort">Jumlah Masuk</th>
-          <th class="text-center no-sort">Expire Date</th>
+          <th class="text-center no-sort">Expired Date</th>
           <th class="text-center no-sort">Tanggal Masuk</th>
+          <?php if($session_detail->id == 7): ?>
+          <th class="text-center no-sort">Harga Pembelian</th>
+          <?php endif; ?>
           <th class="text-center hidden-xs no-sort">Aksi</th>
         </tr>
       </thead>
@@ -84,16 +87,10 @@
                 <input type="text" class="form-control" name="kategori_bahan" id="kategori_bahan" disabled>
               </div>
             </div>
-             <div class="col-sm-6" id="hargapembelian">
-              <div class="form-group">
-                <label for="harga_pembelian">Harga Pembelian</label>
-                <input type="text" class="form-control" name="harga_pembelian" id="harga_pembelian" onkeydown="return numericOnly(event)">
-              </div>
-            </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="nama_produsen">Nama Produsen</label>
-                <select name="id_produsen" class="form-control" id="nama_produsen" required="required">
+                <select name="id_produsen" class="form-control" id="nama_produsen">
                   <option value="" disabled selected>-- Pilih Produsen --</option>
                   <?php foreach($list_produsen as $row): ?>
                   <option value="<?= $row->id ?>"><?= $row->nama ?></option>
@@ -148,15 +145,36 @@
     </div>
   </div>
 </div>
-<!-- /.Modal Ubah-->
+
+<!-- Add Harga -->
+<div class="modal fade" id="hargapembelian" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <form action="" method="POST" id="formHargaPembelian" enctype="multipart/form-data"> <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="harga">Harga Pembelian</label>
+              <input type="text" name="harga" maxlength="50" Required class="form-control" id="harga" placeholder="Harga Pembelian" onkeydown="return numericOnly(event)">
+              <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id_harga" placeholder="ID Barang">
+            </div>
+          </div>
+          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-add" id="aSimpan">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /.Modal Add-->
+
 <script type="text/javascript">
-  $(document).ready(function(){
-    $("#hargapembelian").hide();
-    $('#no_transaksi').mask('0000/AAAA/AAAA/AA/0000', {
-      reverse: false,
-      placeholder: "____/____/____/__/____"
-    });
-  });
   var list_barang = <?php echo json_encode($list_barang); ?>;
   var list_data = <?php echo json_encode($list); ?>;
   var list_produsen = <?php echo json_encode($list_produsen); ?>;
@@ -196,6 +214,13 @@
     $("#expire_date").val("");
     $('#modalAdd').modal('show');
   }
+  function addHarga(id){
+    var data = list_data.filter(function (index) { return index.id == id })[0];
+    $("#id_harga").val(data.id);
+    $("#harga").val(data.harga_pembelian);
+    $("#myModalLabel").text("Ubah Harga Pembelian");
+    $('#hargapembelian').modal('show');
+  }
   function getMasterById(jsonData, id){
     data = jsonData.filter(function(index) {return index.id == id});
     return data.length > 0 ? data[0] : false;
@@ -205,12 +230,37 @@
     var dataKategori = getMasterById(list_kategori_bahan, dataBahan.id_kategori_bahan);
     $("#kode_bahan").val(dataBahan.kode_bahan);
     $("#kategori_bahan").val(dataKategori.nama);
-    if(!dataKategori.nama.toLowerCase().match(/produk jadi.*/)) {
-      $("#hargapembelian").show();
-    } else {
-      $("#hargapembelian").hide();
-    }
   }
+  
+  $("#formHargaPembelian").on('submit', function(e){
+    e.preventDefault();
+    var notifText = 'Data berhasil ditambahkan!';
+    var action = "<?php echo base_url('Transaksi_gudang_masuk/Master/edit')?>/";
+    var param = $('#formHargaPembelian').serialize();
+    
+    $.ajax({
+      type: 'post',
+      url: action,
+      data: param,
+      dataType: 'json',
+      success: function (data) {
+        if(data.status == 3) {
+          list_data = data.list
+        }
+        initDataTable.ajax.reload();
+        $("#hargapembelian").modal('hide');
+        new PNotify({
+          title: data.status == 3 ? 'Success' : 'Gagal',
+          text: data.message,
+          type: data.status == 3 ? 'success' : 'error',
+          hide: true,
+          delay: 5000,
+          styling: 'bootstrap3'
+        });
+      }
+    });
+  });
+
   $("#myform").on('submit', function(e){
     e.preventDefault();
     var notifText = 'Data berhasil ditambahkan!';

@@ -61,7 +61,7 @@
       </tbody>
     </table>
   </div>
-  <?php if($session_detail->id == 5): ?>
+  <?php if($session_detail->id == 9): ?>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-add btn-lg"  onclick="showPilihTipe()">
     Tambah Dokumen

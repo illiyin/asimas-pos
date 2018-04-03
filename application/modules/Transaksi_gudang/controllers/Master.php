@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Master extends MX_Controller {
     private $modul = "Transaksi_gudang/";
     private $fungsi = "";
-	function __construct() {
+    function __construct() {
         parent::__construct();
         $this->load->model('Transaksigudangmodel');
         $this->modul .= $this->router->fetch_class();
@@ -18,36 +18,47 @@ class Master extends MX_Controller {
         $insertLog = $this->Transaksigudangmodel->insert($dataInsert, 't_log');
     }
     function index(){
-    	$this->load->view('Transaksi_gudang/view');
+        $this->load->view('Transaksi_gudang/view');
     }
     function cetak(){
-    	$this->load->view('Transaksi_gudang/cetak');
+        $this->load->view('Transaksi_gudang/cetak');
     }
     function data() {
         $requestData= $_REQUEST;
-        $sql = "SELECT 
-                gm.no_transaksi, bahan.nama AS nama_bahan, bahan.kode_bahan, satuan.nama AS nama_satuan, 
-                tbahan.saldo_bulan_kemarin AS stok_awal, tbahan.saldo_bulan_sekarang AS stok_akhir,
-                tbahan.jumlah_masuk, tbahan.jumlah_keluar, gm.no_batch, 
-                gm.expired_date, 1 AS table_status, gm.date_add AS tanggal, gm.harga_pembelian AS harga
-                FROM tt_gudang_masuk gm, m_bahan bahan, m_satuan satuan, tt_bahan tbahan
-                WHERE gm.id_bahan = bahan.id AND bahan.id_satuan = satuan.id
-                AND gm.id_bahan = tbahan.id_bahan AND gm.deleted = 1
-                UNION
-                SELECT
-                gm.no_transaksi, bahan.nama AS nama_bahan, bahan.kode_bahan, satuan.nama AS nama_satuan, 
-                tbahan.saldo_bulan_kemarin AS stok_awal, tbahan.saldo_bulan_sekarang AS stok_akhir,
-                tbahan.jumlah_masuk, tbahan.jumlah_keluar, gm.no_batch, 
-                gm.expired_date, 2 AS table_status, gm.date_added AS tanggal, gm.harga_penjualan AS harga
-                FROM tt_gudang_keluar gm, m_bahan bahan, m_satuan satuan, tt_bahan tbahan
-                WHERE gm.id_bahan = bahan.id AND bahan.id_satuan = satuan.id
-                AND gm.deleted = 1
-                GROUP BY no_transaksi
-                ORDER BY tanggal DESC";
+        $sql = "SELECT gm.id,
+                gm.no_transaksi, gm.no_batch, gm.expired_date, gm.harga_pembelian AS harga,
+                bahan.nama AS nama_bahan, bahan.kode_bahan, satuan.nama AS nama_satuan,
+                gudang.stok_awal, gudang.jumlah_masuk, gudang.jumlah_keluar, gudang.stok_akhir,
+                gudang.type, gudang.date_add
+                FROM tt_gudang_masuk gm
+                LEFT JOIN tt_gudang gudang ON gm.id = gudang.id_gudang
+                LEFT JOIN m_bahan bahan ON bahan.id = gudang.id_bahan
+                LEFT JOIN m_satuan satuan ON bahan.id_satuan = satuan.id";
+                
         if( !empty($requestData['search']['value']) ) {
-            $sql.=" AND ( nama_barang LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR no_batch LIKE '%".$requestData['search']['value']."%' )";
+            $sql.=" WHERE ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR bahan.kode_bahan LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_transaksi LIKE '%".$requestData['search']['value']."%' )";
         }
+
+        $sql.= " UNION SELECT gm.id,
+                gm.no_transaksi, gm.no_batch, gm.expired_date, gm.harga_penjualan AS harga,
+                bahan.nama AS nama_bahan, bahan.kode_bahan, satuan.nama AS nama_satuan,
+                gudang.stok_awal, gudang.jumlah_masuk, gudang.jumlah_keluar, gudang.stok_akhir,
+                gudang.type, gudang.date_add
+                FROM tt_gudang_keluar gm
+                LEFT JOIN tt_gudang gudang ON gm.id = gudang.id_gudang
+                LEFT JOIN m_bahan bahan ON bahan.id = gudang.id_bahan
+                LEFT JOIN m_satuan satuan ON bahan.id_satuan = satuan.id";
+                
+        if( !empty($requestData['search']['value']) ) {
+            $sql.=" WHERE ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR bahan.kode_bahan LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR no_transaksi LIKE '%".$requestData['search']['value']."%' )";
+        }
+
+        $sql.= " GROUP BY no_transaksi ORDER BY date_add DESC";
+        
         $query=$this->Transaksigudangmodel->rawQuery($sql);
         $totalData = $query->num_rows();
         $data = array(); $i=0;
@@ -57,14 +68,14 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row['no_transaksi'];
             $nestedData[]   =   $row['nama_bahan'];
             $nestedData[]   =   $row['kode_bahan'];
-            $nestedData[]   =   $row['nama_satuan'];
+            $nestedData[]   =   $row['nama_satuan']; 
             $nestedData[]   =   $row['stok_awal'];
             $nestedData[]   =   $row['jumlah_masuk'];
             $nestedData[]   =   $row['jumlah_keluar'];
             $nestedData[]   =   $row['stok_akhir'];
             $nestedData[]   =   $row['no_batch'];
             $nestedData[]   =   date('d/m/Y' , strtotime($row['expired_date']));
-            $nestedData[]   =   ($row['table_status'] == 1 ? 'Gudang Masuk' : 'Gudang Keluar');
+            $nestedData[]   =   ($row['type'] == 1 ? 'Gudang Masuk' : 'Gudang Keluar');
             $nestedData[]   =   toRupiah($row['harga']);
 
             $data[] = $nestedData; $i++;

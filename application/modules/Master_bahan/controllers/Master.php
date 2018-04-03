@@ -115,7 +115,6 @@ class Master extends MX_Controller {
     }
     function add() {
         $params = $this->input->post();
-        $condition['kode_bahan']            = $params['kode_bahan'];
         $dateExplode                        = explode("/", $params['tgl_datang']);
         $expiredExplode                     = explode("/", $params['expired_date']);
         $dataInsert['id_kategori_bahan']    = $params['id_kategori'];
@@ -128,27 +127,21 @@ class Master extends MX_Controller {
         $dataInsert['add_by']               = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $dataInsert['last_edited']          = date("Y-m-d H:i:s");
         $dataInsert['edited_by']            = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
-        $dataInsert['deleted']              = 1;    
+        $dataInsert['deleted']              = 1;
 
-        $checkData = $this->Bahanmodel->select($condition, 'm_bahan');
-        if($checkData->num_rows() < 1){
-            $insert = $this->Bahanmodel->insert_id($dataInsert, 'm_bahan');
-            if($insert){
-                $insertStok['id_bahan']             = $insert;
-                $insertStok['jumlah_masuk']         = $params['jumlah_masuk'];
-                $insertStok['jumlah_keluar']        = $params['jumlah_keluar'];
-                $insertStok['saldo_bulan_sekarang'] = $params['saldo_sekarang'];
-                $insertStok['saldo_bulan_kemarin']  = $params['saldo_kemarin'];
-                $insertStok['tanggal']              = date('Y-m-1');
-                $insertStok = $this->Bahanmodel->insert($insertStok, 'tt_bahan');
-                $list = $this->dataBahan();
-                echo json_encode(array('status' => 3,'list' => $list));
-            }else{
-                echo json_encode(array('status' => 2));
-            }
-
+        $insert = $this->Bahanmodel->insert_id($dataInsert, 'm_bahan');
+        if($insert){
+            $insertStok['id_bahan']             = $insert;
+            $insertStok['jumlah_masuk']         = $params['jumlah_masuk'];
+            $insertStok['jumlah_keluar']        = $params['jumlah_keluar'];
+            $insertStok['saldo_bulan_sekarang'] = $params['saldo_sekarang'];
+            $insertStok['saldo_bulan_kemarin']  = $params['saldo_kemarin'];
+            $insertStok['tanggal']              = date('Y-m-1');
+            $insertStok = $this->Bahanmodel->insert($insertStok, 'tt_bahan');
+            $list = $this->dataBahan();
+            echo json_encode(array('status' => 3,'list' => $list));
         }else{
-            echo json_encode(array( 'status'=> 1, 'message' => 'Kode Bahan sudah ada!'));
+            echo json_encode(array('status' => 2));
         }
     }
     function edit() {
@@ -186,20 +179,30 @@ class Master extends MX_Controller {
         }
     }
     function delete() {
-        $id = $this->input->post("id");
-        if($id != null){
-            $dataCondition['id'] = $id;
-            $dataUpdate['deleted'] = 0;
-            $update = $this->Bahanmodel->update($dataCondition, $dataUpdate, 'm_bahan');
-            if($update){
-                $dataSelect['deleted'] = 1;
-                $list = $this->dataBahan();
-                echo json_encode(array('status' => '3','list' => $list));
-            }else{
-                echo "1";
-            }
-        }else{
-            echo "0";
-        }
+      $id = $this->input->post("id");
+      if($id != null){
+          $dataCondition['id'] = $id;
+          $dataUpdate['deleted'] = 0;
+          $update = $this->Bahanmodel->update($dataCondition, $dataUpdate, 'm_bahan');
+          if($update){
+              $dataSelect['deleted'] = 1;
+              $list = $this->dataBahan();
+              echo json_encode(array('status' => '3','list' => $list));
+          }else{
+              echo "1";
+          }
+      }else{
+          echo "0";
+      }
+    }
+    function similar() {
+      $params = $this->input->post();
+      if(!$params) redirect();
+
+      $namaBahan = trim(strtolower($params['nama_bahan']));
+      $sql = "SELECT id, kode_bahan AS nama FROM m_bahan WHERE nama LIKE '%".$namaBahan."%'";
+      $query = $this->Bahanmodel->rawQuery($sql);
+
+      echo json_encode(array('total' => $query->num_rows(), 'list' => $query->result()));
     }
 }

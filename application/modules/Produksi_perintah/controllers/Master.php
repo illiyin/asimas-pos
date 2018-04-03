@@ -28,6 +28,16 @@ class Master extends MX_Controller {
       $data['list_satuan'] = $this->Perintahproduksimodel->select($dataCondition, 'm_satuan')->result();
       $data['list_bahan'] = $this->Perintahproduksimodel->select($dataCondition, 'm_bahan')->result();
       $data['is_revisi'] = false;
+      $listBahanBaku = "SELECT 
+                        bahan.id, bahan.nama AS nama_bahan,  kategori.nama AS nama_kategori
+                        FROM m_bahan bahan, m_bahan_kategori kategori
+                        WHERE bahan.id_kategori_bahan = kategori.id AND kategori.nama LIKE '%bahan baku%' AND bahan.deleted = 1";
+      $listBahanKemas = "SELECT 
+                        bahan.id, bahan.nama AS nama_bahan,  kategori.nama AS nama_kategori
+                        FROM m_bahan bahan, m_bahan_kategori kategori
+                        WHERE bahan.id_kategori_bahan = kategori.id AND kategori.nama LIKE '%bahan kemas%' AND bahan.deleted = 1";
+      $data['bahan_baku'] = $this->Perintahproduksimodel->rawQuery($listBahanBaku)->result();
+      $data['bahan_kemas'] = $this->Perintahproduksimodel->rawQuery($listBahanKemas)->result();
       $this->load->view('Produksi_perintah/perintahBaru', $data);
     }
     function perintahrevisi(){
@@ -189,26 +199,72 @@ class Master extends MX_Controller {
     }
     function addData(){
       $params = $this->input->post();
-      // PPIC
-      $expiredDate = $this->tanggalExplode(@$params['expired_date']);
-      $dataInsert['no_perintah'] = @$params['no_pp'];
-      $dataInsert['no_sales_order'] = @$params['no_so'];
-      $dataInsert['estimasi_proses'] = @$params['estimasi'];
-      $dataInsert['no_dokumen'] = $params['no_dokumen'] ? $params['no_dokumen'] : null;
-      $dataInsert['revisi'] = $params['revisi'] ? $params['revisi'] : 0;
-      $dataInsert['kode_produksi'] = @$params['kode_produksi'];
-      $dataInsert['expired_date'] = @$expiredDate;
+      // R&D
+      $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
+      $dataInsert['no_dokumen'] = $params['no_dokumen'];
+      $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : date('Y-m-d');
+      $dataInsert['nama_produk']  = $params['nama_produk'];
+      $dataInsert['besar_batch'] = $params['besar_batch'];
+      $dataInsert['revisi'] = 0;
       $dataInsert['date_added'] = date("Y-m-d H:i:s");
       $dataInsert['added_by'] = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
       $dataInsert['last_modified'] = date('Y-m-d H:i:s');
       $dataInsert['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
+      $id_perintah_produksi = $this->Perintahproduksimodel->insert_id($dataInsert, 'm_perintah_produksi');
+      
+      // Data Bahan Baku & Penimbangan Aktual
+      $bahanBaku = $params['bahan_baku'];
+      $dataBahanBaku = json_decode($bahanBaku, true);
+      $bahan_baku = null;
 
-      $this->Perintahproduksimodel->insert($dataInsert, 'm_perintah_produksi');
+      if( count($dataBahanBaku) > 0) {
+        foreach($dataBahanBaku as $num => $row) {
+          $bahan_baku[] = array(
+              'id_perintah_produksi' => $id_perintah_produksi,
+              'id_bahan' => $row['id_bahan'],
+              'per_kaplet' => $row['per_kaplet'],
+              'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
+              'per_batch' => $row['per_batch'],
+              'satuan_batch' => is_numeric($row['satuan_batch']) ? $row['satuan_batch'] : $row['id_satuan_batch'],
+              'jumlah_lot' => $row['jumlah_lot'],
+              'jumlah_perlot' => $row['jumlah_perlot'],
+              'date_add' => date('Y-m-d H:i:s'),
+              'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
+              'modified_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
+              'last_modified' => date('Y-m-d H:i:s'),
+              'deleted' => 1
+            );
+        }
+        $this->Perintahproduksimodel->insert_batch($bahan_baku, 'pp_bahan_baku');
+      }
+
+      // Data Bahan Kemas
+      $bahanKemas = $params['bahan_kemas'];
+      $dataBahanKemas = json_decode($bahanKemas, true);
+      $bahan_kemas = null;
+
+      if( count($dataBahanKemas) > 0) {
+        foreach($dataBahanKemas as $num => $row) {
+          $bahan_kemas[] = array(
+              'id_perintah_produksi' => $id_perintah_produksi,
+              'id_bahan' => $row['id_bahan'],
+              'jumlah' => $row['jumlah'],
+              'satuan' => $row['satuan'],
+              'aktual' => $row['aktual'],
+              'date_added' => date('Y-m-d H:i:s'),
+              'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
+              'deleted' => 1
+            );
+        }
+        $this->Perintahproduksimodel->insert_batch($bahan_kemas, 'pp_bahan_kemas');
+      }
 
       $result = array(
           'status' => 1,
-          'message' => "Berhasil menambah dokumen baru perintah produksi"
+          'message' => "Berhasil menambah dokumen baru perintah produksi",
+          'list' => $params
         );
+      
       echo json_encode($result);
     }
     function editData(){
@@ -230,12 +286,6 @@ class Master extends MX_Controller {
         $dataUpdate['last_modified'] = date('Y-m-d H:i:s');
         $dataUpdate['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
-
-        $result = array(
-            'status' => 1,
-            'message' => "Berhasil mengubah dokumen baru perintah produksi",
-            'params' => $params
-          );
         
         // Data Bahan Baku & Penimbangan Aktual
         $bahanBaku = $params['bahan_baku'];

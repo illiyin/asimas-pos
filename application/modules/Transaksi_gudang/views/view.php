@@ -87,50 +87,22 @@
     <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">
       <thead>
         <tr>
-          <th class="text-center">No Transaksi</th>
-          <th class="text-center">Nama Bahan</th>
-          <th class="text-center">Kode Bahan</th>
-          <th class="text-center">Satuan</th>
-          <th class="text-center">Stok Awal</th>
-          <th class="text-center">Masuk</th>
-          <th class="text-center">Keluar</th>
-          <th class="text-center">Stok Akhir</th>
-          <th class="text-center">Batch</th>
-          <th class="text-center">Expire Date</th>
-          <th class="text-center">Keterangan</th>
-          <th class="text-center">Harga</th>
+          <th class="text-center no-sort">No Transaksi</th>
+          <th class="text-center no-sort">Nama Bahan</th>
+          <th class="text-center no-sort">Kode Bahan</th>
+          <th class="text-center no-sort">Satuan</th>
+          <th class="text-center no-sort">Stok Awal</th>
+          <th class="text-center no-sort">Masuk</th>
+          <th class="text-center no-sort">Keluar</th>
+          <th class="text-center no-sort">Stok Akhir</th>
+          <th class="text-center no-sort">Batch</th>
+          <th class="text-center no-sort">Expired Date</th>
+          <th class="text-center no-sort">Keterangan</th>
+          <th class="text-center no-sort">Harga</th>
         </tr>
       </thead>
 
       <tbody id='bodytable'>
-        <!-- <tr>
-          <td data-search="Brotowali Supplier A Kategori B">1</td>
-          <td>Brotowali</td>
-          <td>XX-3s</td>
-          <td>g</td>
-          <td>300</td>
-          <td>420</td>
-          <td>50</td>
-          <td>50</td>
-          <td>50</td>
-          <td>12/12/2019</td>
-          <td>Sangat Terang</td>
-          <td>300.000</td>
-        </tr>
-        <tr>
-          <td data-search="Biskuit AMB Supplier B Kategori A">2</td>
-          <td>Biskuit AMB</td>
-          <td>XX-3s</td>
-          <td>kg</td>
-          <td>300</td>
-          <td>420</td>
-          <td>50</td>
-          <td>50</td>
-          <td>50</td>
-          <td>12/12/2019</td>
-          <td>Terang</td>
-          <td>200.000</td>
-        </tr> -->
       </tbody>
     </table>
   </div>

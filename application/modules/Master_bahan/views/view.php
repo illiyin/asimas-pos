@@ -89,7 +89,7 @@
              <div class="col-sm-12">
                 <div class="form-group">
                  <label for="nama">Nama Bahan</label>
-                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama">
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" autocomplete="off" />
                  <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id" placeholder="ID Bahan">
                </div>
              </div>
@@ -108,10 +108,16 @@
                  </select>
                </div>
              </div>
-             <div class="col-sm-6">
+             <div class="col-sm-6" id="notSimilar">
                <div class="form-group">
-                 <label for="id_kategori">Kode</label>
+                 <label for="id_kategori">Kode Bahan</label>
                  <input type="text" name="kode_bahan" maxlength="50" class="form-control" id="kode_bahan">
+               </div>
+             </div>
+             <div class="col-sm-6" id="isSimilar">
+               <div class="form-group">
+                 <label for="id_kategori">Kode Bahan</label>
+                 <select name="kode_bahan" class="form-control" id="bahan_similar" required="">
                  </select>
                </div>
              </div>
@@ -170,6 +176,51 @@
 <!-- /.Modal Add-->
 
 <script type="text/javascript">
+  // User stop typing
+  //setup before functions
+  var typingTimer;
+  var doneTypingInterval = 1000; // in ms (miliseconds)
+  var $input = $('#nama');
+
+  //on keyup, start the countdown
+  $input.on('keyup', function () {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(doneTyping, doneTypingInterval);
+  });
+
+  //on keydown, clear the countdown 
+  $input.on('keydown', function () {
+    clearTimeout(typingTimer);
+  });
+
+  var $isSimilar = $("#isSimilar");
+  var $notSimilar = $("#notSimilar");
+
+  $isSimilar.hide();
+
+  //user is "finished typing," do something
+  function doneTyping () {  
+     $.ajax({
+      url :"<?php echo base_url()?>Master_bahan/Master/similar",
+      type: "post", 
+      data: {"nama_bahan":$input.val()},
+      dataType: 'json',
+      error: function(e){
+        console.log(e);
+      },
+      success: function (data) {
+        if(data.total > 0) {
+          $isSimilar.show();
+          $notSimilar.hide();
+          load_select_option(data.list, "#bahan_similar", "Kode Bahan");
+        } else {
+          $isSimilar.hide();
+          $notSimilar.show();
+        }
+      }
+    });
+  }
+
   var jsonlist = <?php echo $list; ?>;
   var jsonSatuan = <?php echo $list_satuan; ?>;
   var jsonKategori = <?php echo $list_kategori; ?>;

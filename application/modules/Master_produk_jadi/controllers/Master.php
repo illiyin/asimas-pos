@@ -53,7 +53,7 @@ class Master extends MX_Controller {
         $nestedData[]   =   toRupiah($row["harga_pembelian"]);
         $nestedData[]   =   date('d/m/Y', strtotime($row["expired_date"]));
         $nestedData[]   =   $row["jumlah_masuk"];
-        $sumHarga       =   (float) $row['harga_pembelian'] / $row['jumlah_masuk'];
+        $sumHarga       =   (float) $row['harga_pembelian'] * $row['jumlah_masuk'];
         $nestedData[]   =   $row['harga_pembelian'] === 0 ? 0 : toRupiah($sumHarga);
         $nestedData[]   =   '<a class="btn btn-sm btn-default text-center" style="display:block;" data-toggle="tooltip" data-placement="top" title="Ubah Harga" onclick="showAdd('.$row["id"].')"><i class="fa fa-pencil"></i></a>';
 

@@ -14,6 +14,8 @@
               <tr>
                   <th class="text-center no-sort">#</th>
                   <th class="text-center">Nama Bahan</th>
+                  <th class="text-center">Harga Jual</th>
+                  <th class="text-center">Total QTY</th>
                   <th class="text-center">Rata-rata Harga</th>
               </tr>
           </thead>
@@ -22,12 +24,10 @@
           </tbody>
       </table>
    </div>
-   <?php if($session_detail->id != 8 || strtolower($session_detail->nama) != 'marketing'): ?>
    <!-- Button trigger modal -->
    <button type="button" class="btn btn-add btn-lg" onclick="gotoCetak()">
      Cetak Laporan
    </button>
-   <?php endif; ?>
 </div>
 <!-- /.container -->
 

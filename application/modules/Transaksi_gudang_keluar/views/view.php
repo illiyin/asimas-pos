@@ -47,20 +47,20 @@
             <div class="col-sm-12">
               <div class="form-group">
                 <label for="no_transaksi">No. Transaksi</label>
-                <input type="text" class="form-control" name="no_transaksi" id="no_transaksi" placeholder="No. Transaksi">
+                <input type="text" class="form-control" name="no_transaksi" id="no_transaksi" placeholder="No. Transaksi" required>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="harga_jual">Harga Penjualan</label>
-                <input type="text" class="form-control" name="harga_jual" id="harga_jual" placeholder="Harga Penjualan">
+                <input type="text" class="form-control" name="harga_jual" id="harga_jual" placeholder="Harga Penjualan" required>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="tanggal_keluar">Tanggal</label>
+                <label for="tanggal_keluar">Tanggal Keluar</label>
                 <div class="input-group">
-                  <input type="text" class="form-control datepicker" name="tanggal_keluar" id="tanggal_keluar" placeholder="dd/mm/yyyy">
+                  <input type="text" class="form-control datepicker" name="tanggal_keluar" id="tanggal_keluar" placeholder="dd/mm/yyyy" required>
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
               </div>
@@ -79,31 +79,26 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="id_satuan">Satuan</label>
-                <select name="id_satuan" class="form-control" id="id_satuan" readonly>
-                  <option value="" disabled selected>-- Pilih Satuan --</option>
-                  <?php foreach($list_satuan as $row): ?>
-                  <option value="<?= $row->id ?>"><?php echo $row->nama ?></option>
-                  <?php endforeach; ?>
-                </select>
+                  <input type="text" name="id_satuan" id="id_satuan" disabled class="form-control">
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="jumlah_keluar">Jumlah Keluar</label>
-                <input type="text" class="form-control" name="jumlah_keluar" id="jumlah_keluar" placeholder="Jumlah Keluar" onkeydown="return numericOnly(event)">
+                <input type="text" class="form-control" name="jumlah_keluar" id="jumlah_keluar" placeholder="Jumlah Keluar" onkeydown="return numericOnly(event)" required>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="no_batch">No. Batch</label>
-                <input type="text" class="form-control" name="no_batch" id="no_batch" placeholder="No. Batch">
+                <input type="text" class="form-control" name="no_batch" id="no_batch" placeholder="No. Batch" required>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="expired_date">Expired Date</label>
                 <div class="input-group">
-                  <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" placeholder="dd/mm/yyyy">
+                  <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" placeholder="dd/mm/yyyy" required>
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
               </div>
@@ -137,12 +132,6 @@
   </div>
   <!-- /.Modal Ubah-->
 <script type="text/javascript">
-$(document).ready(function(){
-  $('#no_transaksi').mask('0000/AAAA/AAAA/AA/0000', {
-    reverse: false,
-    placeholder: "____/____/____/__/____"
-  });
-});
 var jsonList = <?php echo json_encode($list_data); ?>;
 var list_distributor = <?php echo json_encode($list_distributor); ?>;
 var list_satuan = <?php echo json_encode($list_satuan); ?>;
@@ -200,8 +189,8 @@ function getMasterById(jsonData, id){
   return data.length > 0 ? data[0] : false;
 }
 function selectBahan(id){
-  var dataBahan = getMasterById(list_bahan, id);
-  $("#id_satuan").val(dataBahan.id_satuan);
+  var satuan = getMasterById(list_satuan, id);
+  $("#id_satuan").val(satuan.nama);
 }
 
 $("#myform").on('submit', function(e){

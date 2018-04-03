@@ -69,7 +69,7 @@
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="email">Email Distributor</label>
-                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Distributor" required="">
+                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Distributor">
                </div>
              </div>
            </div>
@@ -167,13 +167,20 @@
   }
 
   function showUpdate(i){
+    $("#myModalLabel").text("Ubah Barang");
+    var dataUpdate = jsonList.filter(function (index) { return index.id == i })[0];
     $("#myModalLabel").text("Ubah Distributor");
-    $("#id").val(jsonList[i].id);
-    $("#nama").val(jsonList[i].nama);
-    $("#alamat").val(jsonList[i].alamat);
-    $("#no_telp").val(jsonList[i].no_telp);
-    $("#email").val(jsonList[i].email);
+    $("#id").val(dataUpdate.id);
+    $("#nama").val(dataUpdate.nama);
+    $("#alamat").val(dataUpdate.alamat);
+    $("#no_telp").val(dataUpdate.no_telp);
+    $("#email").val(dataUpdate.email);
     $("#modalform").modal("show");
+  }
+
+  function getMasterById(jsonData, id){
+    data = jsonData.filter(function(index) {return index.id == id});
+    return data.length > 0 ? data[0] : false;
   }
 
   $("#myform").on('submit', function(e){
@@ -201,7 +208,7 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          // jsonList = data.list;
+          jsonList = data.list;
           // loadData(jsonList);
           initDataTable.ajax.reload();
   				$("#modalform").modal('hide');
@@ -249,6 +256,7 @@
                 delay: 5000,
                 styling: 'bootstrap3'
               });
+              jsonList = data.list;
               initDataTable.ajax.reload();
       				// jsonList = data.list;
       				// loadData(jsonList);
