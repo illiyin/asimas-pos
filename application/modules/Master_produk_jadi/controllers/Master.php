@@ -20,10 +20,11 @@ class Master extends MX_Controller {
     function index(){
         $sql = "SELECT 
             gm.id, bahan.nama AS nama_bahan, gm.no_so , gm.harga_pembelian,
-            gm.expired_date, gm.jumlah_masuk, kategori.nama, gm.deleted
-            FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori
-            WHERE gm.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
-            AND gm.deleted = 1
+            gm.expired_date, gudang.jumlah_masuk, kategori.nama
+            FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori, tt_gudang gudang
+            WHERE gudang.id_bahan = bahan.id 
+            AND gm.id = gudang.id_gudang
+            AND bahan.id_kategori_bahan = kategori.id
             AND kategori.nama LIKE '%produk jadi%'";
         $data['session_detail'] = pegawaiLevel($this->session->userdata('id_user_level'));
         $data['list_data'] = $this->Masterprodukjadimodel->rawQuery($sql)->result();
@@ -32,12 +33,13 @@ class Master extends MX_Controller {
     function data(){
       $requestData = $_REQUEST;
       $sql = "SELECT 
-            gm.id, bahan.nama AS nama_bahan, gm.no_so , gm.harga_pembelian,
-            gm.expired_date, gm.jumlah_masuk, kategori.nama, gm.deleted
-            FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori
-            WHERE gm.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
-            AND gm.deleted = 1
-            AND kategori.nama LIKE '%produk jadi%'";
+              gm.id, bahan.nama AS nama_bahan, gm.no_so , gm.harga_pembelian,
+              gm.expired_date, gudang.jumlah_masuk, kategori.nama
+              FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori, tt_gudang gudang
+              WHERE gudang.id_bahan = bahan.id 
+              AND gm.id = gudang.id_gudang
+              AND bahan.id_kategori_bahan = kategori.id
+              AND kategori.nama LIKE '%produk jadi%'";
       if( !empty($requestData['search']['value']) ) {
         $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' )";
       }
@@ -79,12 +81,13 @@ class Master extends MX_Controller {
         $update = $this->Masterprodukjadimodel->update($dataCondition, $dataUpdate, 'tt_gudang_masuk');
         if($update) {
           $sql = "SELECT 
-            gm.id, bahan.nama AS nama_bahan, gm.no_so , gm.harga_pembelian,
-            gm.expired_date, gm.jumlah_masuk, kategori.nama, gm.deleted
-            FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori
-            WHERE gm.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
-            AND gm.deleted = 1
-            AND kategori.nama LIKE '%produk jadi%'";
+                  gm.id, bahan.nama AS nama_bahan, gm.no_so , gm.harga_pembelian,
+                  gm.expired_date, gudang.jumlah_masuk, kategori.nama
+                  FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori, tt_gudang gudang
+                  WHERE gudang.id_bahan = bahan.id 
+                  AND gm.id = gudang.id_gudang
+                  AND bahan.id_kategori_bahan = kategori.id
+                  AND kategori.nama LIKE '%produk jadi%'";
           $list = $this->Masterprodukjadimodel->rawQuery($sql)->result();
           echo json_encode(array('status' => '3','message' => 'Berhasil mengubah data!' , 'list' => $list));
         } else {
