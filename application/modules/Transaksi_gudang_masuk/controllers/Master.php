@@ -200,13 +200,15 @@ class Master extends MX_Controller {
         $update = $this->Transaksigudangmasukmodel->update($dataCondition, $dataUpdate, 'tt_gudang_masuk');
         if($update) {
           $sql = "SELECT
-                  gm.id, gm.no_transaksi, gm.no_batch, gm.harga_pembelian,
+                  gm.id_produsen, gm.id, gm.no_transaksi, gm.no_batch, gm.harga_pembelian,
                   bahan.nama AS nama_bahan, produsen.nama AS nama_produsen, 
-                  supplier.nama AS nama_supplier, gm.jumlah_masuk, gm.no_so,
-                  gm.expired_date, gm.tanggal_masuk
-                  FROM tt_gudang_masuk gm, m_bahan bahan, m_produsen produsen, m_supplier supplier
-                  WHERE gm.deleted = 1 AND gm.id_bahan = bahan.id 
-                  AND gm.id_produsen = produsen.id AND gm.id_supplier = supplier.id";
+                  supplier.nama AS nama_supplier, gm.no_so,
+                  gm.expired_date, gm.tanggal_masuk, gudang.jumlah_masuk
+                  FROM tt_gudang_masuk gm
+                  JOIN tt_gudang gudang ON gm.id = gudang.id_gudang
+                  JOIN m_bahan bahan ON gudang.id_bahan = bahan.id
+                  JOIN m_supplier supplier ON gm.id_supplier = supplier.id
+                  LEFT JOIN m_produsen produsen ON gm.id_produsen = produsen.id";
           $list = $this->Transaksigudangmasukmodel->rawQuery($sql)->result();
           echo json_encode(array('status' => '3','message' => 'Berhasil mengubah data!' , 'list' => $list));
         } else {
