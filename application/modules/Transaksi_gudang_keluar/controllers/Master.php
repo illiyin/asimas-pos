@@ -38,13 +38,15 @@ class Master extends MX_Controller {
                 bahan.kode_bahan,
                 distributor.nama AS nama_distributor,
                 gk.no_batch,
+                gudang.jumlah_keluar,
                 gk.tanggal_keluar,
                 gk.expired_date,
                 gk.keterangan,
                 gk.date_added,
                 satuan.nama AS nama_satuan
-                FROM tt_gudang_keluar gk, m_bahan bahan, m_distributor distributor, m_satuan satuan
+                FROM tt_gudang_keluar gk, m_bahan bahan, m_distributor distributor, m_satuan satuan, tt_gudang gudang
                 WHERE gk.id_bahan = bahan.id
+                AND gudang.id_gudang = gk.id
                 AND bahan.id_satuan = satuan.id
                 AND gk.id_distributor = distributor.id";
         if( !empty($requestData['search']['value']) ) {
@@ -67,7 +69,7 @@ class Master extends MX_Controller {
             $nestedData[]   =   date('d/m/Y', strtotime($row["tanggal_keluar"]));
             $nestedData[]   =   $row["nama_bahan"];
             $nestedData[]   =   $row["nama_satuan"];
-            $nestedData[]   =   "Jumlah Keluar";//$row["jumlah_keluar"];
+            $nestedData[]   =   $row["jumlah_keluar"];
             $nestedData[]   =   $row["no_batch"];
             $nestedData[]   =   date('d/m/Y', strtotime($row["expired_date"]));
             $nestedData[]   =   $row["kode_bahan"];
