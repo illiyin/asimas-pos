@@ -270,10 +270,15 @@
     $("#saldo_sekarang").val("");
     $("#tgl_datang").val("");
     $("#expired_date").val("");
+    $isSimilar.hide();
+    $notSimilar.show();
     $("#modalform").modal("show");
   }
   function showDetail(i) {
     var data = getMasterById(jsonlist, i);
+    console.log(data);
+    console.log(jsonlist);
+    console.log(i);
     $("#det_nama").text(data.nama_bahan);
     $("#det_kode").text(data.kode_bahan);
     var dataSatuan = getMasterById(jsonSatuan, data.id_satuan);
@@ -364,6 +369,7 @@
           },
           success: function (data) {
             if (data.status == '3'){
+              jsonlist = data.list;
              $("#aConfirm"+i).prop("disabled", false);
           // $("#notif-top").fadeIn(500);
           // $("#notif-top").fadeOut(2500);
@@ -408,6 +414,7 @@
       success: function (data) {
         if (data.status == '3'){
          initDataTable.ajax.reload();
+         jsonlist = data.list;
           $("#modalform").modal('hide');
           // $("#notif-top").fadeIn(500);
           // $("#notif-top").fadeOut(2500);
