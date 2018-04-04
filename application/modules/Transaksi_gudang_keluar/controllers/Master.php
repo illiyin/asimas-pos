@@ -203,10 +203,9 @@ class Master extends MX_Controller {
         $id = $this->input->post("id");
         if($id != null){
             $dataCondition['id'] = $id;
-            $dataUpdate['deleted'] = 0;
-            $update = $this->Transaksigudangkeluarmodel->update($dataCondition, $dataUpdate, 'tt_gudang_keluar');
-            if($update){
-                $list = $this->Transaksigudangkeluarmodel->select(array('deleted' => 1), 'tt_gudang_keluar', 'date_add', 'DESC');
+            $delete = $this->Transaksigudangkeluarmodel->delete($dataCondition, 'tt_gudang_keluar');
+            if($delete){
+                $list = $this->Transaksigudangkeluarmodel->select('', 'tt_gudang_keluar', 'date_added', 'DESC');
                 echo json_encode(array('status' => '3','list' => $list));
             }else{
                 echo "1";
