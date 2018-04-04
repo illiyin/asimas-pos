@@ -114,13 +114,13 @@
                  <input type="text" name="kode_bahan" maxlength="50" class="form-control" id="kode_bahan">
                </div>
              </div>
-             <div class="col-sm-6" id="isSimilar">
+             <!-- <div class="col-sm-6" id="isSimilar">
                <div class="form-group">
                  <label for="id_kategori">Kode Bahan</label>
                  <select name="kode_bahan" class="form-control" id="bahan_similar" required="">
                  </select>
                </div>
-             </div>
+             </div> -->
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="id_kategori">Jumlah Keluar</label>
@@ -193,10 +193,10 @@
     clearTimeout(typingTimer);
   });
 
-  var $isSimilar = $("#isSimilar");
+  // var $isSimilar = $("#isSimilar");
   var $notSimilar = $("#notSimilar");
 
-  $isSimilar.hide();
+  // $isSimilar.hide();
 
   //user is "finished typing," do something
   function doneTyping () {  
@@ -210,13 +210,15 @@
       },
       success: function (data) {
         if(data.total > 0) {
-          $isSimilar.show();
-          $notSimilar.hide();
-          load_select_option(data.list, "#bahan_similar", "Kode Bahan");
-        } else {
-          $isSimilar.hide();
-          $notSimilar.show();
-        }
+          $("#kode_bahan").val(data.list[0].nama);
+          // $isSimilar.show();
+          // $notSimilar.hide();
+          // load_select_option(data.list, "#bahan_similar", "Kode Bahan");
+        } 
+        // else {
+        //   $isSimilar.hide();
+        //   $notSimilar.show();
+        // }
       }
     });
   }
@@ -228,7 +230,7 @@
   var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,
     "bServerSide": true,
-    // "order": [[4, 'DESC']],
+    "order": [[0, 'DESC']],
     "ajax":{
           url :"<?php echo base_url()?>Master_bahan/Master/data",
           type: "post",  // type of method  , by default would be get
@@ -270,15 +272,10 @@
     $("#saldo_sekarang").val("");
     $("#tgl_datang").val("");
     $("#expired_date").val("");
-    $isSimilar.hide();
-    $notSimilar.show();
     $("#modalform").modal("show");
   }
   function showDetail(i) {
     var data = getMasterById(jsonlist, i);
-    console.log(data);
-    console.log(jsonlist);
-    console.log(i);
     $("#det_nama").text(data.nama_bahan);
     $("#det_kode").text(data.kode_bahan);
     var dataSatuan = getMasterById(jsonSatuan, data.id_satuan);

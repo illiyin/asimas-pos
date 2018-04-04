@@ -28,9 +28,9 @@ class Master extends MX_Controller {
     }
     public function data() {
         $requestData = $_REQUEST;
-        $sql = "SELECT * FROM m_bahan WHERE deleted = 1";
-        $query=$this->Bahanmodel->rawQuery($sql);
-        $totalData = $query->num_rows();
+        $columns = array(
+            0 => 'bahan.date_add'
+        );
 
         $sql = "SELECT bahan.id, bahan.id_satuan, bahan.id_kategori_bahan, kategori.nama AS nama_kategori,
         bahan.nama AS nama_bahan, bahan.kode_bahan, tbahan.jumlah_masuk,
@@ -45,9 +45,10 @@ class Master extends MX_Controller {
           $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
         }
 
-        $sql .= " ORDER BY bahan.date_add DESC";
         $query=$this->Bahanmodel->rawQuery($sql);
         $totalFiltered = $query->num_rows();
+        $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]." ".$requestData['order'][0]['dir']." LIMIT ".$requestData['start']." ,".$requestData['length']."";
+        $query=$this->Bahanmodel->rawQuery($sql);
 
         $data = array(); $i=0;
         foreach ($query->result_array() as $row) {
@@ -67,10 +68,11 @@ class Master extends MX_Controller {
         }
         $totalData = count($data);
         $json_data = array(
+            "sql" => $sql,
                     "draw"            => intval( $requestData['draw'] ),
                     "recordsTotal"    => intval( $totalData ),
                     "recordsFiltered" => intval( $totalFiltered ),
-                    "data"            => $data
+                    "data"            => $data,
                     );
         echo json_encode($json_data);
     }
