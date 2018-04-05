@@ -43,13 +43,15 @@ class Index extends MX_Controller {
             $selectDataPermission = $this->Gmodel->like('null', $selectData, 'm_pegawai_permission');
             if($selectDataPermission->num_rows() > 0){
                 $idPermission = $selectDataPermission->row()->id;
+                $x = explode("/", $modul);
+                if(in_array('supplier', $x)) $idPermission = 57;
                 if($idPermission!=null && $this->session->userdata('user_permission')!=null){
                     if(in_array($idPermission, $this->session->userdata('user_permission'))){
                         $data['view'] = $modul;
                     }else{
                         $data['view'] = "index/access_restricted";
                     }
-                }else{
+                }else{  
                     $data['view'] = "index/access_restricted";
                 }
             }else{

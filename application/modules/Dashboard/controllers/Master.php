@@ -18,10 +18,7 @@ class Master extends MX_Controller {
     }
 
     function index(){
-
     	$this->load->view('Dashboard/view');
     }
-
-
 
 }
