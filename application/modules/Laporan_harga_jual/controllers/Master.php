@@ -36,15 +36,15 @@ class Master extends MX_Controller {
     }
     function data(){
         $requestData= $_REQUEST;
-        $sql = "SELECT * FROM tt_gudang_keluar WHERE deleted = 1";
+        $sql = "SELECT * FROM tt_gudang_keluar";
         $query=$this->Laporanhargajualmodel->rawQuery($sql);
         $totalData = $query->num_rows();
         $sql = "SELECT
                 bahan.nama AS nama_bahan, kategori.nama AS nama_kategori,
-                SUM(gk.harga_penjualan / gk.jumlah_keluar) / COUNT(*) AS total
-                FROM m_bahan bahan, tt_gudang_keluar gk, m_bahan_kategori kategori
-                WHERE gk.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
-                AND gk.deleted = 1";
+                SUM(gk.harga_penjualan / gudang.jumlah_keluar) / COUNT(*) AS total
+                FROM m_bahan bahan, tt_gudang_keluar gk, m_bahan_kategori kategori, tt_gudang gudang
+                WHERE gudang.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
+                AND gudang.id_gudang = gk.id";
         if( !empty($requestData['search']['value']) ) {
             $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' )";
             // $sql.=" OR m_bahan.nama LIKE '%".$requestData['search']['value']."%' )";

@@ -38,17 +38,18 @@ class Master extends MX_Controller {
       $requestData = $_REQUEST;
       $sql = "SELECT bahan.nama AS nama_bahan, satuan.nama AS nama_satuan,
               SUM(gm.harga_pembelian) AS harga_jual,
-              SUM(gm.jumlah_masuk) AS total_qty,
-              SUM(gm.harga_pembelian * gm.jumlah_masuk) / SUM(gm.jumlah_masuk) AS total
-              FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori, m_satuan satuan
-              WHERE gm.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
-              AND gm.deleted = 1 AND bahan.id_satuan = satuan.id
+              SUM(gudang.jumlah_masuk) AS total_qty,
+              SUM(gm.harga_pembelian * gudang.jumlah_masuk) / SUM(gudang.jumlah_masuk) AS total
+              FROM m_bahan bahan, tt_gudang_masuk gm, m_bahan_kategori kategori, m_satuan satuan, tt_gudang gudang
+              WHERE gudang.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
+              AND bahan.id_satuan = satuan.id
+              AND gudang.id_gudang = gm.id
               AND kategori.nama LIKE '%produk jadi%'";
       if( !empty($requestData['search']['value']) ) {
         $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' )";
       }
 
-      $sql.= " GROUP BY gm.id_bahan";
+      $sql.= " GROUP BY gudang.id_bahan";
       $query=$this->Laporanhargabelimodel->rawQuery($sql);
       $totalFiltered = $query->num_rows();
       

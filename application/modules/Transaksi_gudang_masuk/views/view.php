@@ -28,10 +28,12 @@
       </tbody>
     </table>
   </div>
+  <?php if($session_detail->id != 7): ?>
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-add btn-lg"  onclick="showAdd()">
     Tambah Transaksi
   </button>
+  <?php endif; ?>
 </div>
 <!-- /.container -->
 <!-- Modal add -->

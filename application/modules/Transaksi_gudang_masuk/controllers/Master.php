@@ -109,10 +109,11 @@ class Master extends MX_Controller {
             $nestedData[]   =   date('d/m/Y', strtotime($row['expired_date']));
             $nestedData[]   =   date('d/m/Y', strtotime($row['tanggal_masuk']));
             if($this->session_detail->id == 7) $nestedData[] = toRupiah($row['harga_pembelian']);
-            $action         =  '<td class="text-center"><div class="btn-group">'
-                .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>';
             if($this->session_detail->id == 7) {
-            $action        .=    '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="addHarga('.$row["id"].')"><i class="fa fa-pencil"></i></a>';
+            $action        =    '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="addHarga('.$row["id"].')"><i class="fa fa-pencil"></i></a>';
+            } else{
+              $action         =  '<td class="text-center"><div class="btn-group">'
+                .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>';
             }
 
             $action        .=  '</div>'.'</td>';

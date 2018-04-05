@@ -44,7 +44,7 @@ class Master extends MX_Controller {
               tbahan.saldo_bulan_kemarin AS stok_awal , tbahan.saldo_bulan_sekarang AS stok_akhir, tbahan.tanggal,
               satuan.nama AS nama_satuan
               FROM m_bahan bahan, tt_bahan tbahan, m_satuan satuan
-              WHERE tbahan.id_bahan = bahan.id AND satuan.id = bahan.id_satuan";
+              WHERE bahan.deleted = 1 AND tbahan.id_bahan = bahan.id AND satuan.id = bahan.id_satuan";
       if( !empty($requestData['search']['value']) ) {
           $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
           $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
