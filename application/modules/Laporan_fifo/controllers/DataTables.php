@@ -91,33 +91,36 @@ class DataTables extends MX_Controller {
   }
   function realsupplier() {
     $requestData= $_REQUEST;
-    $sql = "SELECT id_bahan, id_supplier FROM tt_gudang_masuk GROUP BY id_bahan, id_supplier";
+    $sql = "SELECT gudang.id_bahan, gm.id_supplier FROM tt_gudang_masuk gm, tt_gudang gudang
+            WHERE gm.id = gudang.id_gudang
+            GROUP BY gudang.id_bahan, gm.id_supplier";
     $query = $this->Laporanfifomodel->rawQuery($sql);
     $totalData = $query->num_rows();
 
     $tmpdata = null;
-    foreach($query->result() as $row) {
-      $bahan = $this->Laporanfifomodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
-      $supplier = $this->Laporanfifomodel->select(array('id' => $row->id_supplier), 'm_supplier')->row();
+    if($query->num_rows() > 0){
+        foreach($query->result() as $row) {
+          $bahan = $this->Laporanfifomodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+          $supplier = $this->Laporanfifomodel->select(array('id' => $row->id_supplier), 'm_supplier')->row();
 
-        $temporary = array(
-            'nama_bahan' => $bahan->nama,
-            'nama_supplier' => $supplier->nama,
-            'alamat' => $supplier->alamat,
-            'no_telp' => $supplier->no_telp,
-            'email' => $supplier->email
-        );
-        
-    //   if( !empty($requestData['search']['value']) ) {
-    //     $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
-    //     $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
-    //     $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
-    //     $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
-    // }
-      $tmpdata[] = $temporary;
+            $temporary = array(
+                'nama_bahan' => $bahan->nama,
+                'nama_supplier' => $supplier->nama,
+                'alamat' => $supplier->alamat,
+                'no_telp' => $supplier->no_telp,
+                'email' => $supplier->email
+            );
+            
+        //   if( !empty($requestData['search']['value']) ) {
+        //     $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
+        //     $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
+        //     $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
+        //     $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+        // }
+          $tmpdata[] = $temporary;
+        }
     }
     
-
     $data = array(); $i=0;
     foreach ($tmpdata as $row) {
         $nestedData     =   array();
