@@ -76,7 +76,7 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row['no_batch'];
             $nestedData[]   =   date('d/m/Y' , strtotime($row['expired_date']));
             $nestedData[]   =   ($row['type'] == 1 ? 'Gudang Masuk' : 'Gudang Keluar');
-            $nestedData[]   =   toRupiah($row['harga']);
+            // $nestedData[]   =   toRupiah($row['harga']);
 
             $data[] = $nestedData; $i++;
         }

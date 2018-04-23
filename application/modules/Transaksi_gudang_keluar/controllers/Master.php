@@ -116,7 +116,6 @@ class Master extends MX_Controller {
         $dataInsert['id_bahan'] = $params['id_bahan'];
         $dataInsert['id_distributor'] = $params['id_distributor'];
         $dataInsert['no_batch'] = $params['no_batch'];
-        $dataInsert['harga_penjualan'] = $params['harga_jual'];
         // $dataInsert['stok_akhir']           = $bahan->num_rows() > 0 ? 
         //              ($params['jumlah_masuk']) + ($rowBahan->stok_akhir) : $params['jumlah_masuk'];
         // $dataInsert['jumlah_keluar'] = $params['jumlah_keluar'];

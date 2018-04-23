@@ -24,14 +24,6 @@ class Master extends MX_Controller {
 		//print_r($data);
     	$this->load->view('Master_satuan/view', $data);
     }
-	
-	function test(){
-		header('Content-Type: application/json; charset=utf-8');
-		$dataSelect['deleted'] = 1;
-		$list = $this->Satuanmodel->select($dataSelect, 'm_satuan', 'date_add', 'DESC')->result();
-		echo json_encode(array('status' => '3','list' => $list));
-	}
-	
     function add(){
 		$params = $this->input->post();
 		$dataInsert['nama'] 			= $params['nama'];
@@ -121,6 +113,4 @@ class Master extends MX_Controller {
     		echo "NOT FOUND";
     	}
     }
-    
-    
 }

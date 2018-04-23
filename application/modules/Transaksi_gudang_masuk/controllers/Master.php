@@ -77,7 +77,7 @@ class Master extends MX_Controller {
         $sql = "SELECT
                 gm.id_produsen, gm.id, gm.no_transaksi, gm.no_batch, gm.harga_pembelian,
                 bahan.nama AS nama_bahan, produsen.nama AS nama_produsen, 
-                supplier.nama AS nama_supplier, gm.no_so,
+                supplier.nama AS nama_supplier, gm.no_so, gm.moq,
                 gm.expired_date, gm.tanggal_masuk, gudang.jumlah_masuk
                 FROM tt_gudang_masuk gm
                 JOIN tt_gudang gudang ON gm.id = gudang.id_gudang
@@ -108,7 +108,10 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row['jumlah_masuk'];
             $nestedData[]   =   date('d/m/Y', strtotime($row['expired_date']));
             $nestedData[]   =   date('d/m/Y', strtotime($row['tanggal_masuk']));
-            if($this->session_detail->id == 7) $nestedData[] = toRupiah($row['harga_pembelian']);
+            if($this->session_detail->id == 7) {
+              $nestedData[] = toRupiah($row['harga_pembelian']);
+              $nestedData[] = $row['moq'];
+            }
             if($this->session_detail->id == 7) {
             $action        =    '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="addHarga('.$row["id"].')"><i class="fa fa-pencil"></i></a>';
             } else{
@@ -198,12 +201,13 @@ class Master extends MX_Controller {
       $checkData = $this->Transaksigudangmasukmodel->select($dataCondition, 'tt_gudang_masuk');
       if($checkData->num_rows() > 0) {
         $dataUpdate['harga_pembelian'] = $params['harga'];
+        $dataUpdate['moq'] = $params['moq'];
         $update = $this->Transaksigudangmasukmodel->update($dataCondition, $dataUpdate, 'tt_gudang_masuk');
         if($update) {
           $sql = "SELECT
                   gm.id_produsen, gm.id, gm.no_transaksi, gm.no_batch, gm.harga_pembelian,
                   bahan.nama AS nama_bahan, produsen.nama AS nama_produsen, 
-                  supplier.nama AS nama_supplier, gm.no_so,
+                  supplier.nama AS nama_supplier, gm.no_so, gm.moq,
                   gm.expired_date, gm.tanggal_masuk, gudang.jumlah_masuk
                   FROM tt_gudang_masuk gm
                   JOIN tt_gudang gudang ON gm.id = gudang.id_gudang

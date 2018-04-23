@@ -58,8 +58,8 @@
             <td>: <?= $perintah_produksi->kode_produksi ?></td>
           </tr>
           <tr>
-            <td>Expire Date</td>
-            <td>: <?= date('d/m/Y', strtotime($perintah_produksi->expired_date)); ?> </td>
+            <td>Expired Date</td>
+            <td>: <?= $perintah_produksi->expired_date == '0000-00-00' ? "Belum disetting" : date('M Y', strtotime($perintah_produksi->expired_date)); ?> </td>
           </tr>
         </table>
       </td>
@@ -84,7 +84,7 @@
         <td><?= $no++ ?></td>
         <td><?= $row['nama_bahan'] ?></td>
         <td><?= $row['per_kaplet'] ?></td>
-        <td><?= $row['satuan_kaplet'] ?></td>
+        <td><?= $row['satuan_paket'] ?></td>
         <td><?= $row['per_batch'] ?></td>
         <td><?= $row['satuan_batch'] ?></td>
       </tr>
@@ -93,15 +93,15 @@
   </table>
 
   <h3 class="tb-title">Penimbangan Aktual:</h3>
-  <table class="regular">
+  <table class="regular penimbanganAktual">
     <thead>
       <tr>
-        <th class="nomer">No.</th>
-        <th>Nama Bahan</th>
-        <th>Jumlah</th>
-        <th>Satuan</th>
-        <th>Per Lot</th>
-        <th>Total Lot</th>
+        <th class="nomer nope">No.</th>
+        <th class="nope">Nama Bahan</th>
+        <th class="nope">Jumlah</th>
+        <th class="nope">Satuan</th>
+        <th class="nope">Per Lot</th>
+        <th class="nope">Total Lot</th>
         <th class="lot">Lot 1</th>
         <th class="lot">Lot 2</th>
         <th class="lot">Lot 3</th>
@@ -117,18 +117,15 @@
     <tbody>
       <?php $no = 1; foreach($bahan_baku as $row): ?>
       <tr>
-        <td><?= $no++ ?></td>
-        <td><?= $row['nama_bahan'] ?></td>
-        <td><?= $row['per_batch'] ?></td>
-        <td><?= $row['satuan_batch'] ?></td>
-        <td><?= $row['jumlah_perlot'] ?></td>
-        <td><?= $row['jumlah_lot'] ?></td>
-        <?php if($row['jumlah_lot'] > 0 ):
-          for($i = 0; $i < $row['jumlah_lot']; $i++): ?>
-        <td></td>
-        <?php endfor; else:?>
-        <td colspan="10"></td>
-      <?php endif; ?>
+        <td class="nope"><?= $no++ ?></td>
+        <td class="nope"><?= $row['nama_bahan'] ?></td>
+        <td class="nope"><?= $row['per_batch'] ?></td>
+        <td class="nope"><?= $row['satuan_batch'] ?></td>
+        <td class="nope"><?= $row['jumlah_perlot'] ?></td>
+        <td class="nope"><?= $row['jumlah_lot'] ?></td>
+        <?php for($i = 1; $i <= 5; $i++): ?>
+        <td class="col<?= $i ?>">&nbsp;</td>
+        <?php endfor; ?>
       </tr>
       <?php endforeach; ?>
     </tbody>
@@ -152,7 +149,7 @@
         <td><?= $row['nama_bahan'] ?></td>
         <td><?= $row['jumlah'] ?></td>
         <td><?= $row['satuan'] ?></td>
-        <td><?= $row['aktual'] ?></td>
+        <td></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
@@ -161,7 +158,7 @@
   <div class="panel panel-default">
     <div class="panel-body text-right">
       <a href="<?= base_url() ?>index/modul/Produksi_perintah-master-index" class="btn btn-default">Kembali</a>
-      <?php if($session_detail->id == 5 || strpos(strtolower($session_detail->name), 'ppic') === true): ?>
+      <?php if($session_detail->id == 5 || strpos(strtolower($session_detail->nama), 'ppic') === true): ?>
       <button id="setujui<?= base64_url_decode($this->uri->segment(4)) ?>" class="btn btn-success" data-toggle="popover" data-placement="top" onclick="confirmApprove(this)" data-html="true" title="Setujui dokumen ini?" <?= $perintah_produksi->status == 1 ? 'disabled' : null;?>>Setujui</button>
       <?php endif; ?>
     </div>
@@ -292,6 +289,36 @@ table.panel .ttd-field{
 }
 </style>
 <script type="text/javascript">
+$('table.penimbanganAktual tr').each(function() {
+  var tr = this;
+  var counter = 0;
+      
+  $('td', tr).each(function(index, value) {
+    var td = $(this);
+    
+    if (td.text() == "") {
+      counter++;
+      td.remove();
+    }
+  });
+  
+  if (counter !== 0) {
+    var testCounter = parseInt(counter + 1,10);
+    $('td:not(.nope)', tr)
+      .attr('colSpan', '' + testCounter +'');
+  }
+});
+
+$('td.colspans').each(function(){
+  var td = $(this);
+  var colspans = [];
+  
+  td.siblings().each(function() {
+    colspans.push(($(this).attr('colSpan')) == null ? 1 : $(this).attr('colSpan'));
+  });
+  
+  td.text(colspans.join(',')); 
+});
 function confirmApprove(el){
   var element = $(el).attr("id");
   var id  = element.replace("setujui","");

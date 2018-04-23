@@ -6,14 +6,14 @@
   </div>
 </div>
   <div class="row">
-    <h3><strong>Master</strong> - Satuan</h3>
+    <h3><strong>Master</strong> - Paket</h3>
   </div>
    <div class="row" style="margin-top:10px;">
       <table id="TableMain" class="table table-striped table-bordered" cellspacing="0" width="100%">
           <thead>
               <tr>
                   <th class="text-center no-sort">#</th>
-                  <th class="text-center">Nama Satuan</th>
+                  <th class="text-center">Nama Paket</th>
                   <th class="text-center" class="hidden-xs">Tanggal Buat</th>
                   <th class="text-center no-sort">Aksi</th>
               </tr>
@@ -26,7 +26,7 @@
    </div>
    <!-- Button trigger modal -->
    <button type="button" class="btn btn-add btn-lg"  onclick="showAdd()">
-     Tambah Satuan
+     Tambah Paket
    </button>
 </div>
 <!-- /.container -->
@@ -37,16 +37,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Tambah Satuan</h4>
+        <h4 class="modal-title" id="myModalLabel">Tambah Paket</h4>
       </div>
       <form action="" method="POST" id="myform">      
         <div class="modal-body">
            <div class="row">
              <div class="col-sm-12">
                 <div class="form-group">
-                 <label for="nama">Nama Satuan</label>
-                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Satuan">
-                 <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id" placeholder="ID Satuan">
+                 <label for="nama">Nama Paket</label>
+                 <input type="text" name="nama" maxlength="50" Required class="form-control" id="nama" placeholder="Nama Paket">
+                 <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id" placeholder="ID Paket">
                </div>
              </div>
         </div>
@@ -106,14 +106,14 @@
   
   
   function showAdd(){
-    $("#myModalLabel").text("Tambah Satuan");
+    $("#myModalLabel").text("Tambah Paket");
     $("#id").val("");
     $("#nama").val("");
     $("#modalform").modal("show");    
   }
   
   function showUpdate(i){
-    $("#myModalLabel").text("Ubah Satuan");
+    $("#myModalLabel").text("Ubah Paket");
     $("#id").val(jsonlist[i].id);
     $("#nama").val(jsonlist[i].nama);
 	  $("#modalform").modal("show");
@@ -122,9 +122,9 @@
   $("#myform").on('submit', function(e){
     e.preventDefault();
     var notifText = 'Data berhasil ditambahkan!';
-    var action = "<?php echo base_url('Master_satuan/Master/add')?>/";
+    var action = "<?php echo base_url('Master_paket/Master/add')?>/";
     if ($("#id").val() != ""){
-      action = "<?php echo base_url('Master_satuan/Master/edit')?>/";
+      action = "<?php echo base_url('Master_paket/Master/edit')?>/";
       notifText = 'Data berhasil diubah!';
 	  }
 	  var param = $('#myform').serialize();
@@ -172,7 +172,7 @@
 		//console.log(jsonlist[i]);
 		$.ajax({
           type: 'post',
-          url: '<?php echo base_url('Master_satuan/Master/delete'); ?>/',
+          url: '<?php echo base_url('Master_paket/Master/delete'); ?>/',
           data: {"id":jsonlist[i].id},
 		      dataType: 'json',
           beforeSend: function() { 

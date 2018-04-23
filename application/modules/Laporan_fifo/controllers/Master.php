@@ -81,6 +81,7 @@ class Master extends MX_Controller {
             $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
         }
         $query=$this->Laporanfifomodel->rawQuery($sql);
+        $data['data_list'] = $query->result();
         $this->load->view('Laporan_fifo/cetak-produsen', $data);
     }
     function cetakdistributor(){

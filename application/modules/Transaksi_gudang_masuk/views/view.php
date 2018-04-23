@@ -19,6 +19,7 @@
           <th class="text-center no-sort">Tanggal Masuk</th>
           <?php if($session_detail->id == 7): ?>
           <th class="text-center no-sort">Harga Pembelian</th>
+          <th class="text-center no-sort">MOQ</th>
           <?php endif; ?>
           <th class="text-center hidden-xs no-sort">Aksi</th>
         </tr>
@@ -165,6 +166,14 @@
               <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id_harga" placeholder="ID Barang">
             </div>
           </div>
+
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="moq">MOQ</label>
+              <input type="text" name="moq" maxlength="50" Required class="form-control" id="moq" placeholder="MOQ">
+            </div>
+          </div>
+
           </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -220,6 +229,7 @@
     var data = list_data.filter(function (index) { return index.id == id })[0];
     $("#id_harga").val(data.id);
     $("#harga").val(data.harga_pembelian);
+    $("#moq").val(data.moq);
     $("#myModalLabel").text("Ubah Harga Pembelian");
     $('#hargapembelian').modal('show');
   }

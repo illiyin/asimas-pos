@@ -19,9 +19,11 @@
     <thead>
       <tr>
         <th class="nomer">No.</th>
-        <th>Nama Barang</th>
-        <th>Kategori</th>
-        <th>Stok Akhir</th>
+        <th class="text-center">Nama Bahan</th>
+        <th class="text-center">Kategori</th>
+        <th class="text-center">Stok Awal</th>
+        <th class="text-center">Stok Akhir</th>
+        <th class="text-center">Tanggal</th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +36,11 @@
         foreach ($data_list as $key => $row) { ?>
         <tr>
           <td><?php echo ($key+1)?></td>
-          <td><?php echo $row->nama_barang?></td>
+          <td><?php echo $row->nama_bahan?></td>
           <td><?php echo $row->nama_kategori?></td>
-          <td><?php echo $row->stok_akhir?></td>
+          <td class="text-center"><?php echo $row->stok_awal?></td>
+          <td class="text-center"><?php echo $row->stok_akhir?></td>
+          <td class="text-center"><?php echo date('M, Y', strtotime($row->tanggal))?></td>
         </tr>
       <?php }
       } ?>

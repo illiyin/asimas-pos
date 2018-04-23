@@ -78,12 +78,12 @@
                  <input type="text" maxlength="50" name="leadtime" class="form-control" id="leadtime" placeholder="Lead Time" required="">
                </div>
              </div>
-             <div class="col-sm-6">
+             <!-- <div class="col-sm-6">
                <div class="form-group">
                  <label for="email">Minumum Order Quantity (MOQ)</label>
                  <input type="text" maxlength="50" name="moq" class="form-control" id="moq" placeholder="Minumum Order Quantity (MOQ)" required="">
                </div>
-             </div>
+             </div> -->
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="">Status</label>
@@ -186,7 +186,7 @@
     $("#no_telp").val("");
     $("#email").val("");
     $("#leadtime").val("");
-    $("#moq").val("");
+    // $("#moq").val("");
     $("#modalform").modal("show");
   }
 
@@ -198,7 +198,7 @@
     $("#no_telp").val(jsonList[i].no_telp);
     $("#email").val(jsonList[i].email);
     $("#leadtime").val(jsonList[i].lead_time);
-    $("#moq").val(jsonList[i].moq);
+    // $("#moq").val(jsonList[i].moq);
     $("input[name=approvement][value='"+ jsonList[i].status +"']").prop("checked",true);
     $("#modalform").modal("show");
   }
@@ -228,7 +228,7 @@
       },
       success: function (data) {
         if (data.status == '3'){
-          // jsonList = data.list;
+          jsonList = data.list;
           // loadData(jsonList);
           initDataTable.ajax.reload();
           $("#modalform").modal('hide');

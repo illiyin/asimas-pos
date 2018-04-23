@@ -98,7 +98,7 @@
           <th class="text-center no-sort">Batch</th>
           <th class="text-center no-sort">Expired Date</th>
           <th class="text-center no-sort">Keterangan</th>
-          <th class="text-center no-sort">Harga</th>
+          <!-- <th class="text-center no-sort">Harga</th> -->
         </tr>
       </thead>
 

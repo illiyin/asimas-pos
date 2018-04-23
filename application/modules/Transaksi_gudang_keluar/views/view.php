@@ -50,12 +50,12 @@
                 <input type="text" class="form-control" name="no_transaksi" id="no_transaksi" placeholder="No. Transaksi" required>
               </div>
             </div>
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
               <div class="form-group">
                 <label for="harga_jual">Harga Penjualan</label>
                 <input type="text" class="form-control" name="harga_jual" id="harga_jual" placeholder="Harga Penjualan" required>
               </div>
-            </div>
+            </div> -->
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="tanggal_keluar">Tanggal Keluar</label>
@@ -163,7 +163,7 @@ function showUpdate(id){
   $("#no_transaksi").val(dataDetail.no_transaksi);
   $("#no_batch").val(dataDetail.no_batch);
   $("#no_transaksi").prop('disabled', true);
-  $("#harga_jual").val(dataDetail.harga_penjualan);
+  // $("#harga_jual").val(dataDetail.harga_penjualan);
   $("#jumlah_keluar").val(dataDetail.jumlah_keluar);
   $("#keterangan").val(dataDetail.keterangan);
   var expiredDate = dataDetail.expired_date;

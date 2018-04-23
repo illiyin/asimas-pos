@@ -19,9 +19,13 @@
     <thead>
       <tr>
         <th class="nomer">No.</th>
-        <th>Nama Barang</th>
-        <th>Kategori</th>
+        <th>Nama Bahan</th>
+        <th>Satuan</th>
+        <th>Stok Awal</th>
+        <th>Masuk</th>
+        <th>Keluar</th>
         <th>Stok Akhir</th>
+        <th>Expired</th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +38,13 @@
         foreach ($data_list as $key => $row) { ?>
         <tr>
           <td><?php echo ($key+1)?></td>
-          <td><?php echo $row->nama_barang?></td>
-          <td><?php echo $row->nama_kategori?></td>
-          <td><?php echo $row->stok_akhir?></td>
+          <td><?php echo $row->nama_bahan?></td>
+          <td><?php echo $row->nama_satuan?></td>
+          <td class="text-center"><?php echo $row->stok_awal?></td>
+          <td class="text-center"><?php echo $row->jumlah_masuk?></td>
+          <td class="text-center"><?php echo $row->jumlah_keluar?></td>
+          <td class="text-center"><?php echo $row->stok_akhir?></td>
+          <td><?php echo $row->expired_date == '0000-00-00' ? '-' : date('d/m/Y', strtotime($row->expired_date))?></td>
         </tr>
       <?php }
       } ?>

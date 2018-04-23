@@ -47,10 +47,13 @@
       <thead>
         <tr>
           <th class="text-center no-sort">#</th>
-          <th class="text-center no-sort">No. Dokumen</th>
+          <th class="text-center no-sort">Nama Produk</th>
           <th class="text-center no-sort">Revisi Ke</th>
           <th class="text-center no-sort">Tanggal Efektif</th>
           <th class="text-center no-sort">Status</th>
+          <?php if($session_detail->id == 9): ?>
+          <th class="text-center no-sort">Status Valid</th>
+          <?php endif; ?>
           <?php if($session_detail->id == 9 || $session_detail->id == 5): ?>
           <th class="text-center no-sort">Aksi</th>
           <?php endif; ?>
@@ -175,6 +178,33 @@ function deleteData(element){
           styling: 'bootstrap3'
         });
       }
+    }
+  });
+}
+
+function changeValid(element){
+  var el = $(element).attr("id");
+  var id  = el.replace("valid","");
+  var i = parseInt(id);
+  var status = $(element).attr("data-status");
+
+  $.ajax({
+    type: 'post',
+    url: '<?php echo base_url('Produksi_perintah/Master/setValid'); ?>/',
+    data: {"id":i, "status": status},
+    dataType: 'json',
+    success: function (data) {
+      initDataTable.ajax.reload();
+    // $("#notif-top").fadeIn(500);
+    // $("#notif-top").fadeOut(2500);
+      new PNotify({
+        title: 'Sukses',
+        text: 'Data berhasil diubah!',
+        type: 'success',
+        hide: true,
+        delay: 5000,
+        styling: 'bootstrap3'
+      });
     }
   });
 }

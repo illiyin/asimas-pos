@@ -21,18 +21,18 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_stok_bahan_baku/view');
     }
     function cetak(){
-        $sql = "SELECT ";
-        $sql .= "m_barang.nama_barang,
-                m_bahan_kategori.nama AS nama_kategori,
-                m_barang.stok_akhir
-                FROM m_barang, m_bahan_kategori WHERE m_barang.deleted = 1 AND m_barang.id_kategori_bahan = m_bahan_kategori.id";
+        $sql = "SELECT
+                bahan.nama AS nama_bahan , kategori.nama AS nama_kategori,
+                tbahan.saldo_bulan_kemarin AS stok_awal , tbahan.saldo_bulan_sekarang AS stok_akhir, tbahan.tanggal
+                FROM m_bahan bahan, m_bahan_kategori kategori , tt_bahan tbahan
+                WHERE bahan.id_kategori_bahan = kategori.id AND tbahan.id_bahan = bahan.id AND kategori.nama LIKE '%bahan baku%'";
         if( !empty($requestData['search']['value']) ) {
-            $sql.=" AND ( m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR m_bahan_kategori.nama LIKE '%".$requestData['search']['value']."%' )";
+            $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
         }
         $query=$this->Laporanstokbahanbaku->rawQuery($sql);
         $data['data_list'] = $query->result();
-    	$this->load->view('Laporan_stok_gudang/cetak', $data);
+    	$this->load->view('Laporan_stok_bahan_baku/cetak', $data);
     }
     function data(){
         $requestData= $_REQUEST;

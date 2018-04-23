@@ -9,6 +9,7 @@ class Master extends MX_Controller {
         $this->modul .= $this->router->fetch_class();
         $this->fungsi = $this->router->fetch_method();
         $this->_insertLog();
+        $this->session_detail = pegawaiLevel($this->session->userdata('id_user_level'));
     }
     function _insertLog($fungsi = null){
         $id_user = $this->session->userdata('id_user');
@@ -38,6 +39,7 @@ class Master extends MX_Controller {
                         WHERE bahan.id_kategori_bahan = kategori.id AND kategori.nama LIKE '%bahan kemas%' AND bahan.deleted = 1";
       $data['bahan_baku'] = $this->Perintahproduksimodel->rawQuery($listBahanBaku)->result();
       $data['bahan_kemas'] = $this->Perintahproduksimodel->rawQuery($listBahanKemas)->result();
+      $data['list_paket'] = $this->Perintahproduksimodel->select($dataCondition, 'm_paket')->result();
       $this->load->view('Produksi_perintah/perintahBaru', $data);
     }
     function perintahrevisi(){
@@ -105,11 +107,11 @@ class Master extends MX_Controller {
       foreach($bahanBaku as $row) {
         $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
         $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
-        $satuanKaplet = $this->Perintahproduksimodel->select(array('id' => $row->satuan_kaplet), 'm_satuan')->row();
+        $satuanPaket = $this->Perintahproduksimodel->select(array('id' => $row->satuan_paket), 'm_satuan')->row();
         $dataBahanBaku[] = array(
             'nama_bahan' => $bahan->nama,
             'per_kaplet' => $row->per_kaplet,
-            'satuan_kaplet' => $satuanKaplet->nama,
+            'satuan_paket' => $satuanPaket->nama,
             'per_batch' => $row->per_batch,
             'satuan_batch' => $satuanBatch->nama,
             'jumlah_lot' => $row->jumlah_lot,
@@ -149,13 +151,13 @@ class Master extends MX_Controller {
       foreach($bahanBaku as $row) {
         $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
         $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
-        $satuanKaplet = $this->Perintahproduksimodel->select(array('id' => $row->satuan_kaplet), 'm_satuan')->row();
+        $satuanPaket = $this->Perintahproduksimodel->select(array('id' => $row->satuan_paket), 'm_satuan')->row();
         $dataBahanBaku[] = array(
             'id_bahan' => $bahan->id,
             'nama_bahan' => $bahan->nama,
             'per_kaplet' => $row->per_kaplet,
-            'id_satuan_kaplet' => $satuanKaplet->id,
-            'satuan_kaplet' => $satuanKaplet->nama,
+            'id_satuan_kaplet' => $satuanPaket->id,
+            'satuan_kaplet' => $satuanPaket->nama,
             'per_batch' => $row->per_batch,
             'id_satuan_batch' => $satuanBatch->id,
             'satuan_batch' => $satuanBatch->nama,
@@ -199,6 +201,7 @@ class Master extends MX_Controller {
     }
     function addData(){
       $params = $this->input->post();
+
       // R&D
       $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
       $dataInsert['no_dokumen'] = $params['no_dokumen'];
@@ -222,10 +225,13 @@ class Master extends MX_Controller {
           $bahan_baku[] = array(
               'id_perintah_produksi' => $id_perintah_produksi,
               'id_bahan' => $row['id_bahan'],
-              'per_kaplet' => $row['per_kaplet'],
-              'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
+              'id_paket' => $row['id_paket'],
+              'jumlah_paket' => $row['jumlah_paket'],
+              'satuan_paket' => $row['satuan_paket'],
+              // 'per_kaplet' => $row['per_kaplet'],
+              // 'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
               'per_batch' => $row['per_batch'],
-              'satuan_batch' => is_numeric($row['satuan_batch']) ? $row['satuan_batch'] : $row['id_satuan_batch'],
+              'satuan_batch' => is_numeric($row['satuan_batch']) ? $row['satuan_batch'] : 0,
               'jumlah_lot' => $row['jumlah_lot'],
               'jumlah_perlot' => $row['jumlah_perlot'],
               'date_add' => date('Y-m-d H:i:s'),
@@ -389,19 +395,27 @@ class Master extends MX_Controller {
       foreach ($query->result_array() as $row) {
           $nestedData     =   array();
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
-          $dokumen = $row['no_dokumen'] ? '<a href="Produksi_perintah-master-detail/'.base64_url_encode($row['id']).'" title="Detail dan Setujui">'.$row["no_dokumen"].'</a>' : 'Belum disetting';
+          $dokumen = $row['no_dokumen'] ? '<a href="Produksi_perintah-master-detail/'.base64_url_encode($row['id']).'" title="Detail dan Setujui">'.$row["nama_produk"].'</a>' : 'Belum disetting';
           $nestedData[]   =   $dokumen;
           $nestedData[]   =   $row["revisi"];
           $nestedData[]   =   ($row['tanggal_efektif'] == '0000-00-00'? 'Belum disetting' : date('d/m/Y', strtotime($row["tanggal_efektif"])));
           $statusValue = $row["status"] == 0 ? 'Belum Disetujui' : 'Disetujui';
           $statusFilter = $row["status"] == 0 ? 'notapproved' : 'approved';
           $nestedData[]   =   "<span data-filter='".$statusFilter."'>".$statusValue."</span>";
-          $nestedData[]  .=   '<td class="text-center"><div class="btn-group">'
+          $action =   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
                 .'<a class="btn btn-sm btn-default" href="Produksi_perintah-master-edit/'.base64_url_encode($row['id']).'" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil"></i></a>'
-                .'<a href="Produksi_perintah-master-cetak/'.base64_url_encode($row['id']).'" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Cetak Dokumen"><i class="fa fa-print"></i></a>'
-               .'</div>'
+                .'<a href="Produksi_perintah-master-cetak/'.base64_url_encode($row['id']).'" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-html="true" title="Cetak Dokumen"><i class="fa fa-print"></i></a>';
+          if($this->session_detail->id == 9) {
+            $statusValid = $row["valid"] == 0 ? "Non Valid" : "Valid";
+            $iconValid = $row["valid"] == 0 ? "fa fa-check-square-o" : "fa fa-minus-square";
+            $nestedData[] = $statusValid;
+            $action .= '<a id="valid'.$row["id"].'" href="javascript:void(0)" onclick="changeValid(this)" class="btn btn-sm btn-default" data-toggle="popover" data-placement="top" data-status="'.$row['valid'].'" title="'.$statusValid.'"><i class="'.$iconValid.'"></i></a>';
+          }
+
+          $action .= '</div>'
             .'</td>';
+          $nestedData[]  .= $action;
           // Edit: Produksi_perintah-master-edit/'.base64_url_encode($row['id']).'
           $data[] = $nestedData; $i++;
       }
@@ -505,5 +519,16 @@ class Master extends MX_Controller {
           'message' => $statusStok == 'lanjut' ?'Berhasil menyetujui dokumen ini!' : null
         );
       echo json_encode($result);
+    }
+    function setValid(){
+      $params = $this->input->post();
+      if(!$params) redirect();
+
+      $dataUpdate['valid'] = $params['status'] == 0 ? 1 : 0;
+      $dataCondition['id'] = $params['id'];
+      $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
+      $dataSelect['deleted'] = 1;
+      $list = $this->Perintahproduksimodel->select(array('deleted' => 0), 'm_perintah_produksi');
+      echo json_encode(['list' => $list]);
     }
 }

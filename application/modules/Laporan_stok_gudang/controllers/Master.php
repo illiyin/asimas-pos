@@ -22,13 +22,14 @@ class Master extends MX_Controller {
     }
     function cetak(){
       $sql = "SELECT ";
-      $sql .= "m_barang.nama_barang,
-              m_bahan_kategori.nama AS nama_kategori,
-              m_barang.stok_akhir
-              FROM m_barang, m_bahan_kategori WHERE m_barang.deleted = 1 AND m_barang.id_kategori_bahan = m_bahan_kategori.id";
+      $sql .= " bahan.nama AS nama_bahan , tbahan.jumlah_masuk, tbahan.jumlah_keluar , bahan.expired_date,
+              tbahan.saldo_bulan_kemarin AS stok_awal , tbahan.saldo_bulan_sekarang AS stok_akhir, tbahan.tanggal,
+              satuan.nama AS nama_satuan
+              FROM m_bahan bahan, tt_bahan tbahan, m_satuan satuan
+              WHERE bahan.deleted = 1 AND tbahan.id_bahan = bahan.id AND satuan.id = bahan.id_satuan";
       if( !empty($requestData['search']['value']) ) {
-          $sql.=" AND ( m_barang.nama_barang LIKE '%".$requestData['search']['value']."%' ";
-          $sql.=" OR m_bahan_kategori.nama LIKE '%".$requestData['search']['value']."%' )";
+          $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
+          $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
       }
       $query=$this->Laporanstokgudangmodel->rawQuery($sql);
       $data['data_list'] = $query->result();

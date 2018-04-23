@@ -84,8 +84,8 @@ class Master extends MX_Controller {
         $dataInsert['no_telp']          = $params['no_telp'];
         $dataInsert['email']            = $params['email'];
         $dataInsert['lead_time']        = $params['leadtime'];
-        $dataInsert['moq']              = $params['moq'];
-        $dataInsert['status']           = $params['approvement'];
+        // $dataInsert['moq']              = $params['moq'];
+        $dataInsert['status']           = $params['approvement'] ? $params['approvement'] : 0;
         $dataInsert['last_edited']      = date("Y-m-d H:i:s");
         $dataInsert['date_add']         = date("Y-m-d H:i:s");
         $dataInsert['add_by']           = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
@@ -97,7 +97,7 @@ class Master extends MX_Controller {
             $insert = $this->Suppliermodel->insert($dataInsert, 'm_supplier');
             if($insert){
                 $dataSelect['deleted'] = 1;
-                $list = $this->Suppliermodel->select($dataSelect, 'm_supplier', 'date_add', 'DESC')->result();
+                $list = $this->Suppliermodel->select($dataSelect, 'm_supplier', 'date_add')->result();
                 echo json_encode(array('status' => 3,'list' => $list));
             }else{
                 echo json_encode(array('status' => 1));
@@ -117,8 +117,8 @@ class Master extends MX_Controller {
         $dataUpdate['no_telp']          = $params['no_telp'];
         $dataUpdate['email']            = $params['email'];
         $dataUpdate['lead_time']        = $params['leadtime'];
-        $dataUpdate['moq']              = $params['moq'];
-        $dataUpdate['status']           = $params['approvement'];
+        // $dataUpdate['moq']              = $params['moq'];
+        $dataUpdate['status']           = $params['approvement'] ? $params['approvement'] : 0;
         $dataUpdate['last_edited']      = date("Y-m-d H:i:s");
         $dataUpdate['edited_by']        = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
 
@@ -127,7 +127,7 @@ class Master extends MX_Controller {
             $update = $this->Suppliermodel->update($dataCondition, $dataUpdate, 'm_supplier');
             if($update){
                 $dataSelect['deleted'] = 1;
-                $list = $this->Suppliermodel->select($dataSelect, 'm_supplier', 'date_add', 'DESC')->result();
+                $list = $this->Suppliermodel->select($dataSelect, 'm_supplier', 'date_add')->result();
                 echo json_encode(array('status' => '3','list' => $list));
             }else{
                 echo json_encode(array( 'status'=>'2' ));
@@ -144,7 +144,7 @@ class Master extends MX_Controller {
             $update = $this->Suppliermodel->update($dataCondition, $dataUpdate, 'm_supplier');
             if($update){
                 $dataSelect['deleted'] = 1;
-                $list = $this->Suppliermodel->select($dataSelect, 'm_supplier', 'date_add', 'DESC')->result();
+                $list = $this->Suppliermodel->select($dataSelect, 'm_supplier', 'date_add')->result();
                 echo json_encode(array('status' => '3','list' => $list));
             }else{
                 echo "1";
