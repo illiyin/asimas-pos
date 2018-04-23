@@ -158,10 +158,23 @@
           </div>
           <div class="form-group">
             <div class="col-sm-3">
-              <label for="">Per Kaplet</label>
+              <label for="">Nama Paket</label>
             </div>
             <div class="col-sm-9">
-              <input type="text" class="form-control" name="per_kaplet" id="per_kaplet">
+              <select name="paket" class="form-control" id="paket" onchange="showJumlahPaket(this.value)">
+                <option value="" disabled selected>--Pilih Paket--</option>
+                <?php foreach($list_paket as $row): ?>
+                <option value="<?= $row->id ?>"><?= $row->nama ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="kolomPaket">
+            <div class="col-sm-3">
+              <label for="">Jumlah</label>
+            </div>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="jumlah_paket" id="jumlah_paket">
             </div>
           </div>
           <div class="form-group">
@@ -296,6 +309,7 @@ var tempBahanKemas = [];
 var numBahanBaku = 1;
 var numBahanKemas = 1;
 $(document).ready(function(){
+  $("#kolomPaket").hide();
   // Append Bahan Baku ke Table
   if(bahan_baku != null) {
     for(i = 0; i < bahan_baku.length; i++){
@@ -342,26 +356,40 @@ function showBahanKemas() {
   $("#formBahanKemas")[0].reset();
   $('#modalBahanKemas').modal('show');
 }
+function showJumlahPaket(id){
+  $("#kolomPaket").show();
+}
 $("#formBahanBaku").on('submit', function(e){
     e.preventDefault();
     var num = numBahanBaku++;
     var form = $('#formBahanBaku').serializeArray();
     var dataBahan = getMasterById(list_bahan, form[0].value);
-    var satuanKaplet = getMasterById(list_satuan, form[2].value);
-    var satuanBatch = getMasterById(list_satuan, form[4].value);
+    var satuanPaket = getMasterById(list_satuan, form[3].value);
+    var satuanBatch = getMasterById(list_satuan, form[5].value);
     tempBahanBaku.push({
-        'num': num,
+        // 'num': num,
+        // 'id_bahan': form[0].value,
+        // 'per_kaplet': form[1].value,
+        // 'satuan_kaplet': form[2].value,
+        // 'per_batch': form[3].value,
+        // 'satuan_batch': form[4].value,
+        // 'jumlah_lot': form[5].value,
+        // 'jumlah_perlot': form[6].value
         'id_bahan': form[0].value,
-        'per_kaplet': form[1].value,
-        'satuan_kaplet': form[2].value,
-        'per_batch': form[3].value,
-        'satuan_batch': form[4].value,
-        'jumlah_lot': form[5].value,
-        'jumlah_perlot': form[6].value
+        // 'per_kaplet': form[1].value,
+        // 'satuan_kaplet': form[2].value,
+        'id_paket': $("#paket option:selected").val(),
+        'jumlah_paket': form[2].value,
+        'satuan_paket': satuanPaket.id,
+        'per_batch': form[4].value,
+        'satuan_batch': form[5].value,
+        'jumlah_lot': form[6].value,
+        'jumlah_perlot': form[7].value
     });
     $("#dataBahanBaku")
-    .append("<tr id='bahanbaku"+num+"'><td>"+ dataBahan.nama +"</td><td>Per Kaplet: "+form[1].value+''+satuanKaplet.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
+    .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>"+ $("#paket option:selected").text() +": "+form[2].value+''+satuanPaket.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
     $("#formBahanBaku")[0].reset();
+    $("#kolomPaket").hide();
 });
 
 $("#formBahanKemas").on('submit', function(e){

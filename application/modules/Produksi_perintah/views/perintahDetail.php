@@ -79,7 +79,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php $no = 1; foreach($bahan_baku as $row): ?>
+      <?php $no = 1; if(count($bahan_baku) > 0): foreach($bahan_baku as $row): ?>
       <tr>
         <td><?= $no++ ?></td>
         <td><?= $row['nama_bahan'] ?></td>
@@ -88,7 +88,7 @@
         <td><?= $row['per_batch'] ?></td>
         <td><?= $row['satuan_batch'] ?></td>
       </tr>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
@@ -115,7 +115,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php $no = 1; foreach($bahan_baku as $row): ?>
+      <?php $no = 1; if(count($bahan_baku) > 0): foreach($bahan_baku as $row): ?>
       <tr>
         <td class="nope"><?= $no++ ?></td>
         <td class="nope"><?= $row['nama_bahan'] ?></td>
@@ -127,7 +127,7 @@
         <td class="col<?= $i ?>">&nbsp;</td>
         <?php endfor; ?>
       </tr>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
@@ -143,7 +143,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php $no = 1; foreach($bahan_kemas as $row): ?>
+      <?php $no = 1; if(count($bahan_kemas) > 0): foreach($bahan_kemas as $row): ?>
       <tr>
         <td><?= $no++ ?></td>
         <td><?= $row['nama_bahan'] ?></td>
@@ -151,7 +151,7 @@
         <td><?= $row['satuan'] ?></td>
         <td></td>
       </tr>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </tbody>
   </table>
 

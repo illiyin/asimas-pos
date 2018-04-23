@@ -197,6 +197,7 @@ class Master extends MX_Controller {
                         WHERE bahan.id_kategori_bahan = kategori.id AND kategori.nama LIKE '%bahan kemas%' AND bahan.deleted = 1";
       $data['bahan_baku'] = $this->Perintahproduksimodel->rawQuery($listBahanBaku)->result();
       $data['bahan_kemas'] = $this->Perintahproduksimodel->rawQuery($listBahanKemas)->result();
+      $data['list_paket'] = $this->Perintahproduksimodel->select($dataCondition, 'm_paket')->result();
       $this->load->view('Produksi_perintah/perintahEdit', $data);
     }
     function addData(){
@@ -303,8 +304,11 @@ class Master extends MX_Controller {
             $bahan_baku[] = array(
                 'id_perintah_produksi' => $params['id'],
                 'id_bahan' => $row['id_bahan'],
-                'per_kaplet' => $row['per_kaplet'],
-                'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
+                'id_paket' => $row['id_paket'],
+                'jumlah_paket' => $row['jumlah_paket'],
+                'satuan_paket' => $row['satuan_paket'],
+                // 'per_kaplet' => $row['per_kaplet'],
+                // 'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
                 'per_batch' => $row['per_batch'],
                 'satuan_batch' => is_numeric($row['satuan_batch']) ? $row['satuan_batch'] : $row['id_satuan_batch'],
                 'jumlah_lot' => $row['jumlah_lot'],
