@@ -22,6 +22,7 @@ class Master extends MX_Controller {
         $data['list_data'] = $this->Transaksigudangkeluarmodel->select('', 'tt_gudang_keluar')->result();
         $data['list_bahan'] = $this->Transaksigudangkeluarmodel->select($dataCondition, 'm_bahan')->result();
         $data['list_satuan'] = $this->Transaksigudangkeluarmodel->select($dataCondition, 'm_satuan')->result();
+        $data['list_batch'] = $this->Transaksigudangkeluarmodel->get('tt_gudang_masuk')->result();
         $data['list_distributor'] = $this->Transaksigudangkeluarmodel->select($dataCondition, 'm_distributor')->result();
     	$this->load->view('Transaksi_gudang_keluar/view', $data);
     }

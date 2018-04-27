@@ -94,6 +94,14 @@
         </div>
         <div class="form-group">
           <div class="col-sm-3">
+            <label for="" class="control-label">Alias</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="alias" id="alias" value="<?= $perintah_produksi->alias ?>" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3">
             <label for="" class="control-label">Besar Batch</label>
           </div>
           <div class="col-sm-9">
@@ -449,6 +457,7 @@ $("#formPerintahProduksi").on('submit', function(e){
         // R&D
         $("#tanggal_efektif").attr('value', $list.tanggal_efektif);
         $("#nama_produk").attr('value', $list.nama_produk);
+        $("#alias").attr('value', $list.alias);
         $("#besar_batch").attr('value', $list.besar_batch);
         // PPIC
         $("#no_pp").attr('value', $list.no_pp);

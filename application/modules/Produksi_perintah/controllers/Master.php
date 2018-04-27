@@ -222,84 +222,75 @@ class Master extends MX_Controller {
     function addData(){
       $params = $this->input->post();
 
-      $checkNoDoc = $this->Perintahproduksimodel->select(array('no_dokumen' => $params['no_dokumen']), 'm_perintah_produksi');
-      $row = $checkNoDoc->num_rows();
+      // R&D
+      $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
+      $dataInsert['no_dokumen'] = $params['no_dokumen'];
+      $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : date('Y-m-d');
+      $dataInsert['nama_produk']  = $params['nama_produk'];
+      $dataInsert['alias'] = $params['alias'];
+      $dataInsert['besar_batch'] = $params['besar_batch'];
+      $dataInsert['revisi'] = 1;
+      $dataInsert['date_added'] = date("Y-m-d H:i:s");
+      $dataInsert['added_by'] = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
+      $dataInsert['last_modified'] = date('Y-m-d H:i:s');
+      $dataInsert['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
+      $id_perintah_produksi = $this->Perintahproduksimodel->insert_id($dataInsert, 'm_perintah_produksi');
 
-      if($row == 0) {
-        // R&D
-        $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
-        $dataInsert['no_dokumen'] = $params['no_dokumen'];
-        $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : date('Y-m-d');
-        $dataInsert['nama_produk']  = $params['nama_produk'];
-        $dataInsert['besar_batch'] = $params['besar_batch'];
-        $dataInsert['revisi'] = 0;
-        $dataInsert['date_added'] = date("Y-m-d H:i:s");
-        $dataInsert['added_by'] = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
-        $dataInsert['last_modified'] = date('Y-m-d H:i:s');
-        $dataInsert['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
-        $id_perintah_produksi = $this->Perintahproduksimodel->insert_id($dataInsert, 'm_perintah_produksi');
+      // Data Bahan Baku & Penimbangan Aktual
+      $bahanBaku = $params['bahan_baku'];
+      $dataBahanBaku = json_decode($bahanBaku, true);
+      $bahan_baku = null;
 
-        // Data Bahan Baku & Penimbangan Aktual
-        $bahanBaku = $params['bahan_baku'];
-        $dataBahanBaku = json_decode($bahanBaku, true);
-        $bahan_baku = null;
-
-        if( count($dataBahanBaku) > 0) {
-          foreach($dataBahanBaku as $num => $row) {
-            $bahan_baku[] = array(
-                'id_perintah_produksi' => $id_perintah_produksi,
-                'id_bahan' => $row['id_bahan'],
-                'id_paket' => $row['id_paket'],
-                'jumlah_paket' => $row['jumlah_paket'],
-                'satuan_paket' => $row['satuan_paket'],
-                // 'per_kaplet' => $row['per_kaplet'],
-                // 'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
-                'per_batch' => $row['per_batch'],
-                'satuan_batch' => is_numeric($row['satuan_batch']) ? $row['satuan_batch'] : 0,
-                'jumlah_lot' => $row['jumlah_lot'],
-                'jumlah_perlot' => $row['jumlah_perlot'],
-                'date_add' => date('Y-m-d H:i:s'),
-                'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
-                'modified_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
-                'last_modified' => date('Y-m-d H:i:s'),
-                'deleted' => 1
-              );
-          }
-          $this->Perintahproduksimodel->insert_batch($bahan_baku, 'pp_bahan_baku');
+      if( count($dataBahanBaku) > 0) {
+        foreach($dataBahanBaku as $num => $row) {
+          $bahan_baku[] = array(
+              'id_perintah_produksi' => $id_perintah_produksi,
+              'id_bahan' => $row['id_bahan'],
+              'id_paket' => $row['id_paket'],
+              'jumlah_paket' => $row['jumlah_paket'],
+              'satuan_paket' => $row['satuan_paket'],
+              // 'per_kaplet' => $row['per_kaplet'],
+              // 'satuan_kaplet' => is_numeric($row['satuan_kaplet']) ? $row['satuan_kaplet'] : $row['id_satuan_kaplet'],
+              'per_batch' => $row['per_batch'],
+              'satuan_batch' => is_numeric($row['satuan_batch']) ? $row['satuan_batch'] : 0,
+              'jumlah_lot' => $row['jumlah_lot'],
+              'jumlah_perlot' => $row['jumlah_perlot'],
+              'date_add' => date('Y-m-d H:i:s'),
+              'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
+              'modified_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
+              'last_modified' => date('Y-m-d H:i:s'),
+              'deleted' => 1
+            );
         }
-
-        // Data Bahan Kemas
-        $bahanKemas = $params['bahan_kemas'];
-        $dataBahanKemas = json_decode($bahanKemas, true);
-        $bahan_kemas = null;
-
-        if( count($dataBahanKemas) > 0) {
-          foreach($dataBahanKemas as $num => $row) {
-            $bahan_kemas[] = array(
-                'id_perintah_produksi' => $id_perintah_produksi,
-                'id_bahan' => $row['id_bahan'],
-                'jumlah' => $row['jumlah'],
-                'satuan' => $row['satuan'],
-                'aktual' => $row['aktual'],
-                'date_added' => date('Y-m-d H:i:s'),
-                'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
-                'deleted' => 1
-              );
-          }
-          $this->Perintahproduksimodel->insert_batch($bahan_kemas, 'pp_bahan_kemas');
-        }
-
-        $result = array(
-            'status' => 1,
-            'message' => "Berhasil menambah dokumen baru perintah produksi",
-            'list' => $params
-          );
-      } else {
-        $result = array(
-            'status' => 0,
-            'message' => "No Dokumen sudah ada."
-          );
+        $this->Perintahproduksimodel->insert_batch($bahan_baku, 'pp_bahan_baku');
       }
+
+      // Data Bahan Kemas
+      $bahanKemas = $params['bahan_kemas'];
+      $dataBahanKemas = json_decode($bahanKemas, true);
+      $bahan_kemas = null;
+
+      if( count($dataBahanKemas) > 0) {
+        foreach($dataBahanKemas as $num => $row) {
+          $bahan_kemas[] = array(
+              'id_perintah_produksi' => $id_perintah_produksi,
+              'id_bahan' => $row['id_bahan'],
+              'jumlah' => $row['jumlah'],
+              'satuan' => $row['satuan'],
+              'aktual' => $row['aktual'],
+              'date_added' => date('Y-m-d H:i:s'),
+              'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
+              'deleted' => 1
+            );
+        }
+        $this->Perintahproduksimodel->insert_batch($bahan_kemas, 'pp_bahan_kemas');
+      }
+
+      $result = array(
+          'status' => 1,
+          'message' => "Berhasil menambah dokumen baru perintah produksi",
+          'list' => $params
+        );
       
       echo json_encode($result);
     }
@@ -309,6 +300,7 @@ class Master extends MX_Controller {
       $dataInsert['no_dokumen'] = $params['no_dokumen'];
       $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : date('Y-m-d');
       $dataInsert['nama_produk']  = $params['nama_produk'];
+      $dataInsert['alias'] = $params['alias'];
       $dataInsert['besar_batch'] = $params['besar_batch'];
       $dataInsert['revisi'] = $params['revisi'];
       $dataInsert['date_added'] = date("Y-m-d H:i:s");
@@ -390,6 +382,7 @@ class Master extends MX_Controller {
         $dataUpdate['no_dokumen'] = $params['no_dokumen'] ? $params['no_dokumen'] : $perintahProduksi->no_dokumen;
         $dataUpdate['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : $perintahProduksi->tanggal_efektif;
         $dataUpdate['nama_produk']  = $params['nama_produk'] ? $params['nama_produk'] : $perintahProduksi->nama_produk;
+        $dataUpdate['alias']  = $params['alias'] ? $params['alias'] : $perintahProduksi->alias;
         $dataUpdate['besar_batch'] = $params['besar_batch'] ? $params['besar_batch'] : $perintahProduksi->besar_batch;
         $dataUpdate['last_modified'] = date('Y-m-d H:i:s');
         $dataUpdate['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
@@ -502,8 +495,9 @@ class Master extends MX_Controller {
       $data = array(); $i=0;
       foreach ($query->result_array() as $row) {
           $nestedData     =   array();
+          $namaProduk = $row["alias"] ? $row["nama_produk"]." ({$row["alias"]}-{$row['revisi']})" : $row["nama_produk"];
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
-          $dokumen = $row['no_dokumen'] ? '<a href="Produksi_perintah-master-detail/'.base64_url_encode($row['id']).'" title="Detail dan Setujui">'.$row["nama_produk"].'</a>' : 'Belum disetting';
+          $dokumen = $row['no_dokumen'] ? '<a href="Produksi_perintah-master-detail/'.base64_url_encode($row['id']).'" title="Detail dan Setujui">'.$namaProduk.'</a>' : 'Belum disetting';
           $nestedData[]   =   $dokumen;
           $nestedData[]   =   $row["revisi"];
           $nestedData[]   =   ($row['tanggal_efektif'] == '0000-00-00'? 'Belum disetting' : date('d/m/Y', strtotime($row["tanggal_efektif"])));
@@ -513,7 +507,7 @@ class Master extends MX_Controller {
           $action =   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
                 .'<a class="btn btn-sm btn-default" href="Produksi_perintah-master-edit/'.base64_url_encode($row['id']).'" data-toggle="tooltip" data-placement="top" title="Ubah Data"><i class="fa fa-pencil"></i></a>'
-                .'<a href="Produksi_perintah-master-cetak/'.base64_url_encode($row['id']).'" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-html="true" title="Cetak Dokumen"><i class="fa fa-print"></i></a>';
+                .'<a href="Produksi_perintah-master-cetak/'.base64_url_encode($row['id']).'" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-html="true" title="Cetak Dokumen" target="_blank"><i class="fa fa-print"></i></a>';
           if($this->session_detail->id == 9) {
             $statusValid = $row["valid"] == 0 ? "Non Valid" : "Valid";
             $iconValid = $row["valid"] == 0 ? "fa fa-check-square-o" : "fa fa-minus-square";

@@ -4,21 +4,21 @@
     <?php if($session_detail->id == 9): ?>
     <div class="panel panel-default">
       <div class="panel-body">
-        <div class="form-group">
+        <!-- <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">No. Dokumen</label>
           </div>
           <div class="col-sm-9">
             <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" required>
           </div>
-        </div>
-        <!-- <input type="hidden" name="no_dokumen" id="no_dokumen" value="FRM-PPIC/02"> -->
+        </div> -->
+        <input type="hidden" name="no_dokumen" id="no_dokumen" value="FRM-PPIC/02">
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">Revisi Ke</label>
           </div>
           <div class="col-sm-9">
-            <label for="" class="control-label">0</label>
+            <label for="" class="control-label">1</label>
           </div>
         </div>
         <div class="form-group">
@@ -37,57 +37,21 @@
     <?php endif; ?>
     <div class="panel panel-default">
       <div class="panel-body">
-        <?php if($session_detail->id == 5): ?>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">No. Perintah Produksi</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_pp" id="no_pp" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">No. Sales Order</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="no_so" id="no_so" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Estimasi Proses</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="estimasi" id="estimasi" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Kode Produksi</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="kode_produksi" id="kode_produksi" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Expired Date</label>
-          </div>
-          <div class="col-sm-9">
-            <div class="input-group">
-              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" required>
-              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            </div>
-          </div>
-        </div>
-        <?php elseif($session_detail->id == 9): ?>
+        <?php if($session_detail->id == 9): ?>
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">Nama Produk</label>
           </div>
           <div class="col-sm-9">
             <input type="text" class="form-control" name="nama_produk" id="nama_produk" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Alias</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="alias" id="alias" required>
           </div>
         </div>
         <div class="form-group">

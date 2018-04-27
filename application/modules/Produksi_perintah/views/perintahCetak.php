@@ -1,4 +1,10 @@
-<div class="print-container">
+<div class="container">
+  <div class="col-sm-12 text-right">
+    <button class="btn btn-default" title="Cetak Halaman" onclick="window.print();"><i class="fa fa-print"></i> Cetak</button>
+  </div>
+</div>
+
+<div id="printSection" class="print-container">
   <table class="header">
     <tr>
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
@@ -47,7 +53,7 @@
         <table class="nested">
           <tr>
             <td>Nama Produk</td>
-            <td>: <?= $perintah_produksi->nama_produk ?></td>
+            <td>: <?= $perintah_produksi->alias ? $perintah_produksi->nama_produk." ({$perintah_produksi->alias}-{$perintah_produksi->revisi})" : $perintah_produksi->nama_produk ?></td>
           </tr>
           <tr>
             <td>Besar Batch</td>
@@ -79,6 +85,7 @@
       </tr>
     </thead>
     <tbody>
+      <?php if(count($bahan_baku) > 0): ?>
       <?php $no = 1; foreach($bahan_baku as $row): ?>
       <tr>
         <td><?= $no++ ?></td>
@@ -88,7 +95,7 @@
         <td><?= $row['per_batch'] ?></td>
         <td><?= $row['satuan_batch'] ?></td>
       </tr>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
@@ -115,6 +122,7 @@
       </tr>
     </thead>
     <tbody>
+      <?php if(count($bahan_baku) > 0): ?>
       <?php $no = 1; foreach($bahan_baku as $row): ?>
       <tr>
         <td><?= $no++ ?></td>
@@ -134,7 +142,7 @@
         <td></td>
         <td></td>
       </tr>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
@@ -150,6 +158,7 @@
       </tr>
     </thead>
     <tbody>
+      <?php if(count($bahan_kemas) > 0): ?>
       <?php $no = 1; foreach($bahan_kemas as $row): ?>
       <tr>
         <td><?= $no++ ?></td>
@@ -158,7 +167,7 @@
         <td><?= $row['satuan'] ?></td>
         <td><?= $row['aktual'] ?></td>
       </tr>
-      <?php endforeach; ?>
+      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
@@ -402,3 +411,10 @@ table.panel .ttd-field{
   width: 33.33%;
 }
 </style>
+
+<script>
+  $('.navbar.navbar-default').hide();
+  $(document).ready(function() {
+    window.print();
+  });
+</script>

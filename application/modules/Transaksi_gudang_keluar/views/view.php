@@ -91,7 +91,13 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="no_batch">No. Batch</label>
-                <input type="text" class="form-control" name="no_batch" id="no_batch" placeholder="No. Batch" required>
+                <!-- <input type="text" class="form-control" name="no_batch" id="no_batch" placeholder="No. Batch" required> -->
+                <select name="no_batch" id="no_batch" class="form-control">
+                  <option selected disabled>--Pilih No. Batch--</option>
+                  <?php foreach($list_batch as $batch): ?>
+                  <option value="<?= $batch->no_batch ?>"><?= $batch->no_batch ?></option>
+                  <?php endforeach; ?>
+                </select>
               </div>
             </div>
             <div class="col-sm-6">

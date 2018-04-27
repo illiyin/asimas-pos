@@ -52,6 +52,14 @@
         </div>
         <div class="form-group">
           <div class="col-sm-3">
+            <label for="" class="control-label">Alias</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="alias" id="alias" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3">
             <label for="" class="control-label">Besar Batch</label>
           </div>
           <div class="col-sm-9">
