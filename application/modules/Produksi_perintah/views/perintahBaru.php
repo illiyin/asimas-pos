@@ -4,15 +4,15 @@
     <?php if($session_detail->id == 9): ?>
     <div class="panel panel-default">
       <div class="panel-body">
-        <!-- <div class="form-group">
+        <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">No. Dokumen</label>
           </div>
           <div class="col-sm-9">
             <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" required>
           </div>
-        </div> -->
-        <input type="hidden" name="no_dokumen" id="no_dokumen" value="FRM-PPIC/02">
+        </div>
+        <!-- <input type="hidden" name="no_dokumen" id="no_dokumen" value="FRM-PPIC/02"> -->
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">Revisi Ke</label>

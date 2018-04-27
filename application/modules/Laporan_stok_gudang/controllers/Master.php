@@ -37,7 +37,7 @@ class Master extends MX_Controller {
     }
     function data(){
       $requestData= $_REQUEST;
-      $sql = "SELECT * FROM tt_bahan";
+      $sql = "SELECT * FROM m_bahan, tt_bahan WHERE m_bahan.deleted = 1 AND m_bahan.id = tt_bahan.id_bahan";
       $query=$this->Laporanstokgudangmodel->rawQuery($sql);
       $totalData = $query->num_rows();
       $sql = "SELECT
@@ -51,6 +51,8 @@ class Master extends MX_Controller {
           $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
       }
       $totalFiltered = $query->num_rows();
+      $sql.=" ORDER BY bahan.nama";
+      $sql.= " LIMIT ".$requestData['start']." ,".$requestData['length']."";
       $query=$this->Laporanstokgudangmodel->rawQuery($sql);
 
       $data = array(); $i=0;

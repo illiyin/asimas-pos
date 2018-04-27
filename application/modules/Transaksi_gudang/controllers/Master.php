@@ -18,7 +18,9 @@ class Master extends MX_Controller {
         $insertLog = $this->Transaksigudangmodel->insert($dataInsert, 't_log');
     }
     function index(){
-        $this->load->view('Transaksi_gudang/view');
+        $dataCondition['deleted'] = 1;
+        $data['list_bahan'] = $this->Transaksigudangmodel->select($dataCondition, 'm_bahan', 'nama')->result();
+        $this->load->view('Transaksi_gudang/view', $data);
     }
     function cetak(){
         $this->load->view('Transaksi_gudang/cetak');
@@ -41,6 +43,11 @@ class Master extends MX_Controller {
             $sql.=" OR no_transaksi LIKE '%".$requestData['search']['value']."%' )";
         }
 
+        if(!empty($requestData['columns'][1]['search']['value']) && $requestData['columns'][1]['search']['value'] != '') {
+            $filter = $requestData['columns'][1]['search']['value'];
+            $sql.= " AND bahan.nama = '".$filter."'";
+        }
+
         $sql.= " UNION SELECT gm.id,
                 gm.no_transaksi, gm.no_batch, gm.expired_date, gm.harga_penjualan AS harga,
                 bahan.nama AS nama_bahan, bahan.kode_bahan, satuan.nama AS nama_satuan,
@@ -56,11 +63,17 @@ class Master extends MX_Controller {
             $sql.=" OR bahan.kode_bahan LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR no_transaksi LIKE '%".$requestData['search']['value']."%' )";
         }
+        if(!empty($requestData['columns'][1]['search']['value']) && $requestData['columns'][1]['search']['value'] != '') {
+            $filter = $requestData['columns'][1]['search']['value'];
+            $sql.= " AND bahan.nama = '".$filter."'";
+        }
+
+        $query=$this->Transaksigudangmodel->rawQuery($sql);
+        $totalFiltered = $query->num_rows();
 
         $sql.= " GROUP BY no_transaksi ORDER BY date_add DESC";
         
         $query=$this->Transaksigudangmodel->rawQuery($sql);
-        $totalData = $query->num_rows();
         $data = array(); $i=0;
         foreach ($query->result_array() as $row) {
             $nestedData     =   array();
@@ -84,7 +97,7 @@ class Master extends MX_Controller {
         $json_data = array(
                     "draw"            => intval( $requestData['draw'] ),
                     "recordsTotal"    => intval( $totalData ),
-                    "recordsFiltered" => intval( 0 ),
+                    "recordsFiltered" => intval( $totalFiltered ),
                     "data"            => $data
                     );
         echo json_encode($json_data);

@@ -66,7 +66,7 @@
     </tr>
   </table>
 
-  <h3 class="tb-title">Bahan Baku:</h3>
+  <!-- <h3 class="tb-title">Bahan Baku:</h3>
   <table class="regular">
     <thead>
       <tr>
@@ -130,7 +130,76 @@
       <?php endforeach; endif; ?>
     </tbody>
   </table>
+ -->
 
+ <h3 class="tb-title">Bahan Baku:</h3>
+  <table class="regular">
+    <thead>
+      <tr>
+        <th class="nomer">No.</th>
+        <th>Nama Bahan</th>
+        <th>Paket</th>
+        <th>Jumlah</th>
+        <th>Satuan</th>
+        <th>Per Batch</th>
+        <th>Satuan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php $no = 1; foreach($bahan_baku as $row): ?>
+      <tr>
+        <td><?= $no++ ?></td>
+        <td><?= $row['nama_bahan'] ?></td>
+        <td><?= $row['nama_paket'] ?></td>
+        <td><?= $row['jumlah_paket'] ?></td>
+        <td><?= $row['satuan_paket'] ?></td>
+        <td><?= $row['per_batch'] ?></td>
+        <td><?= $row['satuan_batch'] ?></td>
+      </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+  <?php
+    $max_lot = max(array_column($bahan_baku, 'jumlah_lot'));
+  ?>
+  <h3 class="tb-title">Penimbangan Aktual:</h3>
+  <table class="regular penimbanganAktual">
+    <thead>
+      <tr>
+        <th class="nomer nope">No.</th>
+        <th class="nope">Nama Bahan</th>
+        <th class="nope">Jumlah</th>
+        <th class="nope">Satuan</th>
+        <th class="nope">Per Lot</th>
+        <th class="nope">Total Lot</th>
+        <th class="lot" colspan="<?php echo $max_lot?>">Lot</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php $no = 1; foreach($bahan_baku as $row): ?>
+      <tr>
+        <td class="nope"><?= $no++ ?></td>
+        <td class="nope"><?= $row['nama_bahan'] ?></td>
+        <td class="nope"><?= $row['per_batch'] ?></td>
+        <td class="nope"><?= $row['satuan_batch'] ?></td>
+        <td class="nope"><?= $row['jumlah_perlot'] ?></td>
+        <td class="nope"><?= $row['jumlah_lot'] ?></td>
+        <?php
+          $remain_lot = $max_lot - $row['jumlah_lot'];
+          for ($lot=0; $lot < $row['jumlah_lot']; $lot++) { ?>
+            <td>&nbsp;</td>
+          <?php 
+          } 
+          if($remain_lot > 0) { ?>
+            <td colspan="<?php echo $remain_lot?>">&nbsp;</td>
+            <?php
+            }  
+          ?>
+      </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+  
   <h3 class="tb-title">Bahan Kemas:</h3>
   <table class="regular">
     <thead>

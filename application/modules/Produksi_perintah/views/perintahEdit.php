@@ -14,7 +14,7 @@
             <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" <?= $is_revisi ?> />
           </div>
         </div> -->
-        <input type="hidden" name="no_dokumen" id="no_dokumen" value="FRM-PPIC/02">
+        <input type="hidden" name="no_dokumen" id="no_dokumen" value="<?= $perintah_produksi->no_dokumen ?>">
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">Revisi Ke</label>
@@ -367,17 +367,7 @@ $("#formBahanBaku").on('submit', function(e){
     var satuanPaket = getMasterById(list_satuan, form[3].value);
     var satuanBatch = getMasterById(list_satuan, form[5].value);
     tempBahanBaku.push({
-        // 'num': num,
-        // 'id_bahan': form[0].value,
-        // 'per_kaplet': form[1].value,
-        // 'satuan_kaplet': form[2].value,
-        // 'per_batch': form[3].value,
-        // 'satuan_batch': form[4].value,
-        // 'jumlah_lot': form[5].value,
-        // 'jumlah_perlot': form[6].value
         'id_bahan': form[0].value,
-        // 'per_kaplet': form[1].value,
-        // 'satuan_kaplet': form[2].value,
         'id_paket': $("#paket option:selected").val(),
         'jumlah_paket': form[2].value,
         'satuan_paket': satuanPaket.id,

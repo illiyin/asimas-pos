@@ -9,7 +9,7 @@
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
       <td class="kop">
         <h1>PT. AGARICUS SIDO MAKMUR SENTOSA</h1>
-        <h3>Laporan rata-rata harga jual barang bulan Pebruari</h3>
+        <h3>Laporan Penjualan Bulan <?= cetakBulan() ?></h3>
       </td>
     </tr>
   </table>
@@ -19,9 +19,9 @@
     <thead>
       <tr>
         <th class="nomer">No.</th>
-        <th>Nama Barang</th>
+        <th>Nama Bahan</th>
         <th>Kategori</th>
-        <th>Harga Rata-rata</th>
+        <th>Rata-rata Harga</th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +34,9 @@
         foreach ($data_list as $key => $row) { ?>
         <tr>
           <td><?php echo ($key+1)?></td>
-          <td><?php echo $row->nama_bahan?></td>
-          <td><?php echo $row->kategori_bahan?></td>
-          <td><?php echo number_format($row->harga_penjualan, 2, ',', '.')?></td>
+          <td><?php echo $row->nama_bahan ?></td>
+          <td><?php echo $row->nama_kategori ?></td>
+          <td><?php echo toRupiah($row->total) ?></td>
         </tr>
       <?php }
       } ?>

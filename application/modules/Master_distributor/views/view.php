@@ -57,7 +57,7 @@
              <div class="col-sm-12">
                <div class="form-group">
                  <label for="alamat">Alamat Distributor</label>
-                 <input type="text" name="alamat" maxlength="30" class="form-control" id="alamat" placeholder="Alamat Distributor" required="">
+                 <input type="text" name="alamat" maxlength="150" class="form-control" id="alamat" placeholder="Alamat Distributor" required="">
                </div>
              </div>
              <div class="col-sm-6">

@@ -8,6 +8,7 @@ class Master extends MX_Controller {
         $this->load->model('Laporanstokbahanbaku');
         $this->modul .= $this->router->fetch_class();
         $this->fungsi = $this->router->fetch_method();
+        $this->session_detail = pegawaiLevel($this->session->userdata('id_user_level'));
         $this->_insertLog();
     }
     function _insertLog($fungsi = null){
@@ -18,7 +19,8 @@ class Master extends MX_Controller {
         $insertLog = $this->Laporanstokbahanbaku->insert($dataInsert, 't_log');
     }
     function index(){
-    	$this->load->view('Laporan_stok_bahan_baku/view');
+        $data['session_detail'] = $this->session_detail;
+    	$this->load->view('Laporan_stok_bahan_baku/view', $data);
     }
     function cetak(){
         $sql = "SELECT
@@ -36,7 +38,7 @@ class Master extends MX_Controller {
     }
     function data(){
         $requestData= $_REQUEST;
-        $sql = "SELECT * FROM tt_bahan";
+        $sql = "SELECT * FROM m_bahan, tt_bahan WHERE m_bahan.deleted = 1 AND m_bahan.id = tt_bahan.id_bahan";
         $query=$this->Laporanstokbahanbaku->rawQuery($sql);
         $totalData = $query->num_rows();
         $sql = "SELECT
@@ -48,7 +50,10 @@ class Master extends MX_Controller {
             $sql.=" AND ( bahan.nama LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR kategori.nama LIKE '%".$requestData['search']['value']."%' )";
         }
+        $query = $this->Laporanstokbahanbaku->rawQuery($sql);
         $totalFiltered = $query->num_rows();
+        $sql.=" ORDER BY bahan.nama";
+        $sql.= " LIMIT ".$requestData['start']." ,".$requestData['length']."";
         $query=$this->Laporanstokbahanbaku->rawQuery($sql);
 
         $data = array(); $i=0;

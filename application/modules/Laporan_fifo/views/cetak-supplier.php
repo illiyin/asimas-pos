@@ -9,7 +9,7 @@
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
       <td class="kop">
         <h1>PT. AGARICUS SIDO MAKMUR SENTOSA</h1>
-        <h3>Laporan fifo supplier bulan Pebruari</h3>
+        <h3>Laporan Data Supplier Bulan <?= cetakBulan() ?></h3>
       </td>
     </tr>
   </table>
@@ -20,6 +20,7 @@
       <tr>
         <th class="nomer">No.</th>
         <th>Nama Supplier</th>
+        <th>Nama Bahan</th>
         <th>Alamat</th>
         <th>No. Telepon</th>
         <th>Email</th>
@@ -28,17 +29,18 @@
     <tbody>
       <?php
       if(empty($data_list)) { ?>
-        <tr><td colspan="5">Tidak ada data</td></tr>
+        <tr><td colspan="6">Tidak ada data</td></tr>
       <?php
       }
       else {
         foreach ($data_list as $key => $row) { ?>
         <tr>
           <td><?php echo ($key+1)?></td>
-          <td><?php echo $row->nama?></td>
-          <td><?php echo $row->alamat?></td>
-          <td><?php echo $row->no_telp?></td>
-          <td><?php echo $row->email?></td>
+          <td><?= $row['nama_supplier'] ?></td>
+          <td><?= $row['nama_bahan']; ?></td>
+          <td><?= $row['alamat']; ?></td>
+          <td><?= $row['no_telp']; ?></td>
+          <td><?= $row['email']; ?></td>
         </tr>
       <?php }
       } ?>

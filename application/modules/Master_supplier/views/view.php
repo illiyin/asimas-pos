@@ -13,13 +13,12 @@
           <thead>
               <tr>
                   <th class="text-center no-sort">#</th>
-                  <th class="text-center">Nama Supplier</th>
-                  <th class="text-center">Alamat</th>
-                  <th class="text-center">No. Telp</th>
-                  <th class="text-center">Email</th>
-                  <!-- <th class="text-center">NPWP</th>
-                  <th class="text-center">Bank</th>
-                  <th class="text-center">Tanggal Buat</th> -->
+                  <th class="text-center no-sort">Nama Supplier</th>
+                  <th class="text-center no-sort">Alamat</th>
+                  <th class="text-center no-sort">No. Telp</th>
+                  <th class="text-center no-sort">Email</th>
+                  <th class="text-center no-sort">Lead Time</th>
+                  <th class="text-center no-sort">Status</th>
                   <th class="text-center no-sort">Aksi</th>
               </tr>
           </thead>
@@ -57,7 +56,7 @@
              <div class="col-sm-12">
                <div class="form-group">
                  <label for="alamat">Alamat Supplier</label>
-                 <input type="text" name="alamat" maxlength="30" class="form-control" id="alamat" placeholder="Alamat Supplier" required="">
+                 <input type="text" name="alamat" maxlength="150" class="form-control" id="alamat" placeholder="Alamat Supplier" required="">
                </div>
              </div>
              <div class="col-sm-6">
@@ -69,7 +68,7 @@
              <div class="col-sm-6">
                <div class="form-group">
                  <label for="email">Email Supplier</label>
-                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier" required="">
+                 <input type="email" maxlength="50" name="email" class="form-control" id="email" placeholder="Email Supplier">
                </div>
              </div>
              <div class="col-sm-6">

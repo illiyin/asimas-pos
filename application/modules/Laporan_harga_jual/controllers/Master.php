@@ -21,15 +21,14 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_harga_jual/view');
     }
     function cetak(){
-        $sql = "SELECT ";
-        $sql.="  m_bahan.nama AS nama_bahan,
-                 m_bahan_kategori.nama AS kategori_bahan,
-                 AVG(tt_gudang_keluar.harga_penjualan) AS harga_penjualan
-                 FROM tt_gudang_keluar,m_bahan, m_bahan_kategori
-                 WHERE m_bahan.id = tt_gudang_keluar.id_bahan 
-                 AND m_bahan.id_kategori_bahan = m_bahan_kategori.id
-                 AND tt_gudang_keluar.deleted = 1";
-        $sql .= " GROUP BY tt_gudang_keluar.id_bahan";
+        $sql = "SELECT
+                bahan.nama AS nama_bahan, kategori.nama AS nama_kategori,
+                SUM(gk.harga_penjualan / gudang.jumlah_keluar) / COUNT(*) AS total
+                FROM m_bahan bahan, tt_gudang_keluar gk, m_bahan_kategori kategori, tt_gudang gudang
+                WHERE gudang.id_bahan = bahan.id AND bahan.id_kategori_bahan = kategori.id
+                AND gudang.id_gudang = gk.id";
+        $sql .= " GROUP BY gk.id_bahan";
+        $sql .= " ORDER BY gk.date_added DESC";
         $query=$this->Laporanhargajualmodel->rawQuery($sql);
         $data['data_list'] = $query->result();
     	$this->load->view('Laporan_harga_jual/cetak', $data);

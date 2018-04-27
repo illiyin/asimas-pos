@@ -48,7 +48,9 @@ class Master extends MX_Controller {
         $query=$this->Produsenmodel->rawQuery($sql);
         $totalFiltered = $query->num_rows();
 
-        $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']." LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+        // $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']." LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+        $sql.=" ORDER BY date_add DESC";
+        $sql.= " LIMIT ".$requestData['start']." ,".$requestData['length']."";
         $query=$this->Produsenmodel->rawQuery($sql);
 
         $data = array(); $i=0;

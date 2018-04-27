@@ -9,7 +9,7 @@
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
       <td class="kop">
         <h1>PT. AGARICUS SIDO MAKMUR SENTOSA</h1>
-        <h3>Laporan fifo produsen bulan Pebruari</h3>
+        <h3>Laporan Data Produsen Bulan <?= cetakBulan() ?></h3>
       </td>
     </tr>
   </table>

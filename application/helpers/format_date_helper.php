@@ -29,7 +29,5 @@ if(!function_exists("format_tanggal_waktu")) {
 		return $t_format;
 	}
 }
-
-
 /* End of file shorten_number_helper.php */
 /* Location: ./application/helpers/shorten_number_helper.php */

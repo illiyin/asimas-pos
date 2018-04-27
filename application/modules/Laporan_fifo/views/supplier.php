@@ -32,8 +32,10 @@
             <div class="filter-item">
               <select class="form-control" name="" id="filter_bahan" data-column="1">
                 <option value="" data-filter="0">Filter Bahan</option>
-                <option value="bahan_a" data-filter="Brotowali">Brotowali</option>
-                <option value="bahan_b" data-filter="Biskuit AMB">Biskuit AMB</option>
+                <?php foreach($list_bahan as $bahan): ?>
+                <option value="<?= $bahan->nama ?>" data-filter="<?= $bahan->id ?>"><?= $bahan->nama ?></option>
+                <?php endforeach; ?>
+                <!-- <option value="bahan_b" data-filter="Biskuit AMB">Biskuit AMB</option> -->
               </select>
 
             </div>

@@ -24,7 +24,8 @@ class Master extends MX_Controller {
     	$this->load->view('Laporan_fifo/bahan');
     }
     function supplier(){
-    	$this->load->view('Laporan_fifo/supplier');
+        $data['list_bahan'] = $this->Laporanfifomodel->select(['deleted' => 1], 'm_bahan', 'nama')->result();
+    	$this->load->view('Laporan_fifo/supplier', $data);
     }
     function produsen(){
     	$this->load->view('Laporan_fifo/produsen');
@@ -59,16 +60,29 @@ class Master extends MX_Controller {
         $this->load->view('Laporan_fifo/cetak-bahan', $data);
     }
     function cetaksupplier(){
-        $sql = "SELECT * ";
-        $sql.=" FROM m_supplier WHERE deleted = 1";
-        if( !empty($requestData['search']['value']) ) {
-            $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+        $sql = "SELECT gudang.id_bahan, gm.id_supplier FROM tt_gudang_masuk gm, tt_gudang gudang
+            WHERE gm.id = gudang.id_gudang GROUP BY gudang.id_bahan, gm.id_supplier";
+        $query = $this->Laporanfifomodel->rawQuery($sql);
+        
+        $data = null;
+        if($query->num_rows() > 0){
+            foreach($query->result() as $row) {
+              $bahan = $this->Laporanfifomodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
+              $supplier = $this->Laporanfifomodel->select(array('id' => $row->id_supplier), 'm_supplier')->row();
+
+                $temporary = array(
+                    'nama_bahan' => $bahan->nama,
+                    'nama_supplier' => $supplier->nama,
+                    'alamat' => $supplier->alamat,
+                    'no_telp' => $supplier->no_telp,
+                    'email' => $supplier->email
+                );
+
+              $data[] = $temporary;
+            }
         }
-        $query=$this->Laporanfifomodel->rawQuery($sql);
-        $data['data_list'] = $query->result();
+
+        $data['data_list'] = $data;
         $this->load->view('Laporan_fifo/cetak-supplier', $data);
     }
     function cetakprodusen(){

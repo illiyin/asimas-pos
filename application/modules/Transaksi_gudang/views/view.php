@@ -42,14 +42,16 @@
       <div class="row">
         <div class="col-sm-9">
           <div class="multi-filter">
-            <div class="filter-item">
+            <!-- <div class="filter-item">
               <input type="text" class="form-control" placeholder="Search..." id="search_global">
-            </div>
+            </div> -->
             <div class="filter-item">
               <select class="form-control" name="" id="filter_bahan" data-column="1">
                 <option value="" data-filter="0">Filter Bahan</option>
-                <option value="bahan_a" data-filter="Brotowali">Brotowali</option>
-                <option value="bahan_b" data-filter="Biskuit AMB">Biskuit AMB</option>
+                <?php foreach($list_bahan as $bahan): ?> ?>
+                <option value="<?= $bahan->id ?>" data-filter="<?= $bahan->nama ?>"><?= $bahan->nama ?></option>
+                <?php endforeach; ?>
+                <!-- <option value="bahan_b" data-filter="Biskuit AMB">Biskuit AMB</option> -->
               </select>
 
             </div>
@@ -72,14 +74,14 @@
           </div>
         </div>
 
-        <div class="col-sm-3">
+        <!-- <div class="col-sm-3">
           <div class="filter-date">
             <div class="input-group">
               <input type="text" class="form-control datepicker" name="" placeholder="dd/mm/yyyy">
               <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

@@ -43,12 +43,19 @@ class Master extends MX_Controller {
             $sql.=" AND ( nama LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR alamat LIKE '%".$requestData['search']['value']."%' ";
             $sql.=" OR no_telp LIKE '%".$requestData['search']['value']."%' ";
-            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' )";
+            $sql.=" OR email LIKE '%".$requestData['search']['value']."%' ";
+            $sql.=" OR lead_time LIKE '%".$requestData['search']['value']."%' )";
         }
+
+        // if(!empty($requestData['search']['value'])) {
+        //     $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']." LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+        // } else{
+        // }
         $query=$this->Suppliermodel->rawQuery($sql);
         $totalFiltered = $query->num_rows();
-
-        $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']." LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+        
+        $sql.=" ORDER BY date_add DESC";
+        $sql.= " LIMIT ".$requestData['start']." ,".$requestData['length']."";
         $query=$this->Suppliermodel->rawQuery($sql);
 
         $data = array(); $i=0;
@@ -59,6 +66,8 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row["alamat"];
             $nestedData[]   =   $row["no_telp"];
             $nestedData[]   =   $row["email"];
+            $nestedData[]   =   $row["lead_time"];
+            $nestedData[]   =   $row["status"] ? "Approved" : "Pre Approved";
             $nestedData[]   .=   '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
                 .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$index.')"><i class="fa fa-pencil"></i></a>'
@@ -68,6 +77,7 @@ class Master extends MX_Controller {
         }
         $totalData = count($data);
         $json_data = array(
+                "sql" => $sql,
                     "draw"            => intval( $requestData['draw'] ),
                     "recordsTotal"    => intval( $totalData ),
                     "recordsFiltered" => intval( $totalFiltered ),

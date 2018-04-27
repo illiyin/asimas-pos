@@ -6,42 +6,20 @@
   </div>
 </div>
   <div class="row">
-    <h3><strong>Laporan FEFO</strong> - Barang</h3>
+    <h3><strong>Laporan FEFO</strong> - Bahan</h3>
   </div>
    <div class="row" style="margin-top:10px;">
       <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">
           <thead>
               <tr>
                   <th class="text-center no-sort">#</th>
-                  <th class="text-center">Nama Barang</th>
-                  <th class="text-center">No. Batch</th>
-                  <th class="text-center">Stok Akhir</th>
+                  <th class="text-center">Nama Bahan</th>
+                  <th class="text-center">Kode Bahan</th>
                   <th class="text-center">Tanggal Expired</th>
               </tr>
           </thead>
 
           <tbody id='bodytable'>
-            <!-- <tr>
-              <td class="text-center">1</td>
-              <td>Jamur ABM</td>
-              <td>002</td>
-              <td>22</td>
-              <td>30/12/1988</td>
-            </tr>
-            <tr>
-              <td class="text-center">2</td>
-              <td>Jamur ABM</td>
-              <td>002</td>
-              <td>22</td>
-              <td>30/12/1988</td>
-            </tr>
-            <tr>
-              <td class="text-center">3</td>
-              <td>Jamur ABM</td>
-              <td>002</td>
-              <td>22</td>
-              <td>30/12/1988</td>
-            </tr> -->
           </tbody>
       </table>
    </div>
@@ -62,7 +40,7 @@ var awalLoad = true;
 var initDataTable = $('#TableMainServer').DataTable({
     "bProcessing": true,
     "bServerSide": true,
-    "order": [[4, 'DESC']],
+    // "order": [[4, 'DESC']],
     "ajax":{
           url :"<?php echo base_url()?>Laporan_fefo/Master/data",
           type: "post",  // type of method  , by default would be get

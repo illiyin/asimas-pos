@@ -9,7 +9,7 @@
       <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
       <td class="kop">
         <h1>PT. AGARICUS SIDO MAKMUR SENTOSA</h1>
-        <h3>Laporan rata-rata harga beli barang bulan Pebruari</h3>
+        <h3>Laporan Harga Produk Jadi Bulan <?= cetakBulan() ?></h3>
       </td>
     </tr>
   </table>
@@ -19,9 +19,10 @@
     <thead>
       <tr>
         <th class="nomer">No.</th>
-        <th>Nama Barang</th>
-        <th>Kategori</th>
-        <th>Harga Rata-rata</th>
+        <th>Nama Bahan</th>
+        <th>Harga Jual</th>
+        <th>Total QTY</th>
+        <th>Rata-rata Harga</th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +35,10 @@
         foreach ($data_list as $key => $row) { ?>
         <tr>
           <td class="text-center"><?php echo ($key+1)?></td>
-          <td class="text-left"><?php echo $row->nama_barang?></td>
-          <td><?php echo $row->nama_bahan?></td>
-          <td class="text-right">Rp <?php echo number_format($row->harga_pembelian, 0, ',', '.')?></td>
+          <td class="text-left"><?= $row->nama_bahan ?></td>
+          <td><?= toRupiah($row->harga_jual); ?></td>
+          <td><?= $row->total_qty ?></td>
+          <td><?= $row->total === 0 ? 0 : toRupiah($row->total).'/'.$row->nama_satuan; ?></td>
         </tr>
       <?php }
       } ?>
