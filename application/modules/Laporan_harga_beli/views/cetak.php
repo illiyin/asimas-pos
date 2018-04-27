@@ -28,7 +28,7 @@
     <tbody>
       <?php
       if(empty($data_list)) { ?>
-        <tr><td colspan="4">Tidak ada data</td></tr>
+        <tr><td colspan="5">Tidak ada data</td></tr>
       <?php
       }
       else {

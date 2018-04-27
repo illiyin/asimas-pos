@@ -318,17 +318,27 @@ $(document).ready(function(){
       tempBahanBaku.push({
           'num': num,
           'id_bahan': data.id_bahan,
-          'per_kaplet': data.per_kaplet,
-          'id_satuan_kaplet': data.id_satuan_kaplet,
-          'satuan_kaplet': data.satuan_kaplet,
+          'id_paket': data.id_paket,
+          'nama_paket': data.nama_paket,
+          'jumlah_paket': data.jumlah_paket,
+          'satuan_paket' : data.satuan_paket,
           'per_batch': data.per_batch,
           'id_satuan_batch': data.id_satuan_batch,
           'satuan_batch': data.satuan_batch,
           'jumlah_lot': data.jumlah_lot,
           'jumlah_perlot': data.jumlah_perlot
       });
+
+      // 'id_bahan': form[0].value,
+      // 'id_paket': $("#paket option:selected").val(),
+      // 'jumlah_paket': form[2].value,
+      // 'satuan_paket': satuanPaket.id,
+      // 'per_batch': form[4].value,
+      // 'satuan_batch': form[5].value,
+      // 'jumlah_lot': form[6].value,
+      // 'jumlah_perlot': form[7].value
        $("#dataBahanBaku")
-        .append("<tr id='bahanbaku"+num+"'><td>"+ data.nama_bahan +"</td><td>Per Kaplet: "+data.per_kaplet+''+data.satuan_kaplet+"</td><td>Per Batch: "+data.per_batch+''+data.satuan_batch+"</td><td>Per Lot: "+data.jumlah_perlot+"</td><td>Jumlah Lot: "+data.jumlah_lot+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
+        .append("<tr id='bahanbaku"+num+"'><td>"+ data.nama_bahan +"</td><td>"+data.nama_paket+": "+data.jumlah_paket+''+data.nama_satuan_paket+"</td><td>Per Batch: "+data.per_batch+''+data.satuan_batch+"</td><td>Per Lot: "+data.jumlah_perlot+"</td><td>Jumlah Lot: "+data.jumlah_lot+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
     }
   }
   // Append Bahan Kemas ke Table
@@ -377,7 +387,7 @@ $("#formBahanBaku").on('submit', function(e){
         'jumlah_perlot': form[7].value
     });
     $("#dataBahanBaku")
-    .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>"+ $("#paket option:selected").text() +": "+form[2].value+''+satuanPaket.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
+    .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>"+ $("#Pakett option:selected").text() +": "+form[2].value+''+satuanPaket.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
     $("#formBahanBaku")[0].reset();
     $("#kolomPaket").hide();
 });

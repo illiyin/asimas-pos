@@ -6,7 +6,7 @@
   </div>
 </div>
   <div class="row">
-    <h3><strong>Laporan</strong> - Rata-rata Harga Jual Bahan</h3>
+    <h3><strong>Laporan</strong> - Rata-rata Harga Pembelian Barang</h3>
   </div>
    <div class="row" style="margin-top:10px;">
       <table id="TableMainServer" class="table table-striped table-bordered" cellspacing="0" width="100%">

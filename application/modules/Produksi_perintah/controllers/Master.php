@@ -165,12 +165,18 @@ class Master extends MX_Controller {
         $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
         $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
         $satuanPaket = $this->Perintahproduksimodel->select(array('id' => $row->satuan_paket), 'm_satuan')->row();
+        $paket = $this->Perintahproduksimodel->select(array('id' => $row->id_paket), 'm_paket')->row();
         $dataBahanBaku[] = array(
             'id_bahan' => $bahan->id,
             'nama_bahan' => $bahan->nama,
-            'per_kaplet' => $row->per_kaplet,
-            'id_satuan_kaplet' => $satuanPaket->id,
-            'satuan_kaplet' => $satuanPaket->nama,
+            'id_paket' => $row->id_paket,
+            'nama_paket' => $paket->nama,
+            'jumlah_paket' => $row->jumlah_paket,
+            'nama_satuan_paket' => $satuanPaket->nama,
+            'satuan_paket' => $row->satuan_paket,
+            // 'per_kaplet' => $row->per_kaplet,
+            // 'id_satuan_kaplet' => $satuanPaket->id,
+            // 'satuan_kaplet' => $satuanPaket->nama,
             'per_batch' => $row->per_batch,
             'id_satuan_batch' => $satuanBatch->id,
             'satuan_batch' => $satuanBatch->nama,
