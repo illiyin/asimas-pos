@@ -223,9 +223,8 @@ class Master extends MX_Controller {
       $params = $this->input->post();
 
       // R&D
-      $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
       $dataInsert['no_dokumen'] = $params['no_dokumen'];
-      $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : date('Y-m-d');
+      $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $params['tanggal_efektif'] : date('Y-m-d');
       $dataInsert['nama_produk']  = $params['nama_produk'];
       $dataInsert['alias'] = $params['alias'];
       $dataInsert['besar_batch'] = $params['besar_batch'];
@@ -296,9 +295,8 @@ class Master extends MX_Controller {
     }
     function addDataRevisi(){
       $params = $this->input->post();
-      $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
       $dataInsert['no_dokumen'] = $params['no_dokumen'];
-      $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : date('Y-m-d');
+      $dataInsert['tanggal_efektif'] = $params['tanggal_efektif'] ? $params['tanggal_efektif'] : date('Y-m-d');
       $dataInsert['nama_produk']  = $params['nama_produk'];
       $dataInsert['alias'] = $params['alias'];
       $dataInsert['besar_batch'] = $params['besar_batch'];
@@ -378,9 +376,8 @@ class Master extends MX_Controller {
         $this->Perintahproduksimodel->delete(array('id_perintah_produksi' => $params['id']), 'pp_bahan_baku');
         $this->Perintahproduksimodel->delete(array('id_perintah_produksi' => $params['id']), 'pp_bahan_kemas');
         $perintahProduksi = $this->Perintahproduksimodel->select($dataCondition, 'm_perintah_produksi')->row();
-        $tanggalEfektif = $this->tanggalExplode(@$params['tanggal_efektif']);
         $dataUpdate['no_dokumen'] = $params['no_dokumen'] ? $params['no_dokumen'] : $perintahProduksi->no_dokumen;
-        $dataUpdate['tanggal_efektif'] = $params['tanggal_efektif'] ? $tanggalEfektif : $perintahProduksi->tanggal_efektif;
+        $dataUpdate['tanggal_efektif'] = $params['tanggal_efektif'] ? $params['tanggal_efektif'] : $perintahProduksi->tanggal_efektif;
         $dataUpdate['nama_produk']  = $params['nama_produk'] ? $params['nama_produk'] : $perintahProduksi->nama_produk;
         $dataUpdate['alias']  = $params['alias'] ? $params['alias'] : $perintahProduksi->alias;
         $dataUpdate['besar_batch'] = $params['besar_batch'] ? $params['besar_batch'] : $perintahProduksi->besar_batch;
@@ -448,12 +445,11 @@ class Master extends MX_Controller {
         // PPIC
         $dataCondition['id'] = $params['id'];
         $perintahProduksi = $this->Perintahproduksimodel->select($dataCondition, 'm_perintah_produksi')->row();
-        $expiredDate = $this->tanggalExplode(@$params['expired_date']);
         $dataUpdate['no_perintah'] = $params['no_pp'] ? $params['no_pp'] : $perintahProduksi->no_perintah;
         $dataUpdate['no_sales_order'] = $params['no_so'] ? $params['no_so'] : $perintahProduksi->no_sales_order;
         $dataUpdate['estimasi_proses'] = $params['estimasi'] ? $params['estimasi'] : $perintahProduksi->estimasi_proses;
         $dataUpdate['kode_produksi'] = $params['kode_produksi'] ? $params['kode_produksi'] : $perintahProduksi->kode_produksi;
-        $dataUpdate['expired_date'] = $params['expired_date'] ? $expiredDate : $perintahProduksi->expired_date;
+        $dataUpdate['expired_date'] = $params['expired_date'] ? $params['expired_date'] : $perintahProduksi->expired_date;
         $dataUpdate['last_modified'] = date('Y-m-d H:i:s');
         $dataUpdate['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
@@ -549,10 +545,6 @@ class Master extends MX_Controller {
       }else{
           echo "0";
       }
-    }
-    private function tanggalExplode($date) {
-      $x = explode("/" , $date);
-      return $x[2].'-'.$x[1].'-'.$x[0];
     }
     function approve() {
       $params = $this->input->post();

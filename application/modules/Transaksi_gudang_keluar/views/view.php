@@ -68,10 +68,10 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="id_bahan">Nama Bahan</label>
-                <select name="id_bahan" class="form-control" id="id_bahan" required="required" onchange="selectBahan(this.value)">
+                <select name="id_bahan" class="form-control" id="id_bahan" required="required" onchange="selectBahan(this.options[this.selectedIndex].getAttribute('data-satuan'))">
                   <option value="" disabled selected>-- Pilih Bahan --</option>
                   <?php foreach($list_bahan as $row): ?>
-                  <option value="<?= $row->id ?>"><?php echo $row->nama ?></option>
+                  <option value="<?= $row->id ?>" data-satuan="<?= $row->id_satuan ?>"><?php echo $row->nama ?></option>
                   <?php endforeach; ?>
                 </select>
               </div>

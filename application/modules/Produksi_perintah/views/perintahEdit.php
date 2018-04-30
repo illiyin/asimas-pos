@@ -28,10 +28,7 @@
             <label for="" class="control-label">Tanggal Efektif</label>
           </div>
           <div class="col-sm-9">
-            <div class="input-group">
-              <input type="text" class="form-control datepicker" name="tanggal_efektif" id="tanggal_efektif" value="<?= $perintah_produksi->tanggal_efektif == '0000-00-00' ? null : date('d/m/Y', strtotime($perintah_produksi->tanggal_efektif)) ?>"/>
-              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            </div>
+            <input type="text" class="form-control" name="tanggal_efektif" id="tanggal_efektif" required value="<?= $perintah_produksi->tanggal_efektif ?>">
           </div>
         </div>
       </div>
