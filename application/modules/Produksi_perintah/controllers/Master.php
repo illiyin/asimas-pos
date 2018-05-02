@@ -444,12 +444,13 @@ class Master extends MX_Controller {
       else{
         // PPIC
         $dataCondition['id'] = $params['id'];
+        $expiredDate = $this->tanggalExplode(@$params['expired_date']);
         $perintahProduksi = $this->Perintahproduksimodel->select($dataCondition, 'm_perintah_produksi')->row();
         $dataUpdate['no_perintah'] = $params['no_pp'] ? $params['no_pp'] : $perintahProduksi->no_perintah;
         $dataUpdate['no_sales_order'] = $params['no_so'] ? $params['no_so'] : $perintahProduksi->no_sales_order;
         $dataUpdate['estimasi_proses'] = $params['estimasi'] ? $params['estimasi'] : $perintahProduksi->estimasi_proses;
         $dataUpdate['kode_produksi'] = $params['kode_produksi'] ? $params['kode_produksi'] : $perintahProduksi->kode_produksi;
-        $dataUpdate['expired_date'] = $params['expired_date'] ? $params['expired_date'] : $perintahProduksi->expired_date;
+        $dataUpdate['expired_date'] = $params['expired_date'] ? $expiredDate : $perintahProduksi->expired_date;
         $dataUpdate['last_modified'] = date('Y-m-d H:i:s');
         $dataUpdate['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
@@ -673,5 +674,10 @@ class Master extends MX_Controller {
       $data['list_bahan_kemas'] = $dataBahanKemas;
       
       echo json_encode($data);
+    }
+    
+    private function tanggalExplode($date) {
+      $x = explode("/" , $date);
+      return $x[2].'-'.$x[1].'-'.$x[0];
     }
 }
