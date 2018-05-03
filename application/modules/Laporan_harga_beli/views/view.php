@@ -14,9 +14,9 @@
               <tr>
                   <th class="text-center no-sort">#</th>
                   <th class="text-center">Nama Bahan</th>
-                  <th class="text-center">Harga Jual</th>
                   <th class="text-center">Total QTY</th>
                   <th class="text-center">Rata-rata Harga</th>
+                  <th class="text-center">Harga Pokok Produksi</th>
               </tr>
           </thead>
 

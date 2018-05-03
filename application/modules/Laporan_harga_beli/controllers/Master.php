@@ -59,9 +59,10 @@ class Master extends MX_Controller {
         $nestedData     =   array();
         $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
         $nestedData[]   =   $row["nama_bahan"];
-        $nestedData[]   =   toRupiah($row["harga_jual"]);
         $nestedData[]   =   $row["total_qty"];
         $nestedData[]   =   $row['total'] === 0 ? 0 : toRupiah($row['total']).'/'.$row['nama_satuan'];
+        $jumlahHpp = ($row["total"]) * ($row["total_qty"]);
+        $nestedData[]   =   toRupiah($jumlahHpp);
 
         $data[] = $nestedData; $i++;
       }
