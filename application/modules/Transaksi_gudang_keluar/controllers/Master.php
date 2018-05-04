@@ -9,6 +9,7 @@ class Master extends MX_Controller {
         $this->modul .= $this->router->fetch_class();
         $this->fungsi = $this->router->fetch_method();
         $this->_insertLog();
+        $this->session_detail = pegawaiLevel($this->session->userdata('id_user_level'));
     }
     function _insertLog($fungsi = null){
         $id_user = $this->session->userdata('id_user');
@@ -44,6 +45,7 @@ class Master extends MX_Controller {
                 gk.expired_date,
                 gk.keterangan,
                 gk.date_added,
+                gk.harga_penjualan,
                 satuan.nama AS nama_satuan
                 FROM tt_gudang_keluar gk, m_bahan bahan, m_distributor distributor, m_satuan satuan, tt_gudang gudang
                 WHERE gk.id_bahan = bahan.id
@@ -76,11 +78,17 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row["kode_bahan"];
             $nestedData[]   =   $row["nama_distributor"];
             $nestedData[]   =   $row["keterangan"];
-            $nestedData[]   .=   '<td class="text-center"><div class="btn-group">'
+            if($this->session_detail->id == 7) {
+            $nestedData[]   =   toRupiah($row['harga_penjualan']);
+            $action        =    '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="addHarga('.$row["id"].')"><i class="fa fa-pencil"></i></a>';
+            } else{
+            $action = '<td class="text-center"><div class="btn-group">'
                 .'<a id="group'.$row["id"].'" class="divpopover btn btn-sm btn-default" href="javascript:void(0)" data-toggle="popover" data-placement="top" onclick="confirmDelete(this)" data-html="true" title="Hapus Data?" ><i class="fa fa-times"></i></a>'
                 // .'<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="showUpdate('.$row["id"].')"><i class="fa fa-pencil"></i></a>'
                .'</div>'
             .'</td>';
+            }
+            $nestedData[]   .=  $action;
 
             $data[] = $nestedData; $i++;
         }
@@ -95,18 +103,6 @@ class Master extends MX_Controller {
     }
     function add(){
         $params = $this->input->post();
-
-        // $sql = "SELECT gk.id, gk.no_transaksi, gk.no_batch, 
-        //         gudang.stok_awal, gudang.jumlah_masuk,
-        //         gudang.jumlah_keluar, gudang.stok_akhir, gudang.date_add
-        //         FROM tt_gudang_keluar gk
-        //         LEFT JOIN tt_gudang gudang ON gk.id = gudang.id_gudang AND gudang.type = 1
-        //         WHERE gudang.id_bahan = ".$params['id_bahan']." ORDER BY gudang.date_add DESC";
-        // $bahan = $this->Transaksigudangkeluarmodel->rawQuery($sql);
-        // $rowBahan = $bahan->num_rows() > 0 ? $bahan->row() : null;
-        // $x = $bahan->num_rows() > 0 ? $rowBahan->stok_akhir : 0;
-        // echo json_encode(['x' => $x]);
-        // exit;
         // Custom
         $explodeTanggal = explode("/", $params['tanggal_keluar']);
         $explodeKadaluarsa = explode("/", $params['expired_date']);
@@ -198,6 +194,43 @@ class Master extends MX_Controller {
             echo json_encode(array( 'status'=> 1, 'message' => 'No Transaksi sudah ada!'));
         }
 
+    }
+    function addHarga(){
+      $params = $this->input->post();
+      if(!$params) redirect();
+      $dataCondition['id'] = $params['id'];
+
+      $checkData = $this->Transaksigudangkeluarmodel->select($dataCondition, 'tt_gudang_keluar');
+      if($checkData->num_rows() > 0) {
+        $dataUpdate['harga_penjualan'] = $params['harga'];
+        $update = $this->Transaksigudangkeluarmodel->update($dataCondition, $dataUpdate, 'tt_gudang_keluar');
+        if($update) {
+          $sql = "SELECT
+                gk.id,
+                gk.no_transaksi,
+                bahan.nama AS nama_bahan,
+                bahan.kode_bahan,
+                distributor.nama AS nama_distributor,
+                gk.no_batch,
+                gudang.jumlah_keluar,
+                gk.tanggal_keluar,
+                gk.expired_date,
+                gk.keterangan,
+                gk.date_added,
+                satuan.nama AS nama_satuan
+                FROM tt_gudang_keluar gk, m_bahan bahan, m_distributor distributor, m_satuan satuan, tt_gudang gudang
+                WHERE gk.id_bahan = bahan.id
+                AND gudang.id_gudang = gk.id
+                AND bahan.id_satuan = satuan.id
+                AND gk.id_distributor = distributor.id";
+          $list = $this->Transaksigudangkeluarmodel->rawQuery($sql)->result();
+          echo json_encode(array('status' => '3','message' => 'Berhasil mengubah data!' , 'list' => $list));
+        } else {
+          echo json_encode(array( 'status'=>'2', 'message' => 'Something Error!' ));          
+        }
+      } else {
+        echo json_encode(array( 'status'=>'1', 'message' => 'Data Transaksi Gudang Masuk Tidak ditemukan!'));
+      }
     }
     function delete(){
         $id = $this->input->post("id");

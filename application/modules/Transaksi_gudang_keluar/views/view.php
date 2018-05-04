@@ -18,6 +18,9 @@
           <th class="text-center">Kode Bahan</th>
           <th class="text-center">Nama Distributor</th>
           <th class="text-center">Keterangan</th>
+          <?php if($this->session_detail->id == 7): ?>
+          <th class="text-center">Harga Penjualan</th>
+          <?php endif; ?>
           <th class="text-center hidden-xs no-sort">Aksi</th>
         </tr>
       </thead>
@@ -136,7 +139,33 @@
     </div>
   </div>
   </div>
-  <!-- /.Modal Ubah-->
+  <!-- Add Harga -->
+<div class="modal fade" id="hargapenjualan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="labelPenjualan"></h4>
+      </div>
+      <form action="" method="POST" id="formHargaPenjualan" enctype="multipart/form-data"> <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label for="harga">Harga Penjualan</label>
+              <input type="text" name="harga" maxlength="50" Required class="form-control" id="harga" placeholder="Harga Penjualan" onkeydown="return numericOnly(event)">
+              <input type="hidden" name="id" maxlength="50" Required class="form-control" id="id_harga" placeholder="ID Barang">
+            </div>
+          </div>
+          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-add" id="aSimpan">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /.Modal Add-->
 <script type="text/javascript">
 var jsonList = <?php echo json_encode($list_data); ?>;
 var list_distributor = <?php echo json_encode($list_distributor); ?>;
@@ -198,6 +227,41 @@ function selectBahan(id){
   var satuan = getMasterById(list_satuan, id);
   $("#id_satuan").val(satuan.nama);
 }
+function addHarga(id){
+  var data = jsonList.filter(function (index) { return index.id == id })[0];
+  $("#id_harga").val(data.id);
+  $("#harga").val(data.harga_penjualan);
+  $("#labelPenjualan").text("Ubah Harga Penjualan");
+  $('#hargapenjualan').modal('show');
+}
+$("#formHargaPenjualan").on('submit', function(e){
+  e.preventDefault();
+  var notifText = 'Data berhasil ditambahkan!';
+  var action = "<?php echo base_url('Transaksi_gudang_keluar/Master/addHarga')?>/";
+  var param = $('#formHargaPenjualan').serialize();
+  
+  $.ajax({
+    type: 'post',
+    url: action,
+    data: param,
+    dataType: 'json',
+    success: function (data) {
+      if(data.status == 3) {
+        jsonList = data.list
+      }
+      initDataTable.ajax.reload();
+      $("#hargapenjualan").modal('hide');
+      new PNotify({
+        title: data.status == 3 ? 'Success' : 'Gagal',
+        text: data.message,
+        type: data.status == 3 ? 'success' : 'error',
+        hide: true,
+        delay: 5000,
+        styling: 'bootstrap3'
+      });
+    }
+  });
+});
 
 $("#myform").on('submit', function(e){
   e.preventDefault();
