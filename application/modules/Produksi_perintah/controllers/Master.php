@@ -60,6 +60,7 @@ class Master extends MX_Controller {
       $data['bahan_baku'] = $this->Perintahproduksimodel->rawQuery($listBahanBaku)->result();
       $data['bahan_kemas'] = $this->Perintahproduksimodel->rawQuery($listBahanKemas)->result();
       $data['list_paket'] = $this->Perintahproduksimodel->select($dataCondition, 'm_paket')->result();
+      $data['list_produk'] = $this->Perintahproduksimodel->select($dataCondition, 'm_perintah_produksi')->result();
       $this->load->view('Produksi_perintah/perintahRevisi', $data);
     }
     function cetak(){
@@ -629,9 +630,8 @@ class Master extends MX_Controller {
     }
     function getPerintahProduksi(){
       $id = $this->input->post('id');
-      $no_dokumen = $this->input->post('no_dokumen');
       // Perintah Produksi
-      $perintahProduksi = $this->Perintahproduksimodel->select(array('no_dokumen' => $no_dokumen, 'deleted' => 1), 'm_perintah_produksi', 'revisi', 'DESC')->row();
+      $perintahProduksi = $this->Perintahproduksimodel->select(array('id' => $id, 'deleted' => 1), 'm_perintah_produksi', 'revisi', 'DESC')->row();
       // Bahan Baku & Penimbangan Aktual
       $bahanBaku = $this->Perintahproduksimodel->select(array('id_perintah_produksi' => $id), 'pp_bahan_baku')->result();
       $dataBahanBaku = null;

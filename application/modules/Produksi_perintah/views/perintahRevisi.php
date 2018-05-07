@@ -1,50 +1,22 @@
 <div class="container" style="margin-top:10px;margin-bottom:20px;">
-  <h2>Ubah Dokumen</h2>
+  <h2>Dokumen Revisi</h2>
   <form class="form-horizontal" action="<?= base_url() ?>index/modul/Produksi_perintah-master-index" method="post" id="formPerintahProduksi">
-    <?php if($session_detail->id == 9): ?>
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">No. Dokumen</label>
-          </div>
-          <div class="col-sm-9">
-            <select name="no_dokumen" id="no_dokumen" class="form-control" onchange="appendContent(this.options[this.selectedIndex].getAttribute('data-id'), this.value)" required>
-              <option disabled selected>--Pilih No. Dokumen--</option>
-              <?php foreach($list_dokumen as $dokumen): ?>
-              <option value="<?= $dokumen->no_dokumen ?>" data-id="<?= $dokumen->id ?>"><?= $dokumen->no_dokumen ?></option>
-            <?php endforeach; ?>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Revisi Ke</label>
-          </div>
-          <div class="col-sm-9">
-            <label for="" class="control-label" id="revisi" name="revisi"></label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <label for="" class="control-label">Tanggal Efektif</label>
-          </div>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" name="tanggal_efektif" id="tanggal_efektif" required>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php endif; ?>
     <div class="panel panel-default">
       <div class="panel-body">
         <?php if($session_detail->id == 9): ?>
+        <input type="hidden" name="no_dokumen" id="no_dokumen" value="FRM-PPIC/02">
         <div class="form-group">
           <div class="col-sm-3">
             <label for="" class="control-label">Nama Produk</label>
           </div>
           <div class="col-sm-9">
-            <input type="text" class="form-control" name="nama_produk" id="nama_produk" />
+            <select name="nama_produk" class="form-control" id="nama_produk" onchange="appendContent(this.options[this.selectedIndex].getAttribute('data-id'))">
+              <option disabled selected>--Pilih Nama Produk--</option>
+              <?php foreach($list_produk as $produk): ?>
+              <option value="<?= $produk->nama_produk ?>" data-id="<?= $produk->id ?>"><?= $produk->nama_produk ?></option>
+              <?php endforeach; ?>
+            </select>
+            <!-- <input type="text" class="form-control" name="nama_produk" id="nama_produk" /> -->
           </div>
         </div>
         <div class="form-group">
@@ -66,6 +38,29 @@
         <?php endif; ?>
       </div>
     </div>
+
+    <?php if($session_detail->id == 9): ?>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Revisi Ke</label>
+          </div>
+          <div class="col-sm-9">
+            <label for="" class="control-label" id="revisi" name="revisi"></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3">
+            <label for="" class="control-label">Tanggal Efektif</label>
+          </div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" name="tanggal_efektif" id="tanggal_efektif" required>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
 
     <?php if($session_detail->id == 9): ?>
     <div class="">
@@ -265,8 +260,8 @@
 <script type="text/javascript">
 var list_satuan = <?php echo json_encode($list_satuan); ?>;
 var list_bahan = <?php echo json_encode($list_bahan); ?>;
-var bahan_baku = <?php echo json_encode($list_bahan_baku); ?>;
-var bahan_kemas = <?php echo json_encode($list_bahan_kemas); ?>;
+var bahan_baku = <?php echo json_encode($bahan_baku); ?>;
+var bahan_kemas = <?php echo json_encode($bahan_kemas); ?>;
 var tempBahanBaku = [];
 var tempBahanKemas = [];
 var numBahanBaku = 1;
@@ -275,7 +270,7 @@ $(document).ready(function(){
   $("#kolomPaket").hide();
 });
 
-function appendContent(id, no_dokumen) {
+function appendContent(id) {
   tempBahanBaku = [];
   tempBahanKemas = [];
   $("#dataBahanBaku").html('');
@@ -283,7 +278,7 @@ function appendContent(id, no_dokumen) {
   $.ajax({
       url: "<?php echo base_url('Produksi_perintah/Master/getPerintahProduksi')?>/",
       type: 'post',
-      data: "id="+id+"&no_dokumen="+no_dokumen,
+      data: "id="+id,
       dataType: 'json',
       error: function(e) {
         console.log(e);
@@ -296,10 +291,8 @@ function appendContent(id, no_dokumen) {
         console.log(data);
         var revisi = parseInt(perintah_produksi.revisi) + parseInt(1);
         $("#revisi").text(revisi);
-        var tanggal_efektif = perintah_produksi.tanggal_efektif.split('-');
-        var realtanggalefektif = tanggal_efektif[2]+'/'+tanggal_efektif[1]+'/'+tanggal_efektif[0];
-        $("#tanggal_efektif").val(realtanggalefektif);
-        $("#nama_produk").val(perintah_produksi.nama_produk);
+        $("#tanggal_efektif").val(perintah_produksi.tanggal_efektif);
+        $("#alias").val(perintah_produksi.alias);
         $("#besar_batch").val(perintah_produksi.besar_batch);
 
         // Append Bahan Baku ke Table
