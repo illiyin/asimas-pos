@@ -4,12 +4,10 @@
   </div>
 </div>
 
-<div id="printPreview" class="text-center"><h1>HOLLA!</h1></div>
-
 <div id="printSection" class="print-container">
   <table class="header">
     <tr>
-      <td class="logo"><img src="<?php echo base_url(); ?>/assets/img/logo-asimas.png" alt="Logo"></td>
+      <td class="logo"><img src="/assets/img/logo-asimas.png" alt="Logo"></td>
       <td class="kop">
         <h1>PT. AGARICUS SIDO MAKMUR SENTOSA</h1>
         <h3>Dokumen Perintah Produksi</h3>
@@ -18,15 +16,15 @@
         <table class="nested dok-detail">
           <tr>
             <td>No. Dokumen</td>
-            <td>: <?= $perintah_produksi->no_dokumen ?></td>
+            <td>: ND</td>
           </tr>
           <tr>
             <td>Revisi</td>
-            <td>: <?= $perintah_produksi->revisi ?></td>
+            <td>: 01</td>
           </tr>
           <tr>
             <td>Tanggal Efektif</td>
-            <td>: <?= date('d/m/Y', strtotime($perintah_produksi->tanggal_efektif)) ?></td>
+            <td>: JAN 2018</td>
           </tr>
         </table>
       </td>
@@ -39,15 +37,15 @@
         <table class="nested">
           <tr>
             <td>No. Perintah Produksi</td>
-            <td>: <?= $perintah_produksi->no_perintah ?></td>
+            <td>: NPP</td>
           </tr>
           <tr>
             <td>No. Sales Order</td>
-            <td>: <?= $perintah_produksi->no_sales_order ?></td>
+            <td>: NSO</td>
           </tr>
           <tr>
             <td>Estimasi Proses</td>
-            <td>: <?= $perintah_produksi->estimasi_proses ?> hari</td>
+            <td>: 3306 HARI</td>
           </tr>
         </table>
       </td>
@@ -55,19 +53,19 @@
         <table class="nested">
           <tr>
             <td>Nama Produk</td>
-            <td>: <?= $perintah_produksi->alias ? $perintah_produksi->nama_produk." ({$perintah_produksi->alias}-{$perintah_produksi->revisi})" : $perintah_produksi->nama_produk ?></td>
+            <td>: NAMA PRODUK</td>
           </tr>
           <tr>
             <td>Besar Batch</td>
-            <td>: <?= $perintah_produksi->besar_batch ?></td>
+            <td>: 5000 GRAM</td>
           </tr>
           <tr>
             <td>Kode Produksi</td>
-            <td>: <?= $perintah_produksi->kode_produksi ?></td>
+            <td>: KP</td>
           </tr>
           <tr>
             <td>Expire Date</td>
-            <td>: <?= date('d/m/Y', strtotime($perintah_produksi->expired_date)); ?> </td>
+            <td>: EXPIRED DATE</td>
           </tr>
         </table>
       </td>
@@ -88,22 +86,9 @@
       </tr>
     </thead>
     <tbody>
-      <?php if(count($bahan_baku) > 0): ?>
-      <?php $no = 1; foreach($bahan_baku as $row): ?>
-      <tr>
-        <td><?= $no++ ?></td>
-        <td><?= $row['nama_bahan'] ?></td>
-        <td><?= $row['nama_paket'] ?></td>
-        <td><?= $row['jumlah_paket'] ?></td>
-        <td><?= $row['satuan_paket'] ?></td>
-        <td><?= $row['per_batch'] ?></td>
-        <td><?= $row['satuan_batch'] ?></td>
-      </tr>
-      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
-  <?php if(count($bahan_baku) > 0) $max_lot = max(array_column($bahan_baku, 'jumlah_lot')); ?>
   <h3 class="tb-title">Penimbangan Aktual:</h3>
   <table class="regular penimbanganAktual">
     <thead>
@@ -118,27 +103,6 @@
       </tr>
     </thead>
     <tbody>
-      <?php if(count($bahan_baku) > 0): $no = 1; foreach($bahan_baku as $row): ?>
-      <tr>
-        <td class="nope"><?= $no++ ?></td>
-        <td class="nope"><?= $row['nama_bahan'] ?></td>
-        <td class="nope"><?= $row['per_batch'] ?></td>
-        <td class="nope"><?= $row['satuan_batch'] ?></td>
-        <td class="nope"><?= $row['jumlah_perlot'] > 0 ? $row['jumlah_perlot'] : null; ?></td>
-        <!-- <td class="nope"><?= $row['jumlah_lot'] ?></td> -->
-        <?php
-          $remain_lot = @$max_lot - $row['jumlah_lot'];
-          for ($lot=0; $lot < $row['jumlah_lot']; $lot++) { ?>
-            <td>&nbsp;</td>
-          <?php 
-          } 
-          if($remain_lot > 0) { ?>
-            <td colspan="<?php echo $remain_lot?>">&nbsp;</td>
-            <?php
-            }  
-          ?>
-      </tr>
-      <?php endforeach; endif;?>
     </tbody>
   </table>
 
@@ -154,16 +118,6 @@
       </tr>
     </thead>
     <tbody>
-      <?php if(count($bahan_kemas) > 0): ?>
-      <?php $no = 1; foreach($bahan_kemas as $row): ?>
-      <tr>
-        <td><?= $no++ ?></td>
-        <td><?= $row['nama_bahan'] ?></td>
-        <td><?= $row['jumlah'] ?></td>
-        <td><?= $row['satuan'] ?></td>
-        <td></td>
-      </tr>
-      <?php endforeach; endif; ?>
     </tbody>
   </table>
 
@@ -408,22 +362,9 @@ table.panel .ttd-field{
 }
 </style>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 <script>
   $('.navbar.navbar-default').hide();
   $(document).ready(function() {
     // window.print();
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-      "#editor": function (element, renderer) {
-        return true;
-      }
-    };
-
-    doc.fromHTML($("#printPreview").html(), 15, 15, {
-      'width': 170,
-      'elementHandlers': specialElementHandlers
-    });
-    doc.save("testing.pdf");
   });
 </script>

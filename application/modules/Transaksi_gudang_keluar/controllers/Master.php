@@ -78,8 +78,10 @@ class Master extends MX_Controller {
             $nestedData[]   =   $row["kode_bahan"];
             $nestedData[]   =   $row["nama_distributor"];
             $nestedData[]   =   $row["keterangan"];
-            if($this->session_detail->id == 7) {
+            if($this->session_detail->id == 7 || $this->session_detail->id == 6) {
             $nestedData[]   =   toRupiah($row['harga_penjualan']);
+            }
+            if($this->session_detail->id == 6) {
             $action        =    '<a class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Ubah Data" onclick="addHarga('.$row["id"].')"><i class="fa fa-pencil"></i></a>';
             } else{
             $action = '<td class="text-center"><div class="btn-group">'
@@ -246,5 +248,17 @@ class Master extends MX_Controller {
         }else{
             echo "0";
         }
+    }
+    function selectBahan(){
+        $postdata = $this->input->post();
+        $dataCondition['id_bahan'] = $postdata['id_bahan'];
+        // echo $postdata['id_bahan'];
+        $sql = $this->Transaksigudangkeluarmodel->select($dataCondition, 'tt_gudang_masuk');
+        if($sql->num_rows() > 0 ) {
+            $result = ['status' => 3, 'list_batch' => $sql->result()];
+        } else {
+            $result = ['status' => 1];
+        }
+        echo json_encode($result);
     }
 }

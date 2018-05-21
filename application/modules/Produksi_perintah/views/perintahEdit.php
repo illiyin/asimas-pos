@@ -74,10 +74,7 @@
             <label for="" class="control-label">Expired Date</label>
           </div>
           <div class="col-sm-9">
-            <div class="input-group">
-              <input type="text" class="form-control datepicker" name="expired_date" id="expired_date" value="<?= $perintah_produksi->expired_date == '0000-00-00' ? null : date('d/m/Y', strtotime($perintah_produksi->expired_date)) ?>" />
-              <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            </div>
+            <input type="text" class="form-control" name="expired_date" id="expired_date" value="<?= $perintah_produksi->expired_date ?>" required>
           </div>
         </div>
         <?php elseif($session_detail->id == 9): ?>
@@ -91,7 +88,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-3">
-            <label for="" class="control-label">Alias</label>
+            <label for="" class="control-label">Kode Nama Produk</label>
           </div>
           <div class="col-sm-9">
             <input type="text" class="form-control" name="alias" id="alias" value="<?= $perintah_produksi->alias ?>" />
@@ -163,11 +160,11 @@
           </div>
           <div class="form-group">
             <div class="col-sm-3">
-              <label for="">Nama Paket</label>
+              <label for="">Nama Bentuk Persediaan</label>
             </div>
             <div class="col-sm-9">
               <select name="paket" class="form-control" id="paket" onchange="showJumlahPaket(this.value)">
-                <option value="" disabled selected>--Pilih Paket--</option>
+                <option value="" disabled selected>--Pilih Bentuk Persediaan--</option>
                 <?php foreach($list_paket as $row): ?>
                 <option value="<?= $row->id ?>"><?= $row->nama ?></option>
                 <?php endforeach; ?>
@@ -286,14 +283,14 @@
               </select>
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <div class="col-sm-3">
               <label for="">Aktual</label>
             </div>
             <div class="col-sm-9">
               <input type="text" class="form-control" name="aktual" id="aktual"="">
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="modal-footer text-right">
           <button class="btn btn-default" data-dismiss="modal">Close</button>
@@ -351,15 +348,15 @@ $(document).ready(function(){
     for(i = 0; i < bahan_kemas.length; i++){
       var data = bahan_kemas[i];
       var num = numBahanKemas++;
+      console.log(data);
       tempBahanKemas.push({
           'num': num,
           'id_bahan': data.id_bahan,
           'jumlah': data.jumlah,
-          'satuan': data.satuan,
-          'aktual': data.aktual
+          'satuan': data.id_satuan
       });
        $("#dataBahanKemas")
-      .append("<tr id='bahankemas"+num+"'><td>"+ data.nama_bahan +"</td><td>Jumlah: "+data.jumlah+''+data.satuan+"</td><td>Aktual: "+data.aktual+"</td><td><span onclick='deleteBahanKemas("+num+")' class='fa fa-times'></span></td></tr>");
+      .append("<tr id='bahankemas"+num+"'><td>"+ data.nama_bahan +"</td><td>Jumlah: "+data.jumlah+''+data.satuan+"</td><td><span onclick='deleteBahanKemas("+num+")' class='fa fa-times'></span></td></tr>");
     } 
   }
 });
@@ -408,12 +405,11 @@ $("#formBahanKemas").on('submit', function(e){
         'num': num,
         'id_bahan': form[0].value,
         'jumlah': form[1].value,
-        'satuan': form[2].value,
-        'aktual': form[3].value
+        'satuan': form[2].value
     });
 
     $("#dataBahanKemas")
-    .append("<tr id='bahankemas"+num+"'><td>"+ dataBahan.nama +"</td><td>Jumlah: "+form[1].value+''+satuanKemas.nama+"</td><td>Aktual: "+form[3].value+"</td><td><span onclick='deleteBahanKemas("+num+")' class='fa fa-times'></span></td></tr>");
+    .append("<tr id='bahankemas"+num+"'><td>"+ dataBahan.nama +"</td><td>Jumlah: "+form[1].value+''+satuanKemas.nama+"</td><td><span onclick='deleteBahanKemas("+num+")' class='fa fa-times'></span></td></tr>");
     $("#formBahanKemas")[0].reset();
 });
 

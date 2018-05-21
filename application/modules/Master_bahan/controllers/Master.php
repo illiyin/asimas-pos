@@ -68,7 +68,6 @@ class Master extends MX_Controller {
         }
         $totalData = count($data);
         $json_data = array(
-            "sql" => $sql,
                     "draw"            => intval( $requestData['draw'] ),
                     "recordsTotal"    => intval( $totalData ),
                     "recordsFiltered" => intval( $totalFiltered ),

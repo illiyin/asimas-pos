@@ -20,8 +20,12 @@
           <th class="text-center">Keterangan</th>
           <?php if($this->session_detail->id == 7): ?>
           <th class="text-center">Harga Penjualan</th>
-          <?php endif; ?>
+          <?php elseif($this->session_detail->id == 6): ?>
+          <th class="text-center">Harga Penjualan</th>
           <th class="text-center hidden-xs no-sort">Aksi</th>
+          <?php else: ?>
+          <th class="text-center hidden-xs no-sort">Aksi</th>
+          <?php endif; ?>
         </tr>
       </thead>
 
@@ -71,7 +75,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="id_bahan">Nama Bahan</label>
-                <select name="id_bahan" class="form-control" id="id_bahan" required="required" onchange="selectBahan(this.options[this.selectedIndex].getAttribute('data-satuan'))">
+                <select name="id_bahan" class="form-control" id="id_bahan" required="required" onchange="selectBahan(this.options[this.selectedIndex].getAttribute('data-satuan'), this.value)">
                   <option value="" disabled selected>-- Pilih Bahan --</option>
                   <?php foreach($list_bahan as $row): ?>
                   <option value="<?= $row->id ?>" data-satuan="<?= $row->id_satuan ?>"><?php echo $row->nama ?></option>
@@ -91,15 +95,11 @@
                 <input type="text" class="form-control" name="jumlah_keluar" id="jumlah_keluar" placeholder="Jumlah Keluar" onkeydown="return numericOnly(event)" required>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" id="noBatch">
               <div class="form-group">
                 <label for="no_batch">No. Batch</label>
                 <!-- <input type="text" class="form-control" name="no_batch" id="no_batch" placeholder="No. Batch" required> -->
                 <select name="no_batch" id="no_batch" class="form-control">
-                  <option selected disabled>--Pilih No. Batch--</option>
-                  <?php foreach($list_batch as $batch): ?>
-                  <option value="<?= $batch->no_batch ?>"><?= $batch->no_batch ?></option>
-                  <?php endforeach; ?>
                 </select>
               </div>
             </div>
@@ -188,8 +188,11 @@ var initDataTable = $('#TableMainServer').DataTable({
       "orderable": false,
     }]
   });
+
+$("#noBatch").hide();
 function showAdd(){
   $("#myform")[0].reset();
+  $("#noBatch").hide();
   $('#modalAdd').modal('show');
 }
 function showUpdate(id){
@@ -223,9 +226,26 @@ function getMasterById(jsonData, id){
   data = jsonData.filter(function(index) {return index.id == id});
   return data.length > 0 ? data[0] : false;
 }
-function selectBahan(id){
-  var satuan = getMasterById(list_satuan, id);
+function selectBahan(id_satuan, id_bahan){
+  var satuan = getMasterById(list_satuan, id_satuan);
   $("#id_satuan").val(satuan.nama);
+  $("#noBatch").show();
+  $.ajax({
+    type: 'post',
+    url: "<?php echo base_url('Transaksi_gudang_keluar/Master/selectBahan')?>/",
+    data: "id_bahan="+id_bahan,
+    dataType: 'json',
+    success: function (data) {
+      var html = "<option selected disabled>--Pilih No. Batch--</option>";
+      if(data.status == 3) {
+        for (var i=0;i < data.list_batch.length;i++){
+          var result = data.list_batch[i];
+          html = html+ "<option value='"+result.no_batch+"'>"+result.no_batch+"</option>";
+        }
+      }
+      $("#no_batch").html(html);
+    }
+  });
 }
 function addHarga(id){
   var data = jsonList.filter(function (index) { return index.id == id })[0];

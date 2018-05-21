@@ -75,11 +75,13 @@ class Master extends MX_Controller {
       foreach($bahanBaku as $row) {
         $bahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'm_bahan')->row();
         $satuanBatch = $this->Perintahproduksimodel->select(array('id' => $row->satuan_batch), 'm_satuan')->row();
-        $satuanKaplet = $this->Perintahproduksimodel->select(array('id' => $row->satuan_kaplet), 'm_satuan')->row();
+        $paket = $this->Perintahproduksimodel->select(array('id' => $row->id_paket), 'm_paket')->row();
+        $satuanPaket = $this->Perintahproduksimodel->select(array('id' => $row->satuan_paket), 'm_satuan')->row();
         $dataBahanBaku[] = array(
             'nama_bahan' => $bahan->nama,
-            'per_kaplet' => $row->per_kaplet,
-            'satuan_kaplet' => $satuanKaplet->nama,
+            'nama_paket' => $paket->nama,
+            'jumlah_paket' => $row->jumlah_paket,
+            'satuan_paket' => $satuanPaket->nama,
             'per_batch' => $row->per_batch,
             'satuan_batch' => $satuanBatch->nama,
             'jumlah_lot' => $row->jumlah_lot,
@@ -95,16 +97,15 @@ class Master extends MX_Controller {
         $dataBahanKemas[] = array(
             'nama_bahan' => $bahan->nama,
             'jumlah' => $row->jumlah,
-            'satuan' => $satuan->nama,
-            'aktual' => $row->aktual
+            'satuan' => $satuan->nama
           );
       }
       // Data
       $data['perintah_produksi'] = $perintahProduksi;
       $data['bahan_baku'] = $dataBahanBaku;
       $data['bahan_kemas'] = $dataBahanKemas;
+      
       $this->load->view('Produksi_perintah/perintahCetak', $data);
-      // $this->load->view('Produksi_perintah/view', $data);
     }
     function detail(){
       $uid = $this->uri->segment(4);
@@ -125,7 +126,6 @@ class Master extends MX_Controller {
             'nama_paket' => $paket->nama,
             'jumlah_paket' => $row->jumlah_paket,
             'satuan_paket' => $satuanPaket->nama,
-            'per_kaplet' => $row->per_kaplet,
             'per_batch' => $row->per_batch,
             'satuan_batch' => $satuanBatch->nama,
             'jumlah_lot' => $row->jumlah_lot,
@@ -141,8 +141,7 @@ class Master extends MX_Controller {
         $dataBahanKemas[] = array(
             'nama_bahan' => $bahan->nama,
             'jumlah' => $row->jumlah,
-            'satuan' => $satuan->nama,
-            'aktual' => $row->aktual
+            'satuan' => $satuan->nama
           );
       }
       // Data
@@ -196,7 +195,7 @@ class Master extends MX_Controller {
             'nama_bahan' => $bahan->nama,
             'jumlah' => $row->jumlah,
             'satuan' => $satuan->nama,
-            'aktual' => $row->aktual
+            'id_satuan' => $satuan->id
           );
       }
       // Data
@@ -277,7 +276,6 @@ class Master extends MX_Controller {
               'id_bahan' => $row['id_bahan'],
               'jumlah' => $row['jumlah'],
               'satuan' => $row['satuan'],
-              'aktual' => $row['aktual'],
               'date_added' => date('Y-m-d H:i:s'),
               'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
               'deleted' => 1
@@ -349,7 +347,6 @@ class Master extends MX_Controller {
               'id_bahan' => $row['id_bahan'],
               'jumlah' => $row['jumlah'],
               'satuan' => $row['satuan'],
-              'aktual' => $row['aktual'],
               'date_added' => date('Y-m-d H:i:s'),
               'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
               'deleted' => 1
@@ -427,7 +424,6 @@ class Master extends MX_Controller {
                 'id_bahan' => $row['id_bahan'],
                 'jumlah' => $row['jumlah'],
                 'satuan' => $row['satuan'],
-                'aktual' => $row['aktual'],
                 'date_added' => date('Y-m-d H:i:s'),
                 'added_by' => isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0,
                 'deleted' => 1
@@ -445,13 +441,13 @@ class Master extends MX_Controller {
       else{
         // PPIC
         $dataCondition['id'] = $params['id'];
-        $expiredDate = $this->tanggalExplode(@$params['expired_date']);
+        // $expiredDate = $this->tanggalExplode(@$params['expired_date']);
         $perintahProduksi = $this->Perintahproduksimodel->select($dataCondition, 'm_perintah_produksi')->row();
         $dataUpdate['no_perintah'] = $params['no_pp'] ? $params['no_pp'] : $perintahProduksi->no_perintah;
         $dataUpdate['no_sales_order'] = $params['no_so'] ? $params['no_so'] : $perintahProduksi->no_sales_order;
         $dataUpdate['estimasi_proses'] = $params['estimasi'] ? $params['estimasi'] : $perintahProduksi->estimasi_proses;
         $dataUpdate['kode_produksi'] = $params['kode_produksi'] ? $params['kode_produksi'] : $perintahProduksi->kode_produksi;
-        $dataUpdate['expired_date'] = $params['expired_date'] ? $expiredDate : $perintahProduksi->expired_date;
+        $dataUpdate['expired_date'] = $params['expired_date'] ? $params['expired_date'] : $perintahProduksi->expired_date;
         $dataUpdate['last_modified'] = date('Y-m-d H:i:s');
         $dataUpdate['modified_by']  = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
         $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
@@ -559,6 +555,7 @@ class Master extends MX_Controller {
 
       $dataBahanKurang = null;
       $dataBahanBaku = null;
+      $historyBahan = null;
       if($ppBahanBaku->num_rows() > 0) {
         foreach($ppBahanBaku->result() as $row) {
           $tbahan = $this->Perintahproduksimodel->select(array('id' => $row->id_bahan), 'tt_bahan')->row();
@@ -567,6 +564,12 @@ class Master extends MX_Controller {
           $dataBahanBaku[] = array(
               'id_bahan' => $row->id_bahan,
               'saldo_bulan_sekarang' => $penguranganBahanBaku
+            );
+
+          $historyBahan[] = array(
+              'id_bahan' => $row->id_bahan,
+              'jumlah_keluar' => $row->per_batch,
+              'added_by' => $this->session->userdata('id_user_level')
             );
 
           if($penguranganBahanBaku < 0) {
@@ -591,6 +594,12 @@ class Master extends MX_Controller {
               'saldo_bulan_sekarang' => $penguranganBahanKemas
             );
 
+          $historyBahan[] = array(
+              'id_bahan' => $row->id_bahan,
+              'jumlah_keluar' => $row->jumlah,
+              'added_by' => $this->session->userdata('id_user_level')
+            );
+
           if($penguranganBahanKemas < 0) {
             $dataBahanKurang[] = array(
                'nama_bahan' => $bahan->nama,
@@ -608,6 +617,7 @@ class Master extends MX_Controller {
         if(count($dataBahanKemas) > 0) $this->Perintahproduksimodel->update_batch($dataBahanKemas, 'tt_bahan', 'id_bahan');
         $dataUpdate['status'] = 1;
         $update = $this->Perintahproduksimodel->update($dataCondition, $dataUpdate, 'm_perintah_produksi');
+        $this->Perintahproduksimodel->insert_batch($historyBahan, 'h_bahan');
       }
 
       $result = array(
@@ -664,8 +674,7 @@ class Master extends MX_Controller {
             'id_bahan' => $bahan->id,
             'nama_bahan' => $bahan->nama,
             'jumlah' => $row->jumlah,
-            'satuan' => $satuan->nama,
-            'aktual' => $row->aktual
+            'satuan' => $satuan->nama
           );
       }
 

@@ -41,7 +41,7 @@ class Master extends MX_Controller {
       $query=$this->Laporanstokgudangmodel->rawQuery($sql);
       $totalData = $query->num_rows();
       $sql = "SELECT
-              bahan.nama AS nama_bahan , tbahan.jumlah_masuk, tbahan.jumlah_keluar , bahan.expired_date,
+              bahan.id, bahan.nama AS nama_bahan , tbahan.jumlah_masuk, tbahan.jumlah_keluar , bahan.expired_date,
               tbahan.saldo_bulan_kemarin AS stok_awal , tbahan.saldo_bulan_sekarang AS stok_akhir, tbahan.tanggal,
               satuan.nama AS nama_satuan
               FROM m_bahan bahan, tt_bahan tbahan, m_satuan satuan
@@ -57,6 +57,8 @@ class Master extends MX_Controller {
 
       $data = array(); $i=0;
       foreach ($query->result_array() as $row) {
+          $sql = "SELECT SUM(jumlah_keluar) AS keluar_pp FROM h_bahan WHERE id_bahan = ".$row['id'];
+          $keluar_pp = $this->Laporanstokgudangmodel->rawQuery($sql)->row()->keluar_pp;
           $nestedData     =   array();
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
           $nestedData[]   =   $row["nama_bahan"];
@@ -65,6 +67,7 @@ class Master extends MX_Controller {
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["jumlah_masuk"]."</span>";
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["jumlah_keluar"]."</span>";
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["stok_akhir"]."</span>";
+          $nestedData[]   =   "<span class='text-center' style='display:block;'>".($keluar_pp > 0 ? floatval($keluar_pp) : 0)."</span>";
           $expiredDate = $row['expired_date'] == '0000-00-00' ? '-' : date('d/m/Y', strtotime($row["expired_date"]));
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$expiredDate."</span>";
 

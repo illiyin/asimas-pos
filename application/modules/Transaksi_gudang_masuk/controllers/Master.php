@@ -143,6 +143,7 @@ class Master extends MX_Controller {
         $dataInsert['no_batch']             = $params['no_batch'];
         $dataInsert['id_produsen']          = @$params['id_produsen'] ? $params['id_produsen'] : 0;
         $dataInsert['id_supplier']          = $params['id_supplier'];
+        $dataInsert['id_bahan']             = $params['id_bahan'];
         $dataInsert['no_so']                = $params['no_so'];
         $dataInsert['tanggal_masuk']        = $dateExplode[2].'-'.$dateExplode[1].'-'.$dateExplode[0];
         $dataInsert['expired_date']         = $expiredExplode[2].'-'.$expiredExplode[1].'-'.$expiredExplode[0];

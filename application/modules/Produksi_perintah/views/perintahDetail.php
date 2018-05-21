@@ -18,7 +18,7 @@
           </tr>
           <tr>
             <td>Tanggal Efektif</td>
-            <td>: <?= date('d/m/Y', strtotime($perintah_produksi->tanggal_efektif)) ?></td>
+            <td>: <?= $perintah_produksi->tanggal_efektif ?></td>
           </tr>
         </table>
       </td>
@@ -59,7 +59,7 @@
           </tr>
           <tr>
             <td>Expired Date</td>
-            <td>: <?= $perintah_produksi->expired_date == '0000-00-00' ? "Belum disetting" : date('M Y', strtotime($perintah_produksi->expired_date)); ?> </td>
+            <td>: <?= $perintah_produksi->expired_date; ?> </td>
           </tr>
         </table>
       </td>
@@ -72,7 +72,7 @@
       <tr>
         <th class="nomer">No.</th>
         <th>Nama Bahan</th>
-        <th>Paket</th>
+        <th>Bentuk Persediaan</th>
         <th>Jumlah</th>
         <th>Satuan</th>
         <th>Per Batch</th>
@@ -104,7 +104,7 @@
         <th class="nope">Jumlah</th>
         <th class="nope">Satuan</th>
         <th class="nope">Per Lot</th>
-        <th class="nope">Total Lot</th>
+        <!-- <th class="nope">Total Lot</th> -->
         <th class="lot" colspan="<?php echo @$max_lot?>">Lot</th>
       </tr>
     </thead>
@@ -115,8 +115,8 @@
         <td class="nope"><?= $row['nama_bahan'] ?></td>
         <td class="nope"><?= $row['per_batch'] ?></td>
         <td class="nope"><?= $row['satuan_batch'] ?></td>
-        <td class="nope"><?= $row['jumlah_perlot'] ?></td>
-        <td class="nope"><?= $row['jumlah_lot'] ?></td>
+        <td class="nope"><?= $row['jumlah_perlot'] > 0 ? $row['jumlah_perlot'] : null; ?></td>
+        <!-- <td class="nope"><?= $row['jumlah_lot'] ?></td> -->
         <?php
           $remain_lot = @$max_lot - $row['jumlah_lot'];
           for ($lot=0; $lot < $row['jumlah_lot']; $lot++) { ?>
@@ -340,7 +340,7 @@ function approveData(element) {
     dataType: 'json',
     beforeSend: function() {
       // kasi loading
-      $("#aConfirm"+i).html("Sedang Menghapus...");
+      $("#aConfirm"+i).html("Sedang Diproses...");
       $("#aConfirm"+i).prop("disabled", true);
     },
     success: function (data) {

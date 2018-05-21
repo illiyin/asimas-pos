@@ -75,7 +75,7 @@ class Master extends MX_Controller {
         
         $query=$this->Transaksigudangmodel->rawQuery($sql);
         $data = array(); $i=0;
-        foreach ($query->result_array() as $row) {
+        foreach ($query->result_array() as $num => $row) {
             $nestedData     =   array();
             // $nestedData[]   =   "<td data-search='AsdSDasd'><span class='text-center' style='display:block;'>".($i+1)."</span></td>";
             $nestedData[]   =   $row['no_transaksi'];
@@ -93,6 +93,7 @@ class Master extends MX_Controller {
 
             $data[] = $nestedData; $i++;
         }
+        
         $totalData = count($data);
         $json_data = array(
                     "draw"            => intval( $requestData['draw'] ),

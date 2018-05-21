@@ -74,4 +74,29 @@ class Master extends MX_Controller {
                     );
         echo json_encode($json_data);
     }
+    function testQuery(){
+        $sql = "SELECT gudang.id, gudang.id_bahan, 
+                gudang.jumlah_masuk, gudang.stok_akhir,
+                gm.harga_pembelian 
+                FROM tt_gudang gudang, tt_gudang_masuk gm
+                WHERE type = 1 AND gudang.id_bahan = 1
+                AND gm.id = gudang.id_gudang
+                LIMIT 3";
+        $query = $this->Laporanhargajualmodel->rawQuery($sql);
+        
+        $formula1 = null;
+        $formula2 = null;    
+
+        foreach($query->result() as $row) {
+            // = ( (JmlMasuk 1 * HP 1) + (JmlMasuk 2 * HP 2) + (JmlMasuk 3 * HP 3) ) / (JmlMasuk 1 + JmlMasuk 2 + JmlMasuk 3)
+            // = ((1.000 x Rp. 500) + (800 x Rp. 550) + (700 x Rp. 600)) / (1000 + 800 + 700)
+            // = (Rp. 500.000 + Rp. 440.000 + Rp. 420.000) / 2.500  = Rp. 544
+            $formula1 += (($row->jumlah_masuk) * ($row->harga_pembelian));
+            $formula2 += $row->jumlah_masuk;
+        }
+
+        $rata = ($formula1) / ($formula2);
+
+        echo toRupiah(($rata) * ($formula2));
+    }
   }
