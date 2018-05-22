@@ -14,7 +14,11 @@
               <tr>
                   <th class="text-center no-sort">#</th>
                   <th class="text-center">Nama Bahan</th>
-                  <th class="text-center">Kategori</th>
+                  <!-- <th class="text-center">Kategori</th> -->
+                  <th class="text-center">Stok Awal</th>
+                  <th class="text-center">Jumlah Masuk</th>
+                  <th class="text-center">Jumlah Keluar</th>
+                  <th class="text-center">Stok Akhir</th>
                   <th class="text-center">Rata-rata Harga</th>
               </tr>
           </thead>
