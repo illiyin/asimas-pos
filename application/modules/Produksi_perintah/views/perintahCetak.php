@@ -4,8 +4,6 @@
   </div>
 </div>
 
-<div id="printPreview" class="text-center"><h1>HOLLA!</h1></div>
-
 <div id="printSection" class="print-container">
   <table class="header">
     <tr>
@@ -412,18 +410,6 @@ table.panel .ttd-field{
 <script>
   $('.navbar.navbar-default').hide();
   $(document).ready(function() {
-    // window.print();
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-      "#editor": function (element, renderer) {
-        return true;
-      }
-    };
-
-    doc.fromHTML($("#printPreview").html(), 15, 15, {
-      'width': 170,
-      'elementHandlers': specialElementHandlers
-    });
-    doc.save("testing.pdf");
+    window.print();
   });
 </script>
