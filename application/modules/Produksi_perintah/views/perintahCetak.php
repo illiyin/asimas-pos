@@ -101,9 +101,12 @@
     </tbody>
   </table>
 
-  <?php if(count($bahan_baku) > 0) $max_lot = max(array_column($bahan_baku, 'jumlah_lot')); ?>
+  <?php
+    // $max_lot = max(array_column($bahan_baku, 'jumlah_lot'));
+    $max_lot = 10;
+  ?>
   <h3 class="tb-title">Penimbangan Aktual:</h3>
-  <table class="regular penimbanganAktual">
+  <table class="regular penimbanganAktual" style="height:100%">
     <thead>
       <tr>
         <th class="nomer nope">No.</th>
@@ -112,31 +115,44 @@
         <th class="nope">Satuan</th>
         <th class="nope">Per Lot</th>
         <!-- <th class="nope">Total Lot</th> -->
-        <th class="lot" colspan="<?php echo @$max_lot?>">Lot</th>
+        <?php for ($i=1; $i <= $max_lot; $i++) { ?>
+          <th class="lot">Lot <?php echo $i?></th>
+        <?php } ?>
       </tr>
     </thead>
     <tbody>
-      <?php if(count($bahan_baku) > 0): $no = 1; foreach($bahan_baku as $row): ?>
+      <?php $no = 1; foreach($bahan_baku as $row): ?>
       <tr>
         <td class="nope"><?= $no++ ?></td>
         <td class="nope"><?= $row['nama_bahan'] ?></td>
         <td class="nope"><?= $row['per_batch'] ?></td>
         <td class="nope"><?= $row['satuan_batch'] ?></td>
-        <td class="nope"><?= $row['jumlah_perlot'] > 0 ? $row['jumlah_perlot'] : null; ?></td>
+        <td class="nope"><?= $row['jumlah_perlot'] ?></td>
         <!-- <td class="nope"><?= $row['jumlah_lot'] ?></td> -->
-        <?php
-          $remain_lot = @$max_lot - $row['jumlah_lot'];
-          for ($lot=0; $lot < $row['jumlah_lot']; $lot++) { ?>
-            <td>&nbsp;</td>
-          <?php 
-          } 
-          if($remain_lot > 0) { ?>
-            <td colspan="<?php echo $remain_lot?>">&nbsp;</td>
-            <?php
-            }  
-          ?>
+        <td colspan="<?php echo $max_lot?>" style="padding: 0px;">
+          <div style="display: flex; height: 100%; width: 100%;">
+            <?php 
+              $flex_width = 100 / $row['jumlah_lot'];
+              for ($i=1; $i <= $row['jumlah_lot'] ; $i++) { 
+                if($i == $row['jumlah_lot']) { ?>
+                  <div style="flex: 0 0 <?php echo $flex_width?>%; height: 100%;"> &nbsp; </div>
+                <?php 
+                }
+                else { ?>
+                  <div style="flex: 0 0 <?php echo $flex_width?>%; height: 100%; border-right: 1px solid #000;"> &nbsp; </div>
+                <?php 
+                }
+              ?>
+            <?php 
+            } ?>
+          </div>
+        </td>
+        <!-- <td colspan="<?php echo $max_lot?>" style="padding: 0px;">
+          <div style="width: 25%; height: 100%; display:inline-block; background-color: #555;">&nbsp;</div>
+          <div style="width: 25%; height: 100%; display:inline-block; background-color: #444;">&nbsp;</div>
+        </td> -->
       </tr>
-      <?php endforeach; endif;?>
+      <?php endforeach; ?>
     </tbody>
   </table>
 
@@ -173,17 +189,15 @@
             <th>Diterbitkan</th>
           </tr>
           <tr>
-            <td class="ttd-field">
-
+            <td>
+              <br><br>
             </td>
           </tr>
           <tr>
-            <td class="name-field">
-              &nbsp;
-            </td>
+            <td class="name-field"> </td>
           </tr>
           <tr>
-            <td class="jabatan-field">
+            <td class="jabatan-field" style="padding: 2px;">
               PPIC
             </td>
           </tr>
@@ -196,26 +210,22 @@
             <th colspan="2">Diterima</th>
           </tr>
           <tr>
-            <td class="ttd-field bagi-dua">
-
+            <td class="bagi-dua">
+              <br><br>
             </td>
-            <td class="ttd-field bagi-dua">
-
-            </td>
-          </tr>
-          <tr>
-            <td class="name-field">
-              &nbsp;
-            </td>
-            <td class="name-field">
-              &nbsp;
+            <td class="bagi-dua">
+              <br><br>
             </td>
           </tr>
           <tr>
-            <td class="jabatan-field">
-              PPIC
+            <td class="name-field"> </td>
+            <td class="name-field"> </td>
+          </tr>
+          <tr>
+            <td class="jabatan-field" style="padding: 2px;">
+              Gudang
             </td>
-            <td class="jabatan-field">
+            <td class="jabatan-field" style="padding: 2px;">
               Kabag Produksi
             </td>
           </tr>

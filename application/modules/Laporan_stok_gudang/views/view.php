@@ -19,7 +19,6 @@
                   <th class="text-center">Masuk</th>
                   <th class="text-center">Keluar</th>
                   <th class="text-center">Stok Akhir</th>
-                  <th class="text-center">Keluar PP</th>
                   <th class="text-center">Expired Date</th>
               </tr>
           </thead>

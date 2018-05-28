@@ -318,7 +318,6 @@ $(document).ready(function(){
       var data = bahan_baku[i];
       var num = numBahanBaku++;
       tempBahanBaku.push({
-          'num': num,
           'id_bahan': data.id_bahan,
           'id_paket': data.id_paket,
           'nama_paket': data.nama_paket,
@@ -389,7 +388,7 @@ $("#formBahanBaku").on('submit', function(e){
         'jumlah_perlot': form[7].value
     });
     $("#dataBahanBaku")
-    .append("<tr><td>"+ num +"</td><td>"+ dataBahan.nama +"</td><td>"+ $("#Pakett option:selected").text() +": "+form[2].value+''+satuanPaket.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
+    .append("<tr id='bahanbaku"+num+"'><td>"+ dataBahan.nama +"</td><td>"+ $("#Pakett option:selected").text() +": "+form[2].value+''+satuanPaket.nama+"</td><td>Per Batch: "+form[3].value+''+satuanBatch.nama+"</td><td>Per Lot: "+form[6].value+"</td><td>Jumlah Lot: "+form[5].value+"</td><td><span onclick='deleteBahanBaku("+num+")' class='fa fa-times'></span></td></tr>");
     $("#formBahanBaku")[0].reset();
     $("#kolomPaket").hide();
 });

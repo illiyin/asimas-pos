@@ -54,12 +54,15 @@ class Master extends MX_Controller {
             $result = $this->Laporanhargajualmodel->rawQuery($sql)->row();
             if(in_array($bahan->id, $availBahan)) {
                 $sql = "SELECT gudang.id, gudang.id_bahan, bahan.nama,
-                        gudang.jumlah_masuk, gudang.stok_akhir,
-                        gudang.stok_awal, gudang.jumlah_keluar,
+                        tbahan.jumlah_masuk, tbahan.jumlah_keluar,
+                        tbahan.saldo_bulan_sekarang AS stok_akhir, tbahan.saldo_bulan_kemarin AS stok_awal,
+                        gudang.jumlah_masuk AS jml_masuk, gudang.stok_akhir AS jml_akhir,
+                        -- gudang.stok_awal, gudang.jumlah_keluar,
                         gm.harga_pembelian
-                        FROM tt_gudang gudang, tt_gudang_masuk gm, m_bahan bahan
+                        FROM tt_gudang gudang, tt_gudang_masuk gm, m_bahan bahan, tt_bahan tbahan
                         WHERE type = 1
                         AND gm.id = gudang.id_gudang
+                        AND tbahan.id_bahan = bahan.id
                         AND gudang.id_bahan = bahan.id
                         AND gudang.id_bahan = {$bahan->id}
                         ORDER BY gudang.date_add DESC";
@@ -70,10 +73,10 @@ class Master extends MX_Controller {
                 $stokAkhir = 0;
                 foreach($query->result() as $index => $row) {
                     if($index == 0) {
-                        $stokAkhir = $row->stok_akhir;
+                        $stokAkhir = $row->jml_akhir;
                     }
-                    $formula1 += (($row->jumlah_masuk) * ($row->harga_pembelian));
-                    $formula2 += $row->jumlah_masuk;
+                    $formula1 += (($row->jml_masuk) * ($row->harga_pembelian));
+                    $formula2 += $row->jml_masuk;
                 }
 
                 $rata = ($formula1) / ($formula2);
@@ -90,6 +93,7 @@ class Master extends MX_Controller {
             $nestedData[] = "<span class='text-center' style='display:block;'>".($isAvail ? $bahanGudang->jumlah_masuk : 0)."</span>";
             $nestedData[] = "<span class='text-center' style='display:block;'>".($isAvail ? $bahanGudang->jumlah_keluar : 0)."</span>";
             $nestedData[] = "<span class='text-center' style='display:block;'>".($isAvail ? $bahanGudang->stok_akhir : 0)."</span>";
+            $nestedData[] = "<span class='text-center' style='display:block;'>".($isAvail ? toRupiah($rata) : toRupiah(0))."</span>";
             $nestedData[] = "<span class='text-center' style='display:block;'>".($isAvail ? $rataHarga : toRupiah(0))."</span>";
 
             $data[] = $nestedData; $i++;

@@ -59,15 +59,15 @@ class Master extends MX_Controller {
       foreach ($query->result_array() as $row) {
           $sql = "SELECT SUM(jumlah_keluar) AS keluar_pp FROM h_bahan WHERE id_bahan = ".$row['id'];
           $keluar_pp = $this->Laporanstokgudangmodel->rawQuery($sql)->row()->keluar_pp;
+          $jumlahKeluar = ($keluar_pp > 0 ? floatval($keluar_pp) : 0) + ($row['jumlah_keluar']);
           $nestedData     =   array();
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".($i+1)."</span>";
           $nestedData[]   =   $row["nama_bahan"];
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["nama_satuan"]."</span>";
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["stok_awal"]."</span>";
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["jumlah_masuk"]."</span>";
-          $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["jumlah_keluar"]."</span>";
+          $nestedData[]   =   "<span class='text-center' style='display:block;'>".$jumlahKeluar."</span>";
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$row["stok_akhir"]."</span>";
-          $nestedData[]   =   "<span class='text-center' style='display:block;'>".($keluar_pp > 0 ? floatval($keluar_pp) : 0)."</span>";
           $expiredDate = $row['expired_date'] == '0000-00-00' ? '-' : date('d/m/Y', strtotime($row["expired_date"]));
           $nestedData[]   =   "<span class='text-center' style='display:block;'>".$expiredDate."</span>";
 
